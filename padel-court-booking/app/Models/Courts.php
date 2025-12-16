@@ -28,4 +28,14 @@ class Courts extends Model
     {
         return $this->belongsTo(CourtCategories::class);
     }
+    public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Bookings::class);
+    }
+
+    // Tambahan di dalam file Court.php
+public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+{
+    return $this->hasMany(CourtsImages::class);
+}
 }

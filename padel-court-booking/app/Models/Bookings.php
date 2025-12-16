@@ -34,4 +34,9 @@ class Bookings extends Model
     {
         return $this->belongsTo(Courts::class);
     }
+
+    public function payment(): \Illuminate\Database\Eloquent\Relations\HasOne
+{
+    return $this->hasOne(Payments::class);
+}
 }
