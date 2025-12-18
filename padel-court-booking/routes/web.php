@@ -9,8 +9,26 @@ use App\Http\Controllers\UserController;
 
 // Halaman Depan (Landing Page)
 Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+    return view('home');
+});
+
+// Login
+Route::get('/login', function () {
+    return view('login');
+});
+
+Route::post('/login', function () {
+    return redirect('/')->with('success', 'Login successful!');
+});
+
+// Register
+Route::get('/register', function () {
+    return view('register');
+});
+
+Route::post('/register', function () {
+    return redirect('/login')->with('success', 'Registration successful! Please login.');
+});
 
 // Route Resource CRUD untuk masing-masing controller
 Route::resource('users', UserController::class);
