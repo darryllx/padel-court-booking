@@ -20,7 +20,7 @@
                     Home
                 </a>
                 <a href="/about"
-                    class="text-gray-700 hover:text-purple-600 font-medium transition {{ request()->is('/about') ? 'text-purple-600 border-b-2 border-purple-600' : '' }}">
+                    class="text-gray-700 hover:text-purple-600 font-medium transition {{ request()->is('about') ? 'text-purple-600 border-b-2 border-purple-600' : '' }}">
                     About
                 </a>
                 <a href="/book-court"
