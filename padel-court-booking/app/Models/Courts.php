@@ -10,6 +10,8 @@ class Courts extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     protected $fillable = [
         'court_category_id',
         'court_name',
@@ -33,9 +35,11 @@ class Courts extends Model
         return $this->hasMany(Bookings::class);
     }
 
-    // Tambahan di dalam file Court.php
-public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
-{
+    
+    public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
     return $this->hasMany(CourtsImages::class);
-}
+    }
+
+    
 }

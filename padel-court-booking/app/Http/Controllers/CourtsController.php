@@ -36,7 +36,7 @@ class CourtsController extends Controller
         // Kirim data categories untuk opsi filter di view
         $categories = CourtCategories::all();
 
-        return view('courts.index', compact('courts', 'categories'));
+        return view('dashboard.courts.index', compact('courts', 'categories'));
     }
 
 
@@ -44,7 +44,7 @@ class CourtsController extends Controller
     {
         // Ambil data kategori untuk dropdown select option
         $categories = CourtCategories::all();
-        return view('courts.create', compact('categories'));
+        return view('dashboard.courts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -62,21 +62,21 @@ class CourtsController extends Controller
 
         Courts::create($validated);
 
-        return redirect()->route('courts.index')
+        return redirect()->route('dashboard.courts.index')
                          ->with('success', 'Lapangan berhasil ditambahkan.');
     }
 
     public function show(string $id)
     {
         $court = Courts::with('courtCategory')->findOrFail($id);
-        return view('courts.show', compact('court'));
+        return view('dashboard.courts.show', compact('court'));
     }
 
     public function edit(string $id)
     {
         $court = Courts::findOrFail($id);
         $categories = CourtCategories::all();
-        return view('courts.edit', compact('court', 'categories'));
+        return view('dashboard.courts.edit', compact('court', 'categories'));
     }
 
     public function update(Request $request, string $id)
@@ -97,7 +97,7 @@ class CourtsController extends Controller
 
         $court->update($validated);
 
-        return redirect()->route('courts.index')
+        return redirect()->route('dashboard.courts.index')
                          ->with('success', 'Lapangan berhasil diperbarui.');
     }
 
@@ -106,7 +106,7 @@ class CourtsController extends Controller
         $court = Courts::findOrFail($id);
         $court->delete();
 
-        return redirect()->route('courts.index')
+        return redirect()->route('dashboard.courts.index')
                          ->with('success', 'Lapangan berhasil dihapus.');
     }
 }
