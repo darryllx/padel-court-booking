@@ -1,16 +1,47 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CourtCategoriesController;
-use App\Http\Controllers\CourtsController;
-use App\Http\Controllers\BookingsController;
-use App\Http\Controllers\PaymentsController;
-use App\Http\Controllers\UserController;
 
-// Halaman Depan (Landing Page)
+// Home page (sama dengan welcome)
 Route::get('/', function () {
     return view('home');
 });
+
+Route::get('/about', function() {
+    return view('about');
+});
+
+// Book Court - Court Selection
+Route::get('/book-court', function () {
+    return view('courtdetail');  
+});
+
+// Booking Detail Form
+Route::get('/booking-detail', function () {
+    return view('bookingcourt');  
+});
+
+// Payment Page (GET)
+Route::get('/payment', function () {
+    return view('payment');
+});
+
+// Payment Page (POST dari booking form)
+Route::post('/payment', function () {
+    return view('payment');
+});
+
+// Payment Process
+Route::post('/payment/process', function () {
+    return redirect('/booking-success')->with('success', 'Payment successful!');
+});
+
+// Success Page
+Route::get('/booking-success', function () {
+    return view('success');
+});
+
+// Authentication Routes
 
 // Login
 Route::get('/login', function () {
@@ -30,9 +61,14 @@ Route::post('/register', function () {
     return redirect('/login')->with('success', 'Registration successful! Please login.');
 });
 
-// Route Resource CRUD untuk masing-masing controller
-Route::resource('users', UserController::class);
-Route::resource('court-categories', CourtCategoriesController::class);
-Route::resource('courts', CourtsController::class);
-Route::resource('bookings', BookingsController::class);
-Route::resource('payments', PaymentsController::class);
+// Forgot Password (optional)
+Route::get('/forgot-password', function () {
+    return view('forgot-password');
+});
+
+// Logout (optional)
+Route::post('/logout', function () {
+    return redirect('/')->with('success', 'Logged out successfully!');
+});
+
+// note : login,register dan logout belom bisa dijalankan masih baru tampilan aja (ama)

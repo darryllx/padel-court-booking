@@ -25,10 +25,10 @@
                             class="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 transition font-bold text-center shadow-lg hover:shadow-xl transform hover:scale-105">
                             Play now
                         </a>
-                        <a href="/book-court"
+                        {{-- <a href="/book-court"
                             class="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 transition font-bold text-center shadow-lg hover:shadow-xl transform hover:scale-105">
                             Book Court
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
 
@@ -133,7 +133,7 @@
                             </div>
                             <a href="/book-court?type=indoor"
                                 class="bg-blue-500 text-white px-6 py-3 rounded-xl hover:bg-blue-600 transition font-semibold shadow-md hover:shadow-lg">
-                                Play now
+                                Booking
                             </a>
                         </div>
                     </div>
@@ -201,7 +201,7 @@
                             </div>
                             <a href="/book-court?type=outdoor"
                                 class="bg-green-500 text-white px-6 py-3 rounded-xl hover:bg-green-600 transition font-semibold shadow-md hover:shadow-lg">
-                                Play now
+                                Booking
                             </a>
                         </div>
                     </div>
