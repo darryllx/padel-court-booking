@@ -11,13 +11,8 @@ Route::get('/about', function() {
     return view('about');
 });
 
-// Book Court - Court Selection
+// // Book Court - Court Selection
 Route::get('/book-court', function () {
-    return view('courtdetail');  
-});
-
-// Booking Detail Form
-Route::get('/booking-detail', function () {
     return view('bookingcourt');  
 });
 
