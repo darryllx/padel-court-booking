@@ -7,12 +7,13 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/about', function() {
-    return view('about');
+// Book Court - Court Selection
+Route::get('/book-court', function () {
+    return view('courtdetail');  
 });
 
-// // Book Court - Court Selection
-Route::get('/book-court', function () {
+// Booking Detail Form
+Route::get('/booking-detail', function () {
     return view('bookingcourt');  
 });
 
@@ -66,4 +67,3 @@ Route::post('/logout', function () {
     return redirect('/')->with('success', 'Logged out successfully!');
 });
 
-// note : login,register dan logout belom bisa dijalankan masih baru tampilan aja (ama)
