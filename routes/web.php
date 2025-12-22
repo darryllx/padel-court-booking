@@ -5,6 +5,8 @@ use App\Models\CourtCategories;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CourtCategoriesController;
+use App\Http\Controllers\CourtsController;
 
 Route::get('/', function () {
     $categories = CourtCategories::all();
@@ -82,5 +84,14 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // User Management Routes (CRUD) - Only for Admin
     Route::get('/users/export-pdf', [UserController::class, 'exportPdf'])->name('users.exportPdf');
     Route::resource('users', UserController::class);
+});
+
+// Court Categories & Courts Management - Protected with auth and role:admin middleware
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Court Categories Routes
+    Route::resource('court-categories', CourtCategoriesController::class);
+    
+    // Courts Routes
+    Route::resource('courts', CourtsController::class);
 });
 
