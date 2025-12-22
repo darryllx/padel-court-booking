@@ -90,8 +90,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Court Categories Routes
     Route::resource('court-categories', CourtCategoriesController::class);
-    
+
     // Courts Routes
+    Route::get('/courts/export-pdf', [CourtsController::class, 'exportPdf'])->name('courts.exportPdf');
     Route::resource('courts', CourtsController::class);
 });
 
