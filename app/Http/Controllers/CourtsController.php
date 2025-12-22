@@ -39,7 +39,7 @@ class CourtsController extends Controller
         // Kirim data categories untuk opsi filter di view
         $categories = CourtCategories::all();
 
-        return view('courts.index', compact('courts', 'categories'));
+        return view('admin.courts.index', compact('courts', 'categories'));
     }
 
 
@@ -47,7 +47,7 @@ class CourtsController extends Controller
     {
         // Ambil data kategori untuk dropdown select option
         $categories = CourtCategories::all();
-        return view('courts.create', compact('categories'));
+        return view('admin.courts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -72,14 +72,14 @@ class CourtsController extends Controller
     public function show(string $id)
     {
         $court = Courts::with('courtCategory')->findOrFail($id);
-        return view('courts.show', compact('court'));
+        return view('admin.courts.show', compact('court'));
     }
 
     public function edit(string $id)
     {
         $court = Courts::findOrFail($id);
         $categories = CourtCategories::all();
-        return view('courts.edit', compact('court', 'categories'));
+        return view('admin.courts.edit', compact('court', 'categories'));
     }
 
     public function update(Request $request, string $id)

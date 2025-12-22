@@ -10,6 +10,8 @@ class CourtsImages extends Model
 {
     use HasFactory;
 
+    protected $table = 'court_images';
+
     protected $fillable = [
         'court_id',
         'image_path',
