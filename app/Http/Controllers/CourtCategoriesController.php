@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class CourtCategoriesController extends Controller
 {
-    
+    /**
+     * Menampilkan daftar kategori lapangan dengan fitur search
+     */
     public function index(Request $request)
     {
         $query = CourtCategories::query();
@@ -36,8 +38,8 @@ class CourtCategoriesController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'category_name' => 'required|string|max:255|unique:court_categories,category_name',
+            'description' => 'nullable|string|max:1000',
         ]);
 
         CourtCategories::create($validated);
@@ -67,8 +69,8 @@ class CourtCategoriesController extends Controller
         $category = CourtCategories::findOrFail($id);
 
         $validated = $request->validate([
-            'category_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'category_name' => 'required|string|max:255|unique:court_categories,category_name,' . $id,
+            'description' => 'nullable|string|max:1000',
         ]);
 
         $category->update($validated);
@@ -81,6 +83,13 @@ class CourtCategoriesController extends Controller
     public function destroy(string $id)
     {
         $category = CourtCategories::findOrFail($id);
+        
+        // Cek apakah kategori masih digunakan oleh courts
+        if ($category->courts()->count() > 0) {
+            return redirect()->route('court-categories.index')
+                           ->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh ' . $category->courts()->count() . ' lapangan.');
+        }
+        
         $category->delete();
 
         return redirect()->route('court-categories.index')

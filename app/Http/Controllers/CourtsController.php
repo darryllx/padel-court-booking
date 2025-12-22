@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class CourtsController extends Controller
 {
+    /**
+     * Menampilkan daftar lapangan dengan fitur search dan filter
+     */
     public function index(Request $request)
     {
         $query = Courts::with('courtCategory');
@@ -51,14 +54,14 @@ class CourtsController extends Controller
     {
         $validated = $request->validate([
             'court_category_id' => 'required|exists:court_categories,id',
-            'court_name' => 'required|string|max:255',
+            'court_name' => 'required|string|max:255|unique:courts,court_name',
             'location' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
-            'is_available' => 'boolean', // Checkbox untuk ketersediaan
+            'price_per_hour' => 'required|numeric|min:0|max:9999999',
+            'description' => 'nullable|string|max:2000',
+            'is_available' => 'boolean',
         ]);
 
-        $validated['is_available'] = $request->has('is_available');
+        $validated['is_available'] = $request->has('is_available') ? 1 : 0;
 
         Courts::create($validated);
 
@@ -85,15 +88,15 @@ class CourtsController extends Controller
 
         $validated = $request->validate([
             'court_category_id' => 'required|exists:court_categories,id',
-            'court_name' => 'required|string|max:255',
+            'court_name' => 'required|string|max:255|unique:courts,court_name,' . $id,
             'location' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0',
-            'description' => 'nullable|string',
+            'price_per_hour' => 'required|numeric|min:0|max:9999999',
+            'description' => 'nullable|string|max:2000',
             'is_available' => 'boolean',
         ]);
         
         // Handle checkbox update
-        $validated['is_available'] = $request->has('is_available');
+        $validated['is_available'] = $request->has('is_available') ? 1 : 0;
 
         $court->update($validated);
 
@@ -104,6 +107,13 @@ class CourtsController extends Controller
     public function destroy(string $id)
     {
         $court = Courts::findOrFail($id);
+        
+        // Cek apakah lapangan masih memiliki booking aktif
+        if ($court->bookings()->whereIn('status', ['pending', 'confirmed'])->count() > 0) {
+            return redirect()->route('courts.index')
+                           ->with('error', 'Lapangan tidak dapat dihapus karena masih memiliki booking aktif.');
+        }
+        
         $court->delete();
 
         return redirect()->route('courts.index')

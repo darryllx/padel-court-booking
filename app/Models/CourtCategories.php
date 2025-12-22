@@ -13,4 +13,12 @@ class CourtCategories extends Model
         'category_name',
         'description',
     ];
+
+    /**
+     * Relasi ke Courts (One-to-Many)
+     */
+    public function courts()
+    {
+        return $this->hasMany(Courts::class, 'court_category_id');
+    }
 }
