@@ -4,86 +4,117 @@ namespace App\Http\Controllers;
 
 use App\Models\CourtCategories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CourtCategoriesController extends Controller
 {
-    
+    /**
+     * Menampilkan daftar kategori lapangan (admin only)
+     */
     public function index(Request $request)
     {
-        $query = CourtCategories::query();
-
-        // Fitur Search (Nama Kategori)
-        if ($request->has('search')) {
-            $search = $request->input('search');
-            $query->where('category_name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
         }
 
-        // Pagination digunakan agar hasil search rapi
-        $categories = $query->paginate(10)->withQueryString();
+        $query = CourtCategories::query();
 
-        return view('court_categories.index', compact('categories'));
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('category_name', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        $categories = $query->latest()->paginate(10)->withQueryString();
+
+        return view('admin.court-categories.index', compact('categories'));
     }
 
-    
+    /**
+     * Form tambah kategori
+     */
     public function create()
     {
-        // Menampilkan form tambah
-        return view('court_categories.create');
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('admin.court-categories.create');
     }
 
-    
+    /**
+     * Simpan kategori baru
+     */
     public function store(Request $request)
     {
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $validated = $request->validate([
             'category_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description'   => 'nullable|string',
         ]);
 
         CourtCategories::create($validated);
 
-        return redirect()->route('court-categories.index')
-                         ->with('success', 'Kategori lapangan berhasil ditambahkan.');
+        return redirect()
+            ->route('court-categories.index')
+            ->with('success', 'Kategori lapangan berhasil ditambahkan.');
     }
 
-
-    public function show(string $id)
-    {
-        $category = CourtCategories::findOrFail($id);
-        return view('court_categories.show', compact('category'));
-    }
-
-
+    /**
+     * Form edit kategori
+     */
     public function edit(string $id)
     {
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $category = CourtCategories::findOrFail($id);
-        // Menampilkan form edit
-        return view('court_categories.edit', compact('category'));
+
+        return view('admin.court-categories.edit', compact('category'));
     }
 
-
+    /**
+     * Update kategori
+     */
     public function update(Request $request, string $id)
     {
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $category = CourtCategories::findOrFail($id);
 
         $validated = $request->validate([
             'category_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description'   => 'nullable|string',
         ]);
 
         $category->update($validated);
 
-        return redirect()->route('court-categories.index')
-                         ->with('success', 'Kategori lapangan berhasil diperbarui.');
+        return redirect()
+            ->route('court-categories.index')
+            ->with('success', 'Kategori lapangan berhasil diperbarui.');
     }
 
-
+    /**
+     * Hapus kategori
+     */
     public function destroy(string $id)
     {
-        $category = CourtCategories::findOrFail($id);
-        $category->delete();
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
 
-        return redirect()->route('court-categories.index')
-                         ->with('success', 'Kategori lapangan berhasil dihapus.');
+        CourtCategories::findOrFail($id)->delete();
+
+        return redirect()
+            ->route('court-categories.index')
+            ->with('success', 'Kategori lapangan berhasil dihapus.');
     }
 }

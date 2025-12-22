@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -20,7 +21,6 @@
 
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside class="w-64 bg-gradient-to-b from-purple-600 to-indigo-600 text-white flex-shrink-0">
             <div class="p-6">
                 <a href="/" class="flex items-center space-x-2">
@@ -40,7 +40,7 @@
                     </svg>
                     <span class="font-medium">Dashboard</span>
                 </a>
-                
+
                 <a href="{{ route('admin.users.index') }}"
                     class="flex items-center px-6 py-3 hover:bg-white/10 transition {{ request()->routeIs('admin.users.*') ? 'bg-white/20 border-l-4 border-white' : '' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,8 +49,25 @@
                     </svg>
                     <span class="font-medium">Manajemen User</span>
                 </a>
-                
-                <!-- Add more menu items here as needed -->
+
+                <a href="{{ route('court-categories.index') }}"
+                    class="flex items-center px-6 py-3 hover:bg-white/10 transition {{ request()->routeIs('court-categories.*') ? 'bg-white/20 border-l-4 border-white' : '' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                    </svg>
+                    <span class="font-medium">Kategori Lapangan</span>
+                </a>
+
+                <a href="{{ route('courts.index') }}"
+                    class="flex items-center px-6 py-3 hover:bg-white/10 transition {{ request()->routeIs('courts.*') ? 'bg-white/20 border-l-4 border-white' : '' }}">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                    <span class="font-medium">Manajemen Lapangan</span>
+                </a>
+
             </nav>
 
             <div class="absolute bottom-0 w-64 p-6 border-t border-white/20">
@@ -61,8 +78,7 @@
                     </div>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit"
-                            class="text-white/70 hover:text-white transition">
+                        <button type="submit" class="text-white/70 hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -73,9 +89,7 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <div class="flex-1 flex flex-col">
-            <!-- Top Bar -->
             <header class="bg-white shadow-sm">
                 <div class="px-8 py-4">
                     <div class="flex items-center justify-between">
@@ -87,9 +101,7 @@
                 </div>
             </header>
 
-            <!-- Content -->
             <main class="flex-1 p-8">
-                <!-- Success/Error Messages -->
                 @if (session('success'))
                     <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg"
                         role="alert">
@@ -154,6 +166,46 @@
                 setTimeout(() => alert.remove(), 500);
             });
         }, 5000);
+        
+        // Logout Confirmation (SweetAlert)
+        document.addEventListener('submit', function(e) {
+            if (e.target.action && e.target.action.includes('logout')) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Anda akan keluar dari sesi ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Logout!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        e.target.submit();
+                    }
+                });
+            }
+        });
+
+        // Flash Message to SweetAlert (Optional: jika Anda ingin popup selain alert biasa)
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "{{ session('error') }}",
+            });
+        @endif
     </script>
 </body>
 

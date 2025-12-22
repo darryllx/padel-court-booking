@@ -5,6 +5,8 @@ use App\Models\CourtCategories;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CourtCategoriesController; 
+use App\Http\Controllers\CourtsController;
 
 // Update bagian route home '/'
 Route::get('/', function () {
@@ -85,4 +87,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // User Management Routes (CRUD) - Only for Admin
     Route::resource('users', UserController::class);
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('court-categories', CourtCategoriesController::class);
+    Route::resource('courts', CourtsController::class);
+});
+
 
