@@ -24,14 +24,14 @@ class CourtCategoriesController extends Controller
         // Pagination digunakan agar hasil search rapi
         $categories = $query->paginate(10)->withQueryString();
 
-        return view('court_categories.index', compact('categories'));
+        return view('admin.court_categories.index', compact('categories'));
     }
 
     
     public function create()
     {
         // Menampilkan form tambah
-        return view('court_categories.create');
+        return view('admin.court_categories.create');
     }
 
     
@@ -52,7 +52,7 @@ class CourtCategoriesController extends Controller
     public function show(string $id)
     {
         $category = CourtCategories::findOrFail($id);
-        return view('court_categories.show', compact('category'));
+        return view('admin.court_categories.show', compact('category'));
     }
 
 
@@ -60,7 +60,7 @@ class CourtCategoriesController extends Controller
     {
         $category = CourtCategories::findOrFail($id);
         // Menampilkan form edit
-        return view('court_categories.edit', compact('category'));
+        return view('admin.court_categories.edit', compact('category'));
     }
 
 
