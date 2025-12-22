@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -40,7 +41,7 @@
                     </svg>
                     <span class="font-medium">Dashboard</span>
                 </a>
-                
+
                 <a href="{{ route('admin.users.index') }}"
                     class="flex items-center px-6 py-3 hover:bg-white/10 transition {{ request()->routeIs('admin.users.*') ? 'bg-white/20 border-l-4 border-white' : '' }}">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,7 +50,7 @@
                     </svg>
                     <span class="font-medium">Manajemen User</span>
                 </a>
-                
+
                 <!-- Add more menu items here as needed -->
             </nav>
 
@@ -61,8 +62,7 @@
                     </div>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit"
-                            class="text-white/70 hover:text-white transition">
+                        <button type="submit" class="text-white/70 hover:text-white transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -91,8 +91,7 @@
             <main class="flex-1 p-8">
                 <!-- Success/Error Messages -->
                 @if (session('success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg"
-                        role="alert">
+                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg" role="alert">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -124,13 +123,13 @@
 
     <script>
         // Auto-refresh CSRF token to prevent 419 errors
-        setInterval(function() {
+        setInterval(function () {
             fetch('/refresh-csrf', {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.token) {
@@ -146,7 +145,7 @@
         }, 300000); // Refresh every 5 minutes
 
         // Auto-hide alerts after 5 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             const alerts = document.querySelectorAll('[role="alert"]');
             alerts.forEach(alert => {
                 alert.style.transition = 'opacity 0.5s';
@@ -154,6 +153,46 @@
                 setTimeout(() => alert.remove(), 500);
             });
         }, 5000);
+
+        // Logout Confirmation
+        document.addEventListener('submit', function(e) {
+            if (e.target.action && e.target.action.includes('logout')) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Anda akan keluar dari sesi ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Logout!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        e.target.submit();
+                    }
+                });
+            }
+        });
+
+        // Flash Message to SweetAlert
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "{{ session('error') }}",
+            });
+        @endif
     </script>
 </body>
 
