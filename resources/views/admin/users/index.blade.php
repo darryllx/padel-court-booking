@@ -7,13 +7,13 @@
         <div class="p-6 border-b border-gray-200">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <!-- Search Form -->
-                <form method="GET" action="{{ route('admin.users.index') }}" class="flex-1">
+                <form method="GET" action="{{ route('admin.users.index') }}" id="searchForm" class="flex-1">
                     <div class="flex gap-3">
-                        <input type="text" name="search" value="{{ request('search') }}"
+                        <input type="text" name="search" id="searchInput" value="{{ request('search') }}"
                             placeholder="Cari nama atau email..."
                             class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
 
-                        <select name="role"
+                        <select name="role" id="roleSelect"
                             class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                             <option value="">Semua Role</option>
                             @foreach ($roles as $role)

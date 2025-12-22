@@ -39,6 +39,10 @@ class CourtsController extends Controller
         // Kirim data categories untuk opsi filter di view
         $categories = CourtCategories::all();
 
+        if ($request->ajax()) {
+            return view('admin.courts.table', compact('courts', 'categories'))->render();
+        }
+
         return view('admin.courts.index', compact('courts', 'categories'));
     }
 
