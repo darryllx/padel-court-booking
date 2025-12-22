@@ -36,10 +36,9 @@ class Courts extends Model
     }
 
     
-    public function images(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function images()
     {
-    return $this->hasMany(CourtsImages::class);
+        return $this->hasMany(CourtsImages::class, 'court_id');
     }
-
     
 }

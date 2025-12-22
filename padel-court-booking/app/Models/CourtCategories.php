@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany; 
 
 class CourtCategories extends Model
 {
@@ -13,4 +14,9 @@ class CourtCategories extends Model
         'category_name',
         'description',
     ];
+
+    public function courts(): HasMany
+    {
+        return $this->hasMany(Courts::class, 'court_category_id');
+    }
 }

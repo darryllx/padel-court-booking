@@ -3,15 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\CourtCategories;
 
+// Update bagian route home '/'
 Route::get('/', function () {
-    $categories = CourtCategories::all();
+    // Mengambil kategori beserta courts dan images-nya
+    $categories = CourtCategories::with(['courts.images'])->get();
     return view('home', compact('categories'));
 });
 
-// // Home page (sama dengan welcome)
-// Route::get('/', function () {
-//     return view('home');
-// });
 
 // About Page
 Route::get('/about', function () {
