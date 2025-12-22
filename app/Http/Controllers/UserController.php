@@ -44,6 +44,10 @@ class UserController extends Controller
         $users = $query->latest()->paginate(10)->withQueryString();
         $roles = Role::all();
 
+        if ($request->ajax()) {
+            return view('admin.users.table', compact('users'))->render();
+        }
+
         return view('admin.users.index', compact('users', 'roles'));
     }
 
@@ -139,7 +143,7 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
-        
+
         // Cegah admin menghapus dirinya sendiri
         if ($user->id === Auth::id()) {
             return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
