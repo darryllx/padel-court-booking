@@ -8,8 +8,10 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourtCategoriesController;
 use App\Http\Controllers\CourtsController;
 
+// Update bagian route home '/'
 Route::get('/', function () {
-    $categories = CourtCategories::all();
+    // Mengambil kategori beserta courts dan images-nya
+    $categories = CourtCategories::with(['courts.images'])->get();
     return view('home', compact('categories'));
 });
 
@@ -18,10 +20,11 @@ Route::get('/refresh-csrf', function () {
     return response()->json(['token' => csrf_token()]);
 });
 
-// // Home page (sama dengan welcome)
-// Route::get('/', function () {
-//     return view('home');
-// });
+// CSRF Token Refresh Route
+Route::get('/refresh-csrf', function () {
+    return response()->json(['token' => csrf_token()]);
+});
+
 
 // About Page
 Route::get('/about', function () {

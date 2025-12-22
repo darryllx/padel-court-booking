@@ -2,11 +2,9 @@
     <x-navbar></x-navbar>
     <x-slot:title>Home - Courtletics Padel Court Booking</x-slot:title>
 
-    <!-- Hero Section -->
     <section class="py-15 bg-gradient-to-r from-blue-300 to-purple-600 text-white">
         <div class="container mx-auto px-4 py-20 lg:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <!-- Left Content -->
                 <div class="text-center lg:text-left">
                     <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
                         🎾 Best Padel Court in Bandung
@@ -22,7 +20,6 @@
                         Book Now
                     </a>
                 </div>
-                <!-- Right Image -->
                 <div class="relative">
                     <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=500&fit=crop"
                         alt="Padel Court" class="rounded-3xl shadow-2xl w-full h-[400px] object-cover">
@@ -31,28 +28,111 @@
         </div>
     </section>
 
-    <!-- Kategori Lapangan Section -->
-    <section class="py-20 bg-white">
+    <section class="py-24 bg-gray-50">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold mb-8 text-center">Kategori Lapangan</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Our Categories</span>
+                <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-4">Choose Your Court Type</h2>
+                <div class="h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 @forelse($categories as $category)
-                    <div class="bg-gray-100 rounded-xl p-6 shadow text-center">
-                        <h3 class="text-xl font-bold mb-2">{{ $category->category_name }}</h3>
-                        <p class="text-gray-600 mb-4">{{ $category->description }}</p>
-                        <a href="/book-court?category={{ $category->id }}"
-                           class="inline-block mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
-                            Booking Sekarang
-                        </a>
+                    @php
+                        // 1. Logika Pengambilan Gambar
+                        $firstCourt = $category->courts->first();
+                        $firstImage = $firstCourt ? $firstCourt->images->first() : null;
+                        $imageUrl = $firstImage 
+                            ? asset($firstImage->image_path) 
+                            : 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop';
+                            
+                        $courtCount = $category->courts->count();
+
+                        // 2. Logika Penentuan Warna Berdasarkan Nama Kategori
+                        $catName = strtolower($category->category_name);
+                        
+                        // Default (Indoor/Lainnya) - Biru
+                        $theme = [
+                            'badge_text' => 'text-blue-800',
+                            'title_hover'=> 'group-hover:text-blue-600',
+                            'link_hover' => 'group-hover:text-blue-600',
+                            'btn_hover_bg' => 'group-hover:bg-blue-600',
+                        ];
+
+                        if (str_contains($catName, 'semi')) {
+                            // Semi Outdoor - Kuning
+                            $theme = [
+                                'badge_text' => 'text-yellow-800',
+                                'title_hover'=> 'group-hover:text-yellow-600',
+                                'link_hover' => 'group-hover:text-yellow-600',
+                                'btn_hover_bg' => 'group-hover:bg-yellow-500',
+                            ];
+                        } elseif (str_contains($catName, 'outdoor')) {
+                            // Outdoor - Hijau
+                            $theme = [
+                                'badge_text' => 'text-green-800',
+                                'title_hover'=> 'group-hover:text-green-600',
+                                'link_hover' => 'group-hover:text-green-600',
+                                'btn_hover_bg' => 'group-hover:bg-green-600',
+                            ];
+                        }
+                    @endphp
+
+                    <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+                        
+                        <div class="relative h-64 overflow-hidden">
+                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-300 z-10"></div>
+                            
+                            <img src="{{ $imageUrl }}" 
+                                 alt="{{ $category->category_name }}" 
+                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+                            
+                            <div class="absolute top-4 right-4 z-20">
+                                <span class="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold {{ $theme['badge_text'] }} shadow-sm flex items-center gap-1">
+                                    🎾 {{ $courtCount }} Courts
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 flex flex-col flex-grow relative">
+                            
+                            <h3 class="text-2xl font-bold text-gray-900 mb-3 {{ $theme['title_hover'] }} transition-colors">
+                                {{ $category->category_name }}
+                            </h3>
+                            
+                            <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
+                                {{ $category->description ?? 'Nikmati pengalaman bermain padel terbaik dengan fasilitas standar internasional.' }}
+                            </p>
+
+                            <div class="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
+                                <span class="text-sm font-medium text-gray-400 {{ $theme['link_hover'] }} transition-colors">
+                                    View Details
+                                </span>
+                                
+                                <a href="/book-court?category={{ $category->id }}"
+                                   class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-600 {{ $theme['btn_hover_bg'] }} group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 @empty
-                    <div class="col-span-3 text-center text-gray-500">Belum ada kategori lapangan.</div>
+                    <div class="col-span-3 text-center py-12">
+                        <div class="inline-block p-4 rounded-full bg-gray-100 mb-4">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                            </svg>
+                        </div>
+                        <p class="text-gray-500 text-lg">Belum ada kategori lapangan yang tersedia.</p>
+                    </div>
                 @endforelse
             </div>
         </div>
     </section>
 
-    <!-- Facilities Section -->
     <section id="facilities" class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -61,58 +141,33 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-
-                <!-- Indoor Court Card -->
                 <div class="court-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200">
                     <div class="relative h-64">
                         <img src="https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=800&h=400&fit=crop"
                             alt="Indoor Court" class="w-full h-full object-cover">
-                        <div
-                            class="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                        <div class="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                             Indoor
                         </div>
-                        <div
-                            class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
                             Available
                         </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3">Indoor Court</h3>
-                        <p class="text-gray-600 mb-6">Air conditioned court with LED lighting system and premium
-                            synthetic turf</p>
+                        <p class="text-gray-600 mb-6">Air conditioned court with LED lighting system and premium synthetic turf</p>
 
                         <div class="space-y-3 mb-6">
                             <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
+                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 <span>Air Conditioned</span>
                             </div>
                             <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>LED Lighting System</span>
-                            </div>
-                            <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
+                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 <span>Professional Equipment</span>
-                            </div>
-                            <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-blue-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>Changing Room & Shower</span>
                             </div>
                         </div>
 
@@ -130,57 +185,33 @@
                     </div>
                 </div>
 
-                <!-- Outdoor Court Card -->
                 <div class="court-card bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-200">
                     <div class="relative h-64">
                         <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=400&fit=crop"
                             alt="Outdoor Court" class="w-full h-full object-cover">
-                        <div
-                            class="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                        <div class="absolute top-4 left-4 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
                             Outdoor
                         </div>
-                        <div
-                            class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        <div class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
                             Available
                         </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3">Outdoor Court</h3>
-                        <p class="text-gray-600 mb-6">Premium outdoor court with natural lighting and fresh air
-                            environment</p>
+                        <p class="text-gray-600 mb-6">Premium outdoor court with natural lighting and fresh air environment</p>
 
                         <div class="space-y-3 mb-6">
                             <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
+                                <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 <span>Natural Lighting</span>
                             </div>
                             <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
+                                <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
                                 <span>Fresh Air Environment</span>
-                            </div>
-                            <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>Premium Synthetic Turf</span>
-                            </div>
-                            <div class="flex items-center text-gray-700">
-                                <svg class="w-5 h-5 mr-3 text-green-500" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M5 13l4 4L19 7" />
-                                </svg>
-                                <span>Night Lighting Available</span>
                             </div>
                         </div>
 
@@ -202,7 +233,6 @@
         </div>
     </section>
 
-    <!-- Stats Section -->
     <section class="py-16 bg-gradient-to-r from-blue-500 to-purple-600 text-white">
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -226,7 +256,6 @@
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
     <section class="py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -276,7 +305,6 @@
         </div>
     </section>
 
-    <!-- CTA Section (ajakan tindakan agar pengguna langsung memesan)-->
     <section class="py-20 hero-gradient text-black">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Play?</h2>
