@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens; 
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +16,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'password',
+        'role_id',
         'phone_number',
     ];
 
@@ -32,16 +33,21 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return $this->role && $this->role->name === 'admin';
     }
 
     public function isCustomer(): bool
     {
-        return $this->role === 'customer';
+        return $this->role && $this->role->name === 'customer';
+    }
+
+    public function role(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Role::class);
     }
 
     public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
-{
-    return $this->hasMany(Bookings::class);
-}
+    {
+        return $this->hasMany(Bookings::class);
+    }
 }
