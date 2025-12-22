@@ -2,10 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\CourtCategories;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     $categories = CourtCategories::all();
     return view('home', compact('categories'));
+});
+
+// CSRF Token Refresh Route
+Route::get('/refresh-csrf', function () {
+    return response()->json(['token' => csrf_token()]);
 });
 
 // // Home page (sama dengan welcome)
@@ -51,30 +57,18 @@ Route::get('/booking-success', function () {
 // Authentication Routes
 
 // Login
-Route::get('/login', function () {
-    return view('login');
-});
-
-Route::post('/login', function () {
-    return redirect('/')->with('success', 'Login successful!');
-});
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 
 // Register
-Route::get('/register', function () {
-    return view('register');
-});
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
-Route::post('/register', function () {
-    return redirect('/login')->with('success', 'Registration successful! Please login.');
-});
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Forgot Password (optional)
 Route::get('/forgot-password', function () {
     return view('forgot-password');
-});
-
-// Logout (optional)
-Route::post('/logout', function () {
-    return redirect('/')->with('success', 'Logged out successfully!');
 });
 

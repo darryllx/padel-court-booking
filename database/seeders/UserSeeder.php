@@ -3,36 +3,44 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminRole = \App\Models\Role::where('name', 'admin')->first();
-        $customerRole = \App\Models\Role::where('name', 'customer')->first();
+        // Get roles from database
+        $adminRole = Role::where('name', 'admin')->first();
+        $customerRole = Role::where('name', 'customer')->first();
 
-        // 1. Akun Admin
-        DB::table('users')->insert([
+        // Check if roles exist
+        if (!$adminRole || !$customerRole) {
+            $this->command->error('Roles not found! Please run RoleSeeder first.');
+            return;
+        }
+
+        // 1. Create Admin Account
+        User::create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin123'), // Password: admin123
             'role_id' => $adminRole->id,
             'phone_number' => '081234567890',
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
-        // 2. Akun Customer (Penyewa)
-        DB::table('users')->insert([
+        $this->command->info('Admin user created successfully.');
+
+        // 2. Create Customer Account
+        User::create([
             'name' => 'Budi Santoso',
             'email' => 'budi@gmail.com',
             'password' => Hash::make('password123'),
             'role_id' => $customerRole->id,
             'phone_number' => '089876543210',
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+
+        $this->command->info('Customer user created successfully.');
     }
 }
