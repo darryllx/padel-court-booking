@@ -4,10 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Courts;
 use App\Models\CourtCategories;
+use App\Models\User;
+use App\Models\Bookings;
+use App\Models\Payments;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
+    /**
+     * Admin Dashboard with statistics
+     */
+    public function adminDashboard()
+    {
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // Get statistics
+        $totalUsers = User::count();
+        $totalCourts = Courts::count();
+        $totalBookings = Bookings::count();
+        $totalRevenue = Payments::where('payment_status', 'completed')->sum('amount');
+
+        // Recent users (last 5)
+        $recentUsers = User::with('role')->latest()->take(5)->get();
+
+        // Recent bookings (last 5)
+        $recentBookings = Bookings::with(['user', 'court'])->latest()->take(5)->get();
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'totalCourts',
+            'totalBookings',
+            'totalRevenue',
+            'recentUsers',
+            'recentBookings'
+        ));
+    }
+
     public function index(Request $request)
     {
         $query = Courts::with('courtCategory');
