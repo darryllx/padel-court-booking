@@ -5,13 +5,12 @@ use App\Models\CourtCategories;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\CourtCategoriesController; 
+use App\Http\Controllers\CourtCategoriesController;
 use App\Http\Controllers\CourtsController;
+use App\Http\Controllers\ProfileController;
 
-// Update bagian route home '/'
 Route::get('/', function () {
-    // Mengambil kategori beserta courts dan images-nya
-    $categories = CourtCategories::with(['courts.images'])->get();
+    $categories = CourtCategories::all();
     return view('home', compact('categories'));
 });
 
@@ -20,11 +19,10 @@ Route::get('/refresh-csrf', function () {
     return response()->json(['token' => csrf_token()]);
 });
 
-// CSRF Token Refresh Route
-Route::get('/refresh-csrf', function () {
-    return response()->json(['token' => csrf_token()]);
-});
-
+// // Home page (sama dengan welcome)
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 // About Page
 Route::get('/about', function () {
@@ -33,12 +31,12 @@ Route::get('/about', function () {
 
 // Book Court - Court Selection
 Route::get('/book-court', function () {
-    return view('courtdetail');  
+    return view('courtdetail');
 });
 
 // Booking Detail Form
 Route::get('/booking-detail', function () {
-    return view('bookingcourt');  
+    return view('bookingcourt');
 });
 
 // Payment Page (GET)
@@ -74,6 +72,13 @@ Route::post('/register', [AuthController::class, 'register']);
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Profile Routes - Accessible by all authenticated users
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+});
+
 // Forgot Password (optional)
 Route::get('/forgot-password', function () {
     return view('forgot-password');
@@ -83,14 +88,20 @@ Route::get('/forgot-password', function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
-    
+
     // User Management Routes (CRUD) - Only for Admin
+    Route::get('/users/export-pdf', [UserController::class, 'exportPdf'])->name('users.exportPdf');
     Route::resource('users', UserController::class);
 });
 
-Route::middleware(['auth'])->group(function () {
+// Court Categories & Courts Management - Protected with auth and role:admin middleware
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Court Categories Routes
+    Route::get('/court-categories/export-pdf', [CourtCategoriesController::class, 'exportPdf'])->name('court-categories.exportPdf');
     Route::resource('court-categories', CourtCategoriesController::class);
+
+    // Courts Routes
+    Route::get('/courts/export-pdf', [CourtsController::class, 'exportPdf'])->name('courts.exportPdf');
     Route::resource('courts', CourtsController::class);
 });
-
 

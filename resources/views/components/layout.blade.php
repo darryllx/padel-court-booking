@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -50,26 +51,66 @@
 
     <script>
         // Auto-refresh CSRF token to prevent 419 errors
-        setInterval(function() {
+        setInterval(function () {
             fetch('/refresh-csrf', {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.token) {
-                    // Update all CSRF token inputs
-                    document.querySelectorAll('input[name="_token"]').forEach(input => {
-                        input.value = data.token;
-                    });
-                    // Update meta tag
-                    document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.token);
-                }
-            })
-            .catch(error => console.error('CSRF refresh error:', error));
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        // Update all CSRF token inputs
+                        document.querySelectorAll('input[name="_token"]').forEach(input => {
+                            input.value = data.token;
+                        });
+                        // Update meta tag
+                        document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.token);
+                    }
+                })
+                .catch(error => console.error('CSRF refresh error:', error));
         }, 300000); // Refresh every 5 minutes
+
+        // Logout Confirmation
+        document.addEventListener('submit', function(e) {
+            if (e.target.action && e.target.action.includes('logout')) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: "Anda akan keluar dari sesi ini!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Logout!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        e.target.submit();
+                    }
+                });
+            }
+        });
+
+        // Flash Message to SweetAlert
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: "{{ session('success') }}",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "{{ session('error') }}",
+            });
+        @endif
     </script>
 
 </body>

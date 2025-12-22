@@ -65,9 +65,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                     </svg>
-                    <span class="font-medium">Manajemen Lapangan</span>
+                    <span class="font-medium">Lapangan</span>
                 </a>
 
+                <!-- Add more menu items here as needed -->
             </nav>
 
             <div class="absolute bottom-0 w-64 p-6 border-t border-white/20">
@@ -103,8 +104,7 @@
 
             <main class="flex-1 p-8">
                 @if (session('success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg"
-                        role="alert">
+                    <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg" role="alert">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
@@ -136,13 +136,13 @@
 
     <script>
         // Auto-refresh CSRF token to prevent 419 errors
-        setInterval(function() {
+        setInterval(function () {
             fetch('/refresh-csrf', {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
                 .then(response => response.json())
                 .then(data => {
                     if (data.token) {
@@ -158,7 +158,7 @@
         }, 300000); // Refresh every 5 minutes
 
         // Auto-hide alerts after 5 seconds
-        setTimeout(function() {
+        setTimeout(function () {
             const alerts = document.querySelectorAll('[role="alert"]');
             alerts.forEach(alert => {
                 alert.style.transition = 'opacity 0.5s';
@@ -166,8 +166,8 @@
                 setTimeout(() => alert.remove(), 500);
             });
         }, 5000);
-        
-        // Logout Confirmation (SweetAlert)
+
+        // Logout Confirmation
         document.addEventListener('submit', function(e) {
             if (e.target.action && e.target.action.includes('logout')) {
                 e.preventDefault();
@@ -188,7 +188,7 @@
             }
         });
 
-        // Flash Message to SweetAlert (Optional: jika Anda ingin popup selain alert biasa)
+        // Flash Message to SweetAlert
         @if(session('success'))
             Swal.fire({
                 icon: 'success',
