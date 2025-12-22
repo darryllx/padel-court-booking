@@ -18,23 +18,27 @@ class CourtCategoriesController extends Controller
         if ($request->has('search')) {
             $search = $request->input('search');
             $query->where('category_name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                ->orWhere('description', 'like', "%{$search}%");
         }
 
         // Pagination digunakan agar hasil search rapi
         $categories = $query->paginate(10)->withQueryString();
 
+        if ($request->ajax()) {
+            return view('admin.court_categories.table', compact('categories'))->render();
+        }
+
         return view('admin.court_categories.index', compact('categories'));
     }
 
-    
+
     public function create()
     {
         // Menampilkan form tambah
         return view('admin.court_categories.create');
     }
 
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -45,7 +49,7 @@ class CourtCategoriesController extends Controller
         CourtCategories::create($validated);
 
         return redirect()->route('court-categories.index')
-                         ->with('success', 'Kategori lapangan berhasil ditambahkan.');
+            ->with('success', 'Kategori lapangan berhasil ditambahkan.');
     }
 
 
@@ -76,23 +80,40 @@ class CourtCategoriesController extends Controller
         $category->update($validated);
 
         return redirect()->route('court-categories.index')
-                         ->with('success', 'Kategori lapangan berhasil diperbarui.');
+            ->with('success', 'Kategori lapangan berhasil diperbarui.');
     }
 
 
     public function destroy(string $id)
     {
         $category = CourtCategories::findOrFail($id);
-        
+
         // Cek apakah kategori masih digunakan oleh courts
         if ($category->courts()->count() > 0) {
             return redirect()->route('court-categories.index')
-                           ->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh ' . $category->courts()->count() . ' lapangan.');
+                ->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh ' . $category->courts()->count() . ' lapangan.');
         }
-        
+
         $category->delete();
 
         return redirect()->route('court-categories.index')
-                         ->with('success', 'Kategori lapangan berhasil dihapus.');
+            ->with('success', 'Kategori lapangan berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = CourtCategories::query();
+
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where('category_name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+        }
+
+        $categories = $query->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.court_categories.pdf', compact('categories'));
+
+        return $pdf->download('laporan-kategori-lapangan.pdf');
     }
 }
