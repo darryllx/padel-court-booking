@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourtCategoriesController;
 use App\Http\Controllers\CourtsController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     $categories = CourtCategories::all();
@@ -71,6 +72,13 @@ Route::post('/register', [AuthController::class, 'register']);
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Profile Routes - Accessible by all authenticated users
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.update-password');
+});
+
 // Forgot Password (optional)
 Route::get('/forgot-password', function () {
     return view('forgot-password');
@@ -89,6 +97,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 // Court Categories & Courts Management - Protected with auth and role:admin middleware
 Route::middleware(['auth', 'role:admin'])->group(function () {
     // Court Categories Routes
+    Route::get('/court-categories/export-pdf', [CourtCategoriesController::class, 'exportPdf'])->name('court-categories.exportPdf');
     Route::resource('court-categories', CourtCategoriesController::class);
 
     // Courts Routes
