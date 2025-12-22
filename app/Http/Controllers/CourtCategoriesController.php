@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 class CourtCategoriesController extends Controller
 {
-    
+    /**
+     * Menampilkan daftar kategori lapangan dengan fitur search
+     */
     public function index(Request $request)
     {
         $query = CourtCategories::query();
@@ -22,22 +24,22 @@ class CourtCategoriesController extends Controller
         // Pagination digunakan agar hasil search rapi
         $categories = $query->paginate(10)->withQueryString();
 
-        return view('court_categories.index', compact('categories'));
+        return view('admin.court_categories.index', compact('categories'));
     }
 
     
     public function create()
     {
         // Menampilkan form tambah
-        return view('court_categories.create');
+        return view('admin.court_categories.create');
     }
 
     
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'category_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'category_name' => 'required|string|max:255|unique:court_categories,category_name',
+            'description' => 'nullable|string|max:1000',
         ]);
 
         CourtCategories::create($validated);
@@ -50,7 +52,7 @@ class CourtCategoriesController extends Controller
     public function show(string $id)
     {
         $category = CourtCategories::findOrFail($id);
-        return view('court_categories.show', compact('category'));
+        return view('admin.court_categories.show', compact('category'));
     }
 
 
@@ -58,7 +60,7 @@ class CourtCategoriesController extends Controller
     {
         $category = CourtCategories::findOrFail($id);
         // Menampilkan form edit
-        return view('court_categories.edit', compact('category'));
+        return view('admin.court_categories.edit', compact('category'));
     }
 
 
@@ -67,8 +69,8 @@ class CourtCategoriesController extends Controller
         $category = CourtCategories::findOrFail($id);
 
         $validated = $request->validate([
-            'category_name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'category_name' => 'required|string|max:255|unique:court_categories,category_name,' . $id,
+            'description' => 'nullable|string|max:1000',
         ]);
 
         $category->update($validated);
@@ -81,6 +83,13 @@ class CourtCategoriesController extends Controller
     public function destroy(string $id)
     {
         $category = CourtCategories::findOrFail($id);
+        
+        // Cek apakah kategori masih digunakan oleh courts
+        if ($category->courts()->count() > 0) {
+            return redirect()->route('court-categories.index')
+                           ->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh ' . $category->courts()->count() . ' lapangan.');
+        }
+        
         $category->delete();
 
         return redirect()->route('court-categories.index')

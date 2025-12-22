@@ -5,6 +5,8 @@ use App\Models\CourtCategories;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CourtCategoriesController;
+use App\Http\Controllers\CourtsController;
 
 // Update bagian route home '/'
 Route::get('/', function () {
@@ -31,12 +33,12 @@ Route::get('/about', function () {
 
 // Book Court - Court Selection
 Route::get('/book-court', function () {
-    return view('courtdetail');  
+    return view('courtdetail');
 });
 
 // Booking Detail Form
 Route::get('/booking-detail', function () {
-    return view('bookingcourt');  
+    return view('bookingcourt');
 });
 
 // Payment Page (GET)
@@ -81,8 +83,18 @@ Route::get('/forgot-password', function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
-    
+
     // User Management Routes (CRUD) - Only for Admin
+    Route::get('/users/export-pdf', [UserController::class, 'exportPdf'])->name('users.exportPdf');
     Route::resource('users', UserController::class);
+});
+
+// Court Categories & Courts Management - Protected with auth and role:admin middleware
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Court Categories Routes
+    Route::resource('court-categories', CourtCategoriesController::class);
+    
+    // Courts Routes
+    Route::resource('courts', CourtsController::class);
 });
 

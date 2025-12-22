@@ -44,6 +44,10 @@ class UserController extends Controller
         $users = $query->latest()->paginate(10)->withQueryString();
         $roles = Role::all();
 
+        if ($request->ajax()) {
+            return view('admin.users.table', compact('users'))->render();
+        }
+
         return view('admin.users.index', compact('users', 'roles'));
     }
 
@@ -139,7 +143,7 @@ class UserController extends Controller
         }
 
         $user = User::findOrFail($id);
-        
+
         // Cegah admin menghapus dirinya sendiri
         if ($user->id === Auth::id()) {
             return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
@@ -148,5 +152,37 @@ class UserController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $query = User::with('role');
+
+        // Apply filters same as index for consistency
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('role')) {
+            $role = $request->input('role');
+            $query->whereHas('role', function ($q) use ($role) {
+                $q->where('name', $role);
+            });
+        }
+
+        $users = $query->latest()->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.users.pdf', compact('users'));
+
+        return $pdf->download('laporan-user.pdf');
     }
 }
