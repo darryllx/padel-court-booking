@@ -32,7 +32,7 @@ class Courts extends Model
     }
     public function bookings(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Bookings::class);
+        return $this->hasMany(Bookings::class, 'court_id');
     }
 
     
