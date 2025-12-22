@@ -8,10 +8,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourtCategoriesController;
 use App\Http\Controllers\CourtsController;
 
-// Update bagian route home '/'
 Route::get('/', function () {
-    // Mengambil kategori beserta courts dan images-nya
-    $categories = CourtCategories::with(['courts.images'])->get();
+    $categories = CourtCategories::all();
     return view('home', compact('categories'));
 });
 
@@ -20,11 +18,10 @@ Route::get('/refresh-csrf', function () {
     return response()->json(['token' => csrf_token()]);
 });
 
-// CSRF Token Refresh Route
-Route::get('/refresh-csrf', function () {
-    return response()->json(['token' => csrf_token()]);
-});
-
+// // Home page (sama dengan welcome)
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 // About Page
 Route::get('/about', function () {
@@ -95,7 +92,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('court-categories', CourtCategoriesController::class);
 
     // Courts Routes
-    Route::get('/courts/export-pdf', [CourtsController::class, 'exportPdf'])->name('courts.exportPdf');
     Route::resource('courts', CourtsController::class);
 });
 
