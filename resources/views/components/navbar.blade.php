@@ -31,13 +31,61 @@
 
             <!-- Auth Buttons -->
             <div class="hidden md:flex items-center space-x-4">
-                <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">
-                    Login
-                </a>
-                <a href="/register"
-                    class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition">
-                    Sign Up
-                </a>
+                @auth
+                    <!-- Show Admin link for admin users -->
+                    @if (Auth::user()->isAdmin())
+                        <a href="/admin/dashboard"
+                            class="text-gray-700 hover:text-purple-600 font-medium transition">
+                            Admin Panel
+                        </a>
+                    @endif
+
+                    <!-- Profile dropdown or link -->
+                    <div class="relative group">
+                        <button
+                            class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 font-medium transition">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            </svg>
+                            <span>{{ Auth::user()->name }}</span>
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
+
+                        <!-- Dropdown Menu -->
+                        <div
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block">
+                            <a href="/profile"
+                                class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">
+                                Profile
+                            </a>
+                            <a href="/my-bookings"
+                                class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">
+                                My Bookings
+                            </a>
+                            <hr class="my-2">
+                            <form action="/logout" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 transition">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                        Login
+                    </a>
+                    <a href="/register"
+                        class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition">
+                        Sign Up
+                    </a>
+                @endauth
             </div>
 
             <!-- Mobile Menu Button -->
@@ -54,10 +102,28 @@
                 <a href="/" class="text-gray-700 hover:text-purple-600 font-medium transition">Home</a>
                 <a href="/about" class="text-gray-700 hover:text-purple-600 font-medium transition">About</a>
                 <a href="/book-court" class="text-gray-700 hover:text-purple-600 font-medium transition">Book Court</a>
-                <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">Login</a>
-                <a href="/register"
-                    class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium text-center">Sign
-                    Up</a>
+
+                @auth
+                    @if (Auth::user()->isAdmin())
+                        <a href="/admin/dashboard"
+                            class="text-gray-700 hover:text-purple-600 font-medium transition">Admin Panel</a>
+                    @endif
+                    <a href="/profile" class="text-gray-700 hover:text-purple-600 font-medium transition">Profile</a>
+                    <a href="/my-bookings" class="text-gray-700 hover:text-purple-600 font-medium transition">My
+                        Bookings</a>
+                    <form action="/logout" method="POST">
+                        @csrf
+                        <button type="submit"
+                            class="w-full text-left text-red-600 hover:text-red-700 font-medium transition">
+                            Logout
+                        </button>
+                    </form>
+                @else
+                    <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">Login</a>
+                    <a href="/register"
+                        class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium text-center">Sign
+                        Up</a>
+                @endauth
             </div>
         </div>
     </div>
