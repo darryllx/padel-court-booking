@@ -153,4 +153,36 @@ class UserController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
     }
+
+    public function exportPdf(Request $request)
+    {
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $query = User::with('role');
+
+        // Apply filters same as index for consistency
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('role')) {
+            $role = $request->input('role');
+            $query->whereHas('role', function ($q) use ($role) {
+                $q->where('name', $role);
+            });
+        }
+
+        $users = $query->latest()->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.users.pdf', compact('users'));
+
+        return $pdf->download('laporan-user.pdf');
+    }
 }

@@ -28,12 +28,12 @@ Route::get('/about', function () {
 
 // Book Court - Court Selection
 Route::get('/book-court', function () {
-    return view('courtdetail');  
+    return view('courtdetail');
 });
 
 // Booking Detail Form
 Route::get('/booking-detail', function () {
-    return view('bookingcourt');  
+    return view('bookingcourt');
 });
 
 // Payment Page (GET)
@@ -78,8 +78,9 @@ Route::get('/forgot-password', function () {
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
-    
+
     // User Management Routes (CRUD) - Only for Admin
+    Route::get('/users/export-pdf', [UserController::class, 'exportPdf'])->name('users.exportPdf');
     Route::resource('users', UserController::class);
 });
 
