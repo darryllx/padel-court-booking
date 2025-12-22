@@ -1,11 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\CourtCategories;
 
-// Home page (sama dengan welcome)
 Route::get('/', function () {
-    return view('home');
+    $categories = CourtCategories::all();
+    return view('home', compact('categories'));
 });
+
+// // Home page (sama dengan welcome)
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 // About Page
 Route::get('/about', function () {

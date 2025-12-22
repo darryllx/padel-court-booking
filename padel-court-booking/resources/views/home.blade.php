@@ -8,55 +8,46 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <!-- Left Content -->
                 <div class="text-center lg:text-left">
-                    <div
-                        class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                    <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
                         🎾 Best Padel Court in Bandung
                     </div>
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                         Let's play at the #1 padel court in Bandung
                     </h1>
                     <p class="text-xl text-black-100 mb-8">
-                        Book your favorite court easily and quickly. Modern facilities, professional equipment, and
-                        comfortable atmosphere.
+                        Booking lapangan padel indoor & outdoor dengan mudah, cepat, dan transparan.
                     </p>
-
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <a href="#facilities"
-                            class="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 transition font-bold text-center shadow-lg hover:shadow-xl transform hover:scale-105">
-                            Play now
-                        </a>
-                        {{-- <a href="/book-court"
-                            class="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 transition font-bold text-center shadow-lg hover:shadow-xl transform hover:scale-105">
-                            Book Court
-                        </a> --}}
-                    </div>
+                    <a href="/book-court"
+                        class="inline-block bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                        Book Now
+                    </a>
                 </div>
-
-                <!-- Right Content - Image -->
+                <!-- Right Image -->
                 <div class="relative">
-                    <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=600&fit=crop"
-                            alt="Padel Court" class="w-full h-[400px] lg:h-[500px] object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-
-                        <!-- Floating Badge -->
-                        <div class="absolute bottom-6 left-6 bg-white rounded-2xl p-4 shadow-2xl">
-                            <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="text-xl font-bold text-gray-800">Available Now</div>
-                                    <div class="text-sm text-gray-500">Book your slot</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=500&fit=crop"
+                        alt="Padel Court" class="rounded-3xl shadow-2xl w-full h-[400px] object-cover">
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kategori Lapangan Section -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-8 text-center">Kategori Lapangan</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                @forelse($categories as $category)
+                    <div class="bg-gray-100 rounded-xl p-6 shadow text-center">
+                        <h3 class="text-xl font-bold mb-2">{{ $category->category_name }}</h3>
+                        <p class="text-gray-600 mb-4">{{ $category->description }}</p>
+                        <a href="/book-court?category={{ $category->id }}"
+                           class="inline-block mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                            Booking Sekarang
+                        </a>
+                    </div>
+                @empty
+                    <div class="col-span-3 text-center text-gray-500">Belum ada kategori lapangan.</div>
+                @endforelse
             </div>
         </div>
     </section>
