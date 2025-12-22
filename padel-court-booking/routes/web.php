@@ -7,6 +7,11 @@ Route::get('/', function () {
     return view('home');
 });
 
+// About Page
+Route::get('/about', function () {
+    return view('about');
+});
+
 // Book Court - Court Selection
 Route::get('/book-court', function () {
     return view('courtdetail');  
