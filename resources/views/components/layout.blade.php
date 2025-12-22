@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Padel Court Booking' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -45,6 +46,30 @@
             <p class="mb-2">&copy; 2025 Padel Court Booking System</p>
         </div>
     </footer>
+
+    <script>
+        // Auto-refresh CSRF token to prevent 419 errors
+        setInterval(function() {
+            fetch('/refresh-csrf', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.token) {
+                    // Update all CSRF token inputs
+                    document.querySelectorAll('input[name="_token"]').forEach(input => {
+                        input.value = data.token;
+                    });
+                    // Update meta tag
+                    document.querySelector('meta[name="csrf-token"]').setAttribute('content', data.token);
+                }
+            })
+            .catch(error => console.error('CSRF refresh error:', error));
+        }, 300000); // Refresh every 5 minutes
+    </script>
 
 </body>
 
