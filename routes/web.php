@@ -92,6 +92,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('court-categories', CourtCategoriesController::class);
 
     // Courts Routes
+    Route::get('/courts/export-pdf', [CourtsController::class, 'exportPdf'])->name('courts.exportPdf');
     Route::resource('courts', CourtsController::class);
 });
 
