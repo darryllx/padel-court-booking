@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -20,16 +21,18 @@ class UserController extends Controller
         // Fitur Search (Nama atau Email)
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
         // Fitur Filter berdasarkan Role
         if ($request->filled('role')) {
             $role = $request->input('role');
-            $query->where('role', $role);
+            $query->whereHas('role', function ($q) use ($role) {
+                $q->where('name', $role);
+            });
         }
 
         $users = $query->latest()->paginate(10)->withQueryString();
@@ -42,7 +45,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.create');
+        $roles = Role::all();
+        return view('users.create', compact('roles'));
     }
 
     /**
@@ -54,15 +58,14 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Password::defaults()],
-            // Validasi role apakah sesuai dengan daftar role yang ada
-            'role' => ['required', 'in:admin,customer,staff'],
+            'role_id' => ['required', 'exists:roles,id'],
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role,
+            'role_id' => $request->role_id,
         ]);
 
         return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
@@ -83,7 +86,8 @@ class UserController extends Controller
     public function edit(string $id)
     {
         $user = User::findOrFail($id);
-        return view('users.edit', compact('user'));
+        $roles = Role::all();
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -95,7 +99,7 @@ class UserController extends Controller
 
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,'.$user->id],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
             // Password bersifat opsional saat update (nullable)
             'password' => ['nullable', 'confirmed', Password::defaults()],
         ]);
@@ -108,6 +112,10 @@ class UserController extends Controller
         // Hanya update password jika diisi
         if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
+        }
+
+        if ($request->filled('role_id')) {
+            $data['role_id'] = $request->role_id;
         }
 
         $user->update($data);
