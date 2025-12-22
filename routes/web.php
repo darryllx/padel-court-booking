@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\CourtCategories;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     $categories = CourtCategories::all();
@@ -70,5 +72,14 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Forgot Password (optional)
 Route::get('/forgot-password', function () {
     return view('forgot-password');
+});
+
+// Admin Routes - Protected with auth middleware
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
+    
+    // User Management Routes (CRUD) - Only for Admin
+    Route::resource('users', UserController::class);
 });
 

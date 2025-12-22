@@ -34,22 +34,22 @@
                 @auth
                     <!-- Show Admin link for admin users -->
                     @if (Auth::user()->isAdmin())
-                        <a href="/admin/dashboard"
+                        <a href="{{ route('admin.dashboard') }}"
                             class="text-gray-700 hover:text-purple-600 font-medium transition">
                             Admin Panel
                         </a>
                     @endif
 
                     <!-- Profile dropdown or link -->
-                    <div class="relative group">
-                        <button
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open"
                             class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 font-medium transition">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                             </svg>
                             <span>{{ Auth::user()->name }}</span>
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="w-4 h-4 transition-transform" :class="open ? 'rotate-180' : ''" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
                                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
                                     clip-rule="evenodd" />
@@ -57,8 +57,14 @@
                         </button>
 
                         <!-- Dropdown Menu -->
-                        <div
-                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block">
+                        <div x-show="open" @click.away="open = false"
+                            x-transition:enter="transition ease-out duration-100"
+                            x-transition:enter-start="transform opacity-0 scale-95"
+                            x-transition:enter-end="transform opacity-100 scale-100"
+                            x-transition:leave="transition ease-in duration-75"
+                            x-transition:leave-start="transform opacity-100 scale-100"
+                            x-transition:leave-end="transform opacity-0 scale-95"
+                            class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
                             <a href="/profile"
                                 class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">
                                 Profile
@@ -105,7 +111,7 @@
 
                 @auth
                     @if (Auth::user()->isAdmin())
-                        <a href="/admin/dashboard"
+                        <a href="{{ route('admin.dashboard') }}"
                             class="text-gray-700 hover:text-purple-600 font-medium transition">Admin Panel</a>
                     @endif
                     <a href="/profile" class="text-gray-700 hover:text-purple-600 font-medium transition">Profile</a>

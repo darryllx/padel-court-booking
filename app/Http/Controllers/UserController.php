@@ -7,7 +7,8 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -16,7 +17,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $query = User::query();
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $query = User::with('role');
 
         // Fitur Search (Nama atau Email)
         if ($request->filled('search')) {
@@ -36,8 +42,9 @@ class UserController extends Controller
         }
 
         $users = $query->latest()->paginate(10)->withQueryString();
+        $roles = Role::all();
 
-        return view('users.index', compact('users'));
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     /**
@@ -45,22 +52,20 @@ class UserController extends Controller
      */
     public function create()
     {
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $roles = Role::all();
-        return view('users.create', compact('roles'));
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
      * Menyimpan user baru ke database.
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role_id' => ['required', 'exists:roles,id'],
-        ]);
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -68,7 +73,7 @@ class UserController extends Controller
             'role_id' => $request->role_id,
         ]);
 
-        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
     }
 
     /**
@@ -76,8 +81,13 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::findOrFail($id);
-        return view('users.show', compact('user'));
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $user = User::with('role')->findOrFail($id);
+        return view('admin.users.show', compact('user'));
     }
 
     /**
@@ -85,28 +95,27 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $user = User::findOrFail($id);
         $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
      * Memperbarui data user.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         $user = User::findOrFail($id);
-
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-            // Password bersifat opsional saat update (nullable)
-            'password' => ['nullable', 'confirmed', Password::defaults()],
-        ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
+            'role_id' => $request->role_id,
         ];
 
         // Hanya update password jika diisi
@@ -114,13 +123,9 @@ class UserController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        if ($request->filled('role_id')) {
-            $data['role_id'] = $request->role_id;
-        }
-
         $user->update($data);
 
-        return redirect()->route('users.index')->with('success', 'Data user berhasil diperbarui.');
+        return redirect()->route('admin.users.index')->with('success', 'Data user berhasil diperbarui.');
     }
 
     /**
@@ -128,9 +133,20 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        // Pastikan hanya admin yang bisa akses
+        if (!Auth::check() || Auth::user()->role->name !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $user = User::findOrFail($id);
+        
+        // Cegah admin menghapus dirinya sendiri
+        if ($user->id === Auth::id()) {
+            return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
         $user->delete();
 
-        return redirect()->route('users.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
     }
 }
