@@ -10,27 +10,30 @@
                 <p class="text-gray-600">Choose your preferred court type and time slot</p>
             </div>
 
-            <!-- Court Type Selection -->
+            <!-- Court Type Selection - Hanya tampilkan court yang dipilih -->
             <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 mb-6">Court Type</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Indoor Court Option -->
-                    <label class="cursor-pointer">
-                        <input type="radio" name="court_type" value="indoor" class="hidden peer"
-                            {{ request('type') == 'indoor' ? 'checked' : '' }}>
-                        <div
-                            class="border-2 border-gray-200 rounded-xl p-6 peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
-                            <div class="flex items-center justify-between mb-4">
+                @php
+                    // Ambil dari parameter 'type' atau 'category'
+                    $selectedType = request('type');
+                    $categoryId = request('category');
+
+                    // Mapping category ID ke type
+                    if ($categoryId == 1) {
+                        $selectedType = 'indoor';
+                    } elseif ($categoryId == 2) {
+                        $selectedType = 'outdoor';
+                    } elseif ($categoryId == 3) {
+                        $selectedType = 'semi-outdoor';
+                    }
+                @endphp
+
+                @if ($selectedType == 'indoor')
+                    <!-- Indoor Court Only -->
+                    <div class="max-w-md">
+                        <div class="border-2 border-purple-600 bg-purple-50 rounded-xl p-6">
+                            <div class="mb-4">
                                 <h3 class="text-xl font-bold text-gray-800">Indoor Court</h3>
-                                <div
-                                    class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white hidden peer-checked:block" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
                             </div>
                             <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400"
                                 alt="Indoor Court" class="w-full h-40 object-cover rounded-lg mb-4">
@@ -38,25 +41,13 @@
                             <p class="text-2xl font-bold text-purple-600">Rp 200.000<span
                                     class="text-sm text-gray-500">/hour</span></p>
                         </div>
-                    </label>
-
-                    <!-- Outdoor Court Option -->
-                    <label class="cursor-pointer">
-                        <input type="radio" name="court_type" value="outdoor" class="hidden peer"
-                            {{ request('type') == 'outdoor' ? 'checked' : '' }}>
-                        <div
-                            class="border-2 border-gray-200 rounded-xl p-6 peer-checked:border-green-600 peer-checked:bg-green-50 hover:border-green-300 transition">
-                            <div class="flex items-center justify-between mb-4">
+                    </div>
+                @elseif($selectedType == 'outdoor')
+                    <!-- Outdoor Court Only -->
+                    <div class="max-w-md">
+                        <div class="border-2 border-green-600 bg-green-50 rounded-xl p-6">
+                            <div class="mb-4">
                                 <h3 class="text-xl font-bold text-gray-800">Outdoor Court</h3>
-                                <div
-                                    class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-green-600 peer-checked:bg-green-600 flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-white hidden peer-checked:block" fill="currentColor"
-                                        viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd"
-                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </div>
                             </div>
                             <img src="https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=400"
                                 alt="Outdoor Court" class="w-full h-40 object-cover rounded-lg mb-4">
@@ -64,8 +55,26 @@
                             <p class="text-2xl font-bold text-green-600">Rp 150.000<span
                                     class="text-sm text-gray-500">/hour</span></p>
                         </div>
-                    </label>
-                </div>
+                    </div>
+                @elseif($selectedType == 'semi-outdoor')
+                    <!-- Semi Outdoor Court Only -->
+                    <div class="max-w-md">
+                        <div class="border-2 border-blue-600 bg-blue-50 rounded-xl p-6">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">Semi Outdoor Court</h3>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400"
+                                alt="Semi Outdoor Court" class="w-full h-40 object-cover rounded-lg mb-4">
+                            <p class="text-gray-600 mb-3">Partially covered, best of both worlds</p>
+                            <p class="text-2xl font-bold text-blue-600">Rp 175.000<span
+                                    class="text-sm text-gray-500">/hour</span></p>
+                        </div>
+                    </div>
+                @else
+                    <div class="text-center py-8">
+                        <p class="text-gray-500">Silakan pilih kategori lapangan terlebih dahulu</p>
+                    </div>
+                @endif
             </div>
 
             <!-- Date Selection -->
@@ -139,30 +148,32 @@
     </section>
 
     <script>
-        let selectedCourt = '{{ request('type') ?? '' }}';
+        // Ambil parameter dari URL
+        const urlParams = new URLSearchParams(window.location.search);
+        let selectedCourt = urlParams.get('type') || '';
+        const categoryId = urlParams.get('category');
+
+        // Mapping category ID ke type
+        if (categoryId == 1) {
+            selectedCourt = 'indoor';
+        } else if (categoryId == 2) {
+            selectedCourt = 'outdoor';
+        } else if (categoryId == 3) {
+            selectedCourt = 'semi-outdoor';
+        }
+
         let selectedDate = '';
         let selectedTime = '';
         const courtPrices = {
             'indoor': 200000,
-            'outdoor': 150000
+            'outdoor': 150000,
+            'semi-outdoor': 175000
         };
 
         // Initialize court selection from URL parameter
         if (selectedCourt) {
-            const courtRadio = document.querySelector(`input[name="court_type"][value="${selectedCourt}"]`);
-            if (courtRadio) {
-                courtRadio.checked = true;
-                updateSummary();
-            }
+            updateSummary();
         }
-
-        // Court type selection
-        document.querySelectorAll('input[name="court_type"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                selectedCourt = e.target.value;
-                updateSummary();
-            });
-        });
 
         // Date selection
         document.getElementById('booking_date').addEventListener('change', (e) => {
@@ -233,5 +244,4 @@
             }
         });
     </script>
-
 </x-layout>
