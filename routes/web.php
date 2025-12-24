@@ -31,7 +31,17 @@ Route::get('/about', function () {
 
 // Book Court - Court Selection
 Route::get('/book-court', function () {
-    return view('courtdetail');
+    $category = null;
+    $courts = [];
+    
+    if (request()->has('category')) {
+        $category = CourtCategories::with('courts')->find(request('category'));
+        if ($category) {
+            $courts = $category->courts;
+        }
+    }
+    
+    return view('courtdetail', compact('category', 'courts'));
 });
 
 // Booking Detail Form

@@ -10,69 +10,114 @@
                 <p class="text-gray-600">Choose your preferred court type and time slot</p>
             </div>
 
-            <!-- Court Type Selection - Hanya tampilkan court yang dipilih -->
+            <!-- Court Type Selection -->
             <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Court Type</h2>
-                @php
-                    // Ambil dari parameter 'type' atau 'category'
-                    $selectedType = request('type');
-                    $categoryId = request('category');
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Court Info</h2>
+                @if ($category)
+                    @php
+                        // Keep image mapping for aesthetics since DB might not have images
+                        $images = [
+                            1 => 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400', // Indoor
+                            2 => 'https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=400', // Outdoor
+                            3 => 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400', // Semi
+                        ];
+                        $bgColors = [
+                            1 => 'bg-purple-50 border-purple-600',
+                            2 => 'bg-green-50 border-green-600',
+                            3 => 'bg-blue-50 border-blue-600',
+                        ];
+                        // Default fallback
+                        $img = $images[$category->id] ?? 'https://via.placeholder.com/400x200';
+                        $bg = $bgColors[$category->id] ?? 'bg-gray-50 border-gray-600';
+                    @endphp
 
-                    // Mapping category ID ke type
-                    if ($categoryId == 1) {
-                        $selectedType = 'indoor';
-                    } elseif ($categoryId == 2) {
-                        $selectedType = 'outdoor';
-                    } elseif ($categoryId == 3) {
-                        $selectedType = 'semi-outdoor';
-                    }
-                @endphp
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Left Column: Court Visuals & Info -->
+                        <div
+                            class="border-2 {{ $bg }} rounded-xl p-6 transition transform hover:scale-[1.02] duration-300">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="text-xl font-bold text-gray-800">{{ $category->category_name }}</h3>
+                                <span
+                                    class="bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-600 shadow-sm">
+                                    Premium
+                                </span>
+                            </div>
+                            <div class="relative overflow-hidden rounded-lg mb-4 shadow-md group">
+                                <img src="{{ $img }}" alt="{{ $category->category_name }}"
+                                    class="w-full h-48 object-cover transform group-hover:scale-110 transition duration-500">
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                                    <p class="text-white font-semibold text-sm">Best choice for professionals</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 mb-3 leading-relaxed">{{ $category->description }}</p>
+                            <div class="flex items-center gap-2 text-sm text-gray-500">
+                                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span>High Quality Surface</span>
+                            </div>
+                        </div>
 
-                @if ($selectedType == 'indoor')
-                    <!-- Indoor Court Only -->
-                    <div class="max-w-md">
-                        <div class="border-2 border-purple-600 bg-purple-50 rounded-xl p-6">
-                            <div class="mb-4">
-                                <h3 class="text-xl font-bold text-gray-800">Indoor Court</h3>
+                        <!-- Right Column: Selection Area -->
+                        <div class="flex flex-col justify-center">
+                            <div
+                                class="bg-gray-50 border border-gray-200 rounded-xl p-8 shadow-sm h-full flex flex-col justify-center relative overflow-hidden">
+                                <div
+                                    class="absolute top-0 right-0 w-24 h-24 bg-purple-100 rounded-bl-full -mr-4 -mt-4 opacity-50">
+                                </div>
+
+                                <div class="relative z-10">
+                                    <h3 class="text-2xl font-bold text-gray-800 mb-2">Ready to Play?</h3>
+                                    <p class="text-gray-500 mb-8">Select specific court to check availability and book
+                                        your slot.</p>
+
+                                    <label for="court_select"
+                                        class="block text-sm font-bold text-gray-700 mb-3 uppercase tracking-wider">
+                                        Choose Specific Court
+                                    </label>
+                                    <div class="relative">
+                                        <select id="court_select"
+                                            class="w-full p-4 pl-5 pr-10 border-2 border-purple-100 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-500/10 focus:outline-none appearance-none bg-white text-gray-700 font-medium text-lg transition shadow-sm cursor-pointer hover:border-purple-300">
+                                            <option value="">-- Select a Court --</option>
+                                            @foreach ($courts as $court)
+                                                <option value="{{ $court->id }}"
+                                                    data-price="{{ $court->price_per_hour }}"
+                                                    data-name="{{ $court->court_name }}">
+                                                    {{ $court->court_name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <div
+                                            class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-purple-600">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+
+                                    <!-- Price Preview Box -->
+                                    <div id="price_preview_box"
+                                        class="mt-6 p-4 bg-white rounded-lg border border-gray-100 shadow-sm opacity-0 transition-all duration-300 transform translate-y-2">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-gray-500 text-sm">Hourly Rate</span>
+                                            <span id="price_preview_text" class="text-xl font-bold text-purple-600">Rp
+                                                0</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <img src="https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=400"
-                                alt="Indoor Court" class="w-full h-40 object-cover rounded-lg mb-4">
-                            <p class="text-gray-600 mb-3">Climate-controlled, professional lighting</p>
-                            <p class="text-2xl font-bold text-purple-600">Rp 200.000<span
-                                    class="text-sm text-gray-500">/hour</span></p>
-                        </div>
-                    </div>
-                @elseif($selectedType == 'outdoor')
-                    <!-- Outdoor Court Only -->
-                    <div class="max-w-md">
-                        <div class="border-2 border-green-600 bg-green-50 rounded-xl p-6">
-                            <div class="mb-4">
-                                <h3 class="text-xl font-bold text-gray-800">Outdoor Court</h3>
-                            </div>
-                            <img src="https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=400"
-                                alt="Outdoor Court" class="w-full h-40 object-cover rounded-lg mb-4">
-                            <p class="text-gray-600 mb-3">Open-air, natural environment</p>
-                            <p class="text-2xl font-bold text-green-600">Rp 150.000<span
-                                    class="text-sm text-gray-500">/hour</span></p>
-                        </div>
-                    </div>
-                @elseif($selectedType == 'semi-outdoor')
-                    <!-- Semi Outdoor Court Only -->
-                    <div class="max-w-md">
-                        <div class="border-2 border-blue-600 bg-blue-50 rounded-xl p-6">
-                            <div class="mb-4">
-                                <h3 class="text-xl font-bold text-gray-800">Semi Outdoor Court</h3>
-                            </div>
-                            <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400"
-                                alt="Semi Outdoor Court" class="w-full h-40 object-cover rounded-lg mb-4">
-                            <p class="text-gray-600 mb-3">Partially covered, best of both worlds</p>
-                            <p class="text-2xl font-bold text-blue-600">Rp 175.000<span
-                                    class="text-sm text-gray-500">/hour</span></p>
                         </div>
                     </div>
                 @else
                     <div class="text-center py-8">
-                        <p class="text-gray-500">Silakan pilih kategori lapangan terlebih dahulu</p>
+                        <p class="text-gray-500">Kategori tidak ditemukan. Silakan pilih kategori lapangan terlebih
+                            dahulu.</p>
+                        <a href="/" class="text-purple-600 font-bold hover:underline">Kembali ke Home</a>
                     </div>
                 @endif
             </div>
@@ -130,7 +175,7 @@
                         <h3 class="text-2xl font-bold mb-2">Booking Summary</h3>
                         <p class="text-purple-100 mb-4">Review your selection before proceeding</p>
                         <div class="space-y-2 text-sm">
-                            <p><span class="font-semibold">Court Type:</span> <span id="summary_court">Not
+                            <p><span class="font-semibold">Court:</span> <span id="summary_court">Not
                                     selected</span></p>
                             <p><span class="font-semibold">Date:</span> <span id="summary_date">Not selected</span></p>
                             <p><span class="font-semibold">Time:</span> <span id="summary_time">Not selected</span></p>
@@ -148,31 +193,42 @@
     </section>
 
     <script>
-        // Ambil parameter dari URL
-        const urlParams = new URLSearchParams(window.location.search);
-        let selectedCourt = urlParams.get('type') || '';
-        const categoryId = urlParams.get('category');
-
-        // Mapping category ID ke type
-        if (categoryId == 1) {
-            selectedCourt = 'indoor';
-        } else if (categoryId == 2) {
-            selectedCourt = 'outdoor';
-        } else if (categoryId == 3) {
-            selectedCourt = 'semi-outdoor';
-        }
-
+        let selectedCourtId = '';
+        let selectedCourtName = '';
+        let selectedPrice = 0;
         let selectedDate = '';
         let selectedTime = '';
-        const courtPrices = {
-            'indoor': 200000,
-            'outdoor': 150000,
-            'semi-outdoor': 175000
-        };
 
-        // Initialize court selection from URL parameter
-        if (selectedCourt) {
-            updateSummary();
+        // Court selection dropdown
+        const courtSelect = document.getElementById('court_select');
+        const pricePreviewBox = document.getElementById('price_preview_box');
+        const pricePreviewText = document.getElementById('price_preview_text');
+
+        if (courtSelect) {
+            courtSelect.addEventListener('change', function() {
+                if (this.value) {
+                    selectedCourtId = this.value;
+                    const selectedOption = this.options[this.selectedIndex];
+                    selectedCourtName = selectedOption.getAttribute('data-name');
+                    selectedPrice = parseInt(selectedOption.getAttribute('data-price'));
+
+                    // Show price preview
+                    if (pricePreviewBox && pricePreviewText) {
+                        pricePreviewText.textContent = 'Rp ' + selectedPrice.toLocaleString('id-ID');
+                        pricePreviewBox.classList.remove('opacity-0', 'translate-y-2');
+                    }
+                } else {
+                    selectedCourtId = '';
+                    selectedCourtName = '';
+                    selectedPrice = 0;
+
+                    // Hide price preview
+                    if (pricePreviewBox) {
+                        pricePreviewBox.classList.add('opacity-0', 'translate-y-2');
+                    }
+                }
+                updateSummary();
+            });
         }
 
         // Date selection
@@ -196,9 +252,9 @@
             const summaryPriceEl = document.getElementById('summary_price');
             const continueBtn = document.getElementById('continue_btn');
 
-            // Update court type
-            if (selectedCourt) {
-                summaryCourtEl.textContent = selectedCourt.charAt(0).toUpperCase() + selectedCourt.slice(1) + ' Court';
+            // Update court name
+            if (selectedCourtName) {
+                summaryCourtEl.textContent = selectedCourtName;
             } else {
                 summaryCourtEl.textContent = 'Not selected';
             }
@@ -220,15 +276,14 @@
             summaryTimeEl.textContent = selectedTime || 'Not selected';
 
             // Update price
-            if (selectedCourt) {
-                const price = courtPrices[selectedCourt];
-                summaryPriceEl.textContent = 'Rp ' + price.toLocaleString('id-ID');
+            if (selectedPrice > 0) {
+                summaryPriceEl.textContent = 'Rp ' + selectedPrice.toLocaleString('id-ID');
             } else {
                 summaryPriceEl.textContent = 'Rp 0';
             }
 
             // Enable/disable continue button
-            if (selectedCourt && selectedDate && selectedTime) {
+            if (selectedCourtId && selectedDate && selectedTime) {
                 continueBtn.disabled = false;
             } else {
                 continueBtn.disabled = true;
@@ -237,10 +292,11 @@
 
         // Continue button action
         document.getElementById('continue_btn').addEventListener('click', () => {
-            if (selectedCourt && selectedDate && selectedTime) {
-                const price = courtPrices[selectedCourt];
+            if (selectedCourtId && selectedDate && selectedTime) {
+                // Pass parameter court_id, name, price, date, time
+                // Using 'type' param as court name to maintain some compatibility or clarity
                 window.location.href =
-                    `/booking-detail?type=${selectedCourt}&date=${selectedDate}&time=${selectedTime}&price=${price}`;
+                    `/booking-detail?court_id=${selectedCourtId}&type=${encodeURIComponent(selectedCourtName)}&date=${selectedDate}&time=${selectedTime}&price=${selectedPrice}`;
             }
         });
     </script>
