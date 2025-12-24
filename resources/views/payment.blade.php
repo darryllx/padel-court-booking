@@ -2,6 +2,22 @@
     <x-navbar></x-navbar>
     <x-slot:title>Payment - Padel Court Booking</x-slot:title>
 
+    <style>
+        .payment-radio:checked+.payment-option {
+            border-color: rgb(147 51 234);
+            background-color: rgb(250 245 255);
+        }
+
+        .payment-radio:checked+.payment-option .check-circle {
+            background-color: rgb(34 197 94);
+            border-color: rgb(34 197 94);
+        }
+
+        .payment-radio:checked+.payment-option .checkmark {
+            display: block;
+        }
+    </style>
+
     <section class="py-12 px-4 bg-gray-50 min-h-screen">
         <div class="container mx-auto max-w-6xl">
             <!-- Header -->
@@ -30,11 +46,11 @@
                             <div class="mb-6">
                                 <h3 class="text-lg font-semibold text-gray-700 mb-4">E-Wallet</h3>
                                 <div class="space-y-3">
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="gopay" class="hidden peer"
-                                            required>
+                                    <label class="cursor-pointer block">
+                                        <input type="radio" name="payment_method" value="gopay"
+                                            class="payment-radio hidden" required>
                                         <div
-                                            class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                            class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                             <div class="flex items-center">
                                                 <div
                                                     class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
@@ -43,15 +59,21 @@
                                                 <span class="font-semibold text-gray-800">GoPay</span>
                                             </div>
                                             <div
-                                                class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                                class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                                <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     </label>
 
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="ovo" class="hidden peer">
+                                    <label class="cursor-pointer block">
+                                        <input type="radio" name="payment_method" value="ovo"
+                                            class="payment-radio hidden">
                                         <div
-                                            class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                            class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                             <div class="flex items-center">
                                                 <div
                                                     class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center mr-4">
@@ -60,15 +82,21 @@
                                                 <span class="font-semibold text-gray-800">OVO</span>
                                             </div>
                                             <div
-                                                class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                                class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                                <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     </label>
 
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="dana" class="hidden peer">
+                                    <label class="cursor-pointer block">
+                                        <input type="radio" name="payment_method" value="dana"
+                                            class="payment-radio hidden">
                                         <div
-                                            class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                            class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                             <div class="flex items-center">
                                                 <div
                                                     class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
@@ -77,7 +105,12 @@
                                                 <span class="font-semibold text-gray-800">DANA</span>
                                             </div>
                                             <div
-                                                class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                                class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                                <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     </label>
@@ -88,10 +121,11 @@
                             <div class="mb-6">
                                 <h3 class="text-lg font-semibold text-gray-700 mb-4">Bank Transfer</h3>
                                 <div class="space-y-3">
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="bca" class="hidden peer">
+                                    <label class="cursor-pointer block">
+                                        <input type="radio" name="payment_method" value="bca"
+                                            class="payment-radio hidden">
                                         <div
-                                            class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                            class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                             <div class="flex items-center">
                                                 <div
                                                     class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mr-4">
@@ -100,15 +134,21 @@
                                                 <span class="font-semibold text-gray-800">Bank BCA</span>
                                             </div>
                                             <div
-                                                class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                                class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                                <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     </label>
 
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="mandiri" class="hidden peer">
+                                    <label class="cursor-pointer block">
+                                        <input type="radio" name="payment_method" value="mandiri"
+                                            class="payment-radio hidden">
                                         <div
-                                            class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                            class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                             <div class="flex items-center">
                                                 <div
                                                     class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center mr-4">
@@ -117,15 +157,21 @@
                                                 <span class="font-semibold text-gray-800">Bank Mandiri</span>
                                             </div>
                                             <div
-                                                class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                                class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                                <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     </label>
 
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="payment_method" value="bni" class="hidden peer">
+                                    <label class="cursor-pointer block">
+                                        <input type="radio" name="payment_method" value="bni"
+                                            class="payment-radio hidden">
                                         <div
-                                            class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                            class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                             <div class="flex items-center">
                                                 <div
                                                     class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mr-4">
@@ -134,7 +180,12 @@
                                                 <span class="font-semibold text-gray-800">Bank BNI</span>
                                             </div>
                                             <div
-                                                class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                                class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                                <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                    stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                                </svg>
                                             </div>
                                         </div>
                                     </label>
@@ -144,10 +195,11 @@
                             <!-- Credit/Debit Card -->
                             <div class="mb-8">
                                 <h3 class="text-lg font-semibold text-gray-700 mb-4">Credit/Debit Card</h3>
-                                <label class="cursor-pointer">
-                                    <input type="radio" name="payment_method" value="card" class="hidden peer">
+                                <label class="cursor-pointer block">
+                                    <input type="radio" name="payment_method" value="card"
+                                        class="payment-radio hidden">
                                     <div
-                                        class="border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between peer-checked:border-purple-600 peer-checked:bg-purple-50 hover:border-purple-300 transition">
+                                        class="payment-option border-2 border-gray-200 rounded-lg p-4 flex items-center justify-between hover:border-purple-300 transition">
                                         <div class="flex items-center">
                                             <div
                                                 class="w-12 h-12 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center mr-4">
@@ -161,7 +213,12 @@
                                             <span class="font-semibold text-gray-800">Credit/Debit Card</span>
                                         </div>
                                         <div
-                                            class="w-6 h-6 rounded-full border-2 border-gray-300 peer-checked:border-purple-600 peer-checked:bg-purple-600">
+                                            class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
+                                            <svg class="checkmark w-4 h-4 text-white hidden" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
+                                                    d="M5 13l4 4L19 7"></path>
+                                            </svg>
                                         </div>
                                     </div>
                                 </label>
