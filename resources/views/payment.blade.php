@@ -56,7 +56,7 @@
                                                     class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mr-4">
                                                     <span class="text-white font-bold">GO</span>
                                                 </div>
-                                                <span class="font-semibold text-gray-800">GoPay</span>
+                                                <span class="font-semibold text-black-800">GoPay</span>
                                             </div>
                                             <div
                                                 class="check-circle w-6 h-6 rounded-full border-2 border-gray-300 flex items-center justify-center transition">
