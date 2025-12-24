@@ -7,8 +7,7 @@
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200">
                 <div class="flex items-center">
-                    <a href="{{ route('court-categories.index') }}"
-                        class="text-gray-600 hover:text-gray-800 mr-4">
+                    <a href="{{ route('court-categories.index') }}" class="text-gray-600 hover:text-gray-800 mr-4">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -19,7 +18,8 @@
             </div>
 
             <!-- Form -->
-            <form action="{{ route('court-categories.store') }}" method="POST" class="p-6">
+            <form action="{{ route('court-categories.store') }}" method="POST" enctype="multipart/form-data"
+                class="p-6">
                 @csrf
 
                 <!-- Category Name -->
@@ -27,8 +27,7 @@
                     <label for="category_name" class="block text-sm font-medium text-gray-700 mb-2">
                         Nama Kategori <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="category_name" id="category_name"
-                        value="{{ old('category_name') }}"
+                    <input type="text" name="category_name" id="category_name" value="{{ old('category_name') }}"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('category_name') border-red-500 @enderror"
                         placeholder="Contoh: Indoor, Outdoor, Premium" required>
                     @error('category_name')
@@ -48,6 +47,19 @@
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                     <p class="mt-1 text-xs text-gray-500">Maksimal 1000 karakter</p>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="mb-6">
+                    <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
+                        Gambar Kategori
+                    </label>
+                    <input type="file" name="image" id="image" accept="image/*"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('image') border-red-500 @enderror">
+                    @error('image')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-xs text-gray-500">Format: JPG, JPEG, PNG, WEBP. Maks: 2MB</p>
                 </div>
 
                 <!-- Action Buttons -->

@@ -115,3 +115,5 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('courts', CourtsController::class);
 });
 
+
+

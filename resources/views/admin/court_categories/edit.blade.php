@@ -8,8 +8,7 @@
             <div class="px-6 py-4 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
-                        <a href="{{ route('court-categories.index') }}"
-                            class="text-gray-600 hover:text-gray-800 mr-4">
+                        <a href="{{ route('court-categories.index') }}" class="text-gray-600 hover:text-gray-800 mr-4">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -22,7 +21,8 @@
             </div>
 
             <!-- Form -->
-            <form action="{{ route('court-categories.update', $category->id) }}" method="POST" class="p-6">
+            <form action="{{ route('court-categories.update', $category->id) }}" method="POST"
+                enctype="multipart/form-data" class="p-6">
                 @csrf
                 @method('PUT')
 
@@ -54,22 +54,27 @@
                     <p class="mt-1 text-xs text-gray-500">Maksimal 1000 karakter</p>
                 </div>
 
-                <!-- Info Section -->
-                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <div class="flex items-start">
-                        <svg class="w-5 h-5 text-gray-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-600">
-                                Kategori ini saat ini digunakan oleh
-                                <span class="font-semibold text-gray-900">{{ $category->courts->count() }}</span>
-                                lapangan.
-                            </p>
+                <!-- Image Upload -->
+                <div class="mb-6">
+                    <label for="image" class="block text-sm font-medium text-gray-700 mb-2">
+                        Gambar Kategori
+                    </label>
+
+                    @if ($category->image)
+                        <div class="mb-2">
+                            <p class="text-xs text-gray-500 mb-1">Gambar saat ini:</p>
+                            <img src="{{ Storage::url($category->image) }}" alt="{{ $category->category_name }}"
+                                class="h-32 w-auto object-cover rounded-md border border-gray-200">
                         </div>
-                    </div>
+                    @endif
+
+                    <input type="file" name="image" id="image" accept="image/*"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('image') border-red-500 @enderror">
+                    @error('image')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-xs text-gray-500">Biarkan kosong jika tidak ingin mengubah gambar. Format: JPG,
+                        JPEG, PNG, WEBP. Maks: 2MB.</p>
                 </div>
 
                 <!-- Action Buttons -->
@@ -98,7 +103,8 @@
                     <h3 class="text-sm font-medium text-yellow-800">Peringatan</h3>
                     <div class="mt-2 text-sm text-yellow-700">
                         <ul class="list-disc list-inside space-y-1">
-                            <li>Perubahan nama kategori akan mempengaruhi semua lapangan yang menggunakan kategori ini</li>
+                            <li>Perubahan nama kategori akan mempengaruhi semua lapangan yang menggunakan kategori ini
+                            </li>
                             <li>Pastikan nama kategori tidak sama dengan kategori lain yang sudah ada</li>
                         </ul>
                     </div>

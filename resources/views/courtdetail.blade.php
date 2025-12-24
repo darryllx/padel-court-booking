@@ -27,7 +27,13 @@
                             3 => 'bg-blue-50 border-blue-600',
                         ];
                         // Default fallback
-                        $img = $images[$category->id] ?? 'https://via.placeholder.com/400x200';
+                        if ($category->image) {
+                            $img = Str::startsWith($category->image, 'http')
+                                ? $category->image
+                                : Storage::url($category->image);
+                        } else {
+                            $img = $images[$category->id] ?? 'https://via.placeholder.com/400x200';
+                        }
                         $bg = $bgColors[$category->id] ?? 'bg-gray-50 border-gray-600';
                     @endphp
 

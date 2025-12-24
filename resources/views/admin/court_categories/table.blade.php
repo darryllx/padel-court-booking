@@ -5,6 +5,9 @@
                 #
             </th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Gambar
+            </th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Nama Kategori
             </th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -23,6 +26,14 @@
             <tr class="hover:bg-gray-50 transition">
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     {{ $categories->firstItem() + $index }}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    @if ($category->image)
+                        <img src="{{ Storage::url($category->image) }}" alt="{{ $category->category_name }}"
+                            class="h-10 w-16 object-cover rounded">
+                    @else
+                        <span class="text-xs text-gray-400">No Image</span>
+                    @endif
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900">{{ $category->category_name }}</div>
@@ -50,8 +61,8 @@
                         </a>
 
                         <!-- Delete Button -->
-                        <form action="{{ route('court-categories.destroy', $category->id) }}" method="POST" class="inline"
-                            onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
+                        <form action="{{ route('court-categories.destroy', $category->id) }}" method="POST"
+                            class="inline" onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="text-red-600 hover:text-red-900 transition" title="Hapus">
