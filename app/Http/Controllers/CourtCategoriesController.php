@@ -6,6 +6,8 @@ use App\Models\CourtCategories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Storage;
+
 class CourtCategoriesController extends Controller
 {
     /**
@@ -52,7 +54,13 @@ class CourtCategoriesController extends Controller
         $validated = $request->validate([
             'category_name' => 'required|string|max:255|unique:court_categories,category_name',
             'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('categories', 'public');
+            $validated['image'] = $path;
+        }
 
         CourtCategories::create($validated);
 
@@ -93,7 +101,17 @@ class CourtCategoriesController extends Controller
         $validated = $request->validate([
             'category_name' => 'required|string|max:255|unique:court_categories,category_name,' . $id,
             'description' => 'nullable|string|max:1000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($category->image) {
+                Storage::disk('public')->delete($category->image);
+            }
+            $path = $request->file('image')->store('categories', 'public');
+            $validated['image'] = $path;
+        }
 
         $category->update($validated);
 
@@ -112,6 +130,11 @@ class CourtCategoriesController extends Controller
         if ($category->courts()->count() > 0) {
             return redirect()->route('court-categories.index')
                 ->with('error', 'Kategori tidak dapat dihapus karena masih digunakan oleh ' . $category->courts()->count() . ' lapangan.');
+        }
+
+        // Delete image if exists
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
         }
 
         $category->delete();

@@ -6,7 +6,8 @@
         <div class="container mx-auto px-4 py-20 lg:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="text-center lg:text-left">
-                    <div class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                    <div
+                        class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
                         🎾 Best Padel Court in Bandung
                     </div>
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
@@ -30,7 +31,7 @@
 
     <section class="py-24 bg-gray-50">
         <div class="container mx-auto px-4">
-            
+
             <div class="text-center max-w-3xl mx-auto mb-16">
                 <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Our Categories</span>
                 <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-4">Choose Your Court Type</h2>
@@ -41,21 +42,25 @@
                 @forelse($categories as $category)
                     @php
                         // 1. Logika Pengambilan Gambar
-                        $firstCourt = $category->courts->first();
-                        $firstImage = $firstCourt ? $firstCourt->images->first() : null;
-                        $imageUrl = $firstImage 
-                            ? asset($firstImage->image_path) 
-                            : 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop';
-                            
+                        if ($category->image) {
+                            $imageUrl = Storage::url($category->image);
+                        } else {
+                            $firstCourt = $category->courts->first();
+                            $firstImage = $firstCourt ? $firstCourt->images->first() : null;
+                            $imageUrl = $firstImage
+                                ? asset($firstImage->image_path)
+                                : 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=500&fit=crop';
+                        }
+
                         $courtCount = $category->courts->count();
 
                         // 2. Logika Penentuan Warna Berdasarkan Nama Kategori
                         $catName = strtolower($category->category_name);
-                        
+
                         // Default (Indoor/Lainnya) - Biru
                         $theme = [
                             'badge_text' => 'text-blue-800',
-                            'title_hover'=> 'group-hover:text-blue-600',
+                            'title_hover' => 'group-hover:text-blue-600',
                             'link_hover' => 'group-hover:text-blue-600',
                             'btn_hover_bg' => 'group-hover:bg-blue-600',
                         ];
@@ -64,7 +69,7 @@
                             // Semi Outdoor - Kuning
                             $theme = [
                                 'badge_text' => 'text-yellow-800',
-                                'title_hover'=> 'group-hover:text-yellow-600',
+                                'title_hover' => 'group-hover:text-yellow-600',
                                 'link_hover' => 'group-hover:text-yellow-600',
                                 'btn_hover_bg' => 'group-hover:bg-yellow-500',
                             ];
@@ -72,48 +77,55 @@
                             // Outdoor - Hijau
                             $theme = [
                                 'badge_text' => 'text-green-800',
-                                'title_hover'=> 'group-hover:text-green-600',
+                                'title_hover' => 'group-hover:text-green-600',
                                 'link_hover' => 'group-hover:text-green-600',
                                 'btn_hover_bg' => 'group-hover:bg-green-600',
                             ];
                         }
                     @endphp
 
-                    <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
-                        
+                    <div
+                        class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+
                         <div class="relative h-64 overflow-hidden">
-                            <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-300 z-10"></div>
-                            
-                            <img src="{{ $imageUrl }}" 
-                                 alt="{{ $category->category_name }}" 
-                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
-                            
+                            <div
+                                class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-300 z-10">
+                            </div>
+
+                            <img src="{{ $imageUrl }}" alt="{{ $category->category_name }}"
+                                class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+
                             <div class="absolute top-4 right-4 z-20">
-                                <span class="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold {{ $theme['badge_text'] }} shadow-sm flex items-center gap-1">
+                                <span
+                                    class="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold {{ $theme['badge_text'] }} shadow-sm flex items-center gap-1">
                                     🎾 {{ $courtCount }} Courts
                                 </span>
                             </div>
                         </div>
 
                         <div class="p-8 flex flex-col flex-grow relative">
-                            
-                            <h3 class="text-2xl font-bold text-gray-900 mb-3 {{ $theme['title_hover'] }} transition-colors">
+
+                            <h3
+                                class="text-2xl font-bold text-gray-900 mb-3 {{ $theme['title_hover'] }} transition-colors">
                                 {{ $category->category_name }}
                             </h3>
-                            
+
                             <p class="text-gray-500 text-sm leading-relaxed mb-6 line-clamp-3 flex-grow">
                                 {{ $category->description ?? 'Nikmati pengalaman bermain padel terbaik dengan fasilitas standar internasional.' }}
                             </p>
 
                             <div class="mt-auto pt-6 border-t border-gray-100 flex items-center justify-between">
-                                <span class="text-sm font-medium text-gray-400 {{ $theme['link_hover'] }} transition-colors">
+                                <span
+                                    class="text-sm font-medium text-gray-400 {{ $theme['link_hover'] }} transition-colors">
                                     View Details
                                 </span>
-                                
+
                                 <a href="/book-court?category={{ $category->id }}"
-                                   class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-600 {{ $theme['btn_hover_bg'] }} group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
-                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-50 text-gray-600 {{ $theme['btn_hover_bg'] }} group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
+                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                     </svg>
                                 </a>
                             </div>
@@ -123,7 +135,8 @@
                     <div class="col-span-3 text-center py-12">
                         <div class="inline-block p-4 rounded-full bg-gray-100 mb-4">
                             <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                             </svg>
                         </div>
                         <p class="text-gray-500 text-lg">Belum ada kategori lapangan yang tersedia.</p>
@@ -179,8 +192,7 @@
 
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
                     <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
@@ -192,8 +204,7 @@
 
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition">
                     <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-6">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
