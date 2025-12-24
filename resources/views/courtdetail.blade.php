@@ -28,7 +28,9 @@
                         ];
                         // Default fallback
                         if ($category->image) {
-                            $img = Storage::url($category->image);
+                            $img = Str::startsWith($category->image, 'http')
+                                ? $category->image
+                                : Storage::url($category->image);
                         } else {
                             $img = $images[$category->id] ?? 'https://via.placeholder.com/400x200';
                         }
