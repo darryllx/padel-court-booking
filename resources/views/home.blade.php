@@ -3,31 +3,27 @@
     <x-slot:title>Home - Courtletics Padel Court Booking</x-slot:title>
 
     <!-- Hero section -->
-    <section class="py-15 bg-gradient-to-r from-blue-300 to-purple-600 text-white">
-        <div class="container mx-auto px-4 py-20 lg:py-32">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="text-center lg:text-left">
-                    <div
-                        class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                        <p>100+ pro players play here.</p>
-                    </div>
-                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                        Play Padel with pro players
-                    </h1>
-                    <p class="text-xl text-black-100 mb-8">
-                        Book your court in seconds—no hassle, no waiting.
-                    </p>
-                    <a href="/book-court"
-                        class="inline-block bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
-                        Play Now
-                    </a>
-                </div>
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=500&fit=crop"
-                        alt="Padel Court" class="rounded-3xl shadow-2xl w-full h-[400px] object-cover">
-                </div>
+    <section class="bg-white text-neutral-900 flex 
+                      justify-between min-h-screen pt-[92px] items-center px-8">
+            
+        <div class="w-3/5">
+        
+            <p class="mb-[12px]">100+ pro players play here.</p>
+            <h1 class="text-6xl font-bold text-neutral-900 tracking-tight mb-[12px]">Play padel <br>with pro players</h1>
+            <p class="text-xl text-neutral-700 mb-[32px]">Book your court in seconds, no hassle, no waiting.</p>
+
+            <div class="bg-blue-600 w-[200px] h-[56px] rounded-md flex 
+                          items-center justify-center hover:bg-blue-700">
+                <a href="/book-court" class="text-white text-xl font-semibold">Play now</a>
             </div>
+
         </div>
+
+        <div class="w-2/5 bg-sky-300">
+            <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=500&fit=crop"
+                    alt="Padel Court">
+        </div>
+            
     </section>
 
     <!-- Court Categories Section -->

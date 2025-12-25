@@ -43,11 +43,11 @@
 
     {{ $slot }}
 
-    <footer class="mt-auto py-8 text-center text-white text-sm bg-gradient-to-r from-purple-600 to-indigo-600">
+    {{-- <footer class="mt-auto py-8 text-center text-white text-sm bg-gradient-to-r from-purple-600 to-indigo-600">
         <div class="container mx-auto px-4">
             <p class="mb-2">&copy; 2025 Padel Court Booking System</p>
         </div>
-    </footer>
+    </footer> --}}
 
     <script>
         // Auto-refresh CSRF token to prevent 419 errors

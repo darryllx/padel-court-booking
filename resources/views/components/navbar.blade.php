@@ -1,6 +1,6 @@
 
-<nav class="bg-white shadow-sm sticky top-0 z-50">
-    <div class="container mx-auto px-6 py-6">
+<nav class="bg-white h-[92px] flex items-center justify-center shadow-sm fixed top-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-8 py-8">
         <div class="flex justify-between items-center">
 
             <!-- Logo -->
@@ -88,11 +88,11 @@
                     </div>
                 @else
                 <div class="flex gap-[8px]">
-                    <a href="/login" class="w-[120px] border-2 border-neutral-100 text-center bg-white text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-neutral-100">
+                    <a href="/login" class="w-[120px] border-2 border-neutral-100 text-center flex items-center justify-center bg-white text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-neutral-100">
                         Login
                     </a>
                     <a href="/register"
-                        class="w-[120px] text-center bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 shadow-lg transition">
+                        class="w-[120px] flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 shadow-lg transition">
                         Sign Up
                     </a>
                 @endauth
