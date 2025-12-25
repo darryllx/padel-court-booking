@@ -5,36 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Courts;
 use App\Models\CourtCategories;
 use Illuminate\Http\Request;
-
 class CourtsController extends Controller
 {
-    /**
-     * Menampilkan daftar lapangan dengan fitur search dan filter
-     */
     public function index(Request $request)
     {
         $query = Courts::with('courtCategory');
 
         if ($request->filled('search')) {
-            $search = $request->input('search');
+            $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('court_name', 'like', "%{$search}%")
-                    ->orWhere('location', 'like', "%{$search}%");
+                  ->orWhere('location', 'like', "%{$search}%");
             });
         }
 
         if ($request->filled('category_id')) {
-            $query->where('court_category_id', $request->input('category_id'));
+            $query->where('court_category_id', $request->category_id);
         }
 
-        // Fitur Filter: Berdasarkan Status Ketersediaan (Available / Not)
         if ($request->filled('is_available')) {
-            $query->where('is_available', $request->input('is_available'));
+            $query->where('is_available', $request->is_available);
         }
 
         $courts = $query->paginate(10)->withQueryString();
-
-        // Kirim data categories untuk opsi filter di view
         $categories = CourtCategories::all();
 
         if ($request->ajax()) {
@@ -52,27 +45,22 @@ class CourtsController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        // ✅ SIMPAN HASIL VALIDASI
+        $validated = $request->validate([
             'court_category_id' => 'required|exists:court_categories,id',
             'court_name' => 'required|string|max:255|unique:courts,court_name',
             'location' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0|max:9999999',
+            'price_per_hour' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:2000',
-            'is_available' => 'boolean',
         ]);
 
-        $validated['is_available'] = $request->has('is_available') ? 1 : 0;
+        // ✅ HANDLE CHECKBOX
+        $validated['is_available'] = $request->has('is_available');
 
         Courts::create($validated);
 
         return redirect()->route('courts.index')
             ->with('success', 'Lapangan berhasil ditambahkan.');
-    }
-
-    public function show(string $id)
-    {
-        $court = Courts::with('courtCategory')->findOrFail($id);
-        return view('admin.courts.show', compact('court'));
     }
 
     public function edit(string $id)
@@ -86,17 +74,15 @@ class CourtsController extends Controller
     {
         $court = Courts::findOrFail($id);
 
-        $request->validate([
+        $validated = $request->validate([
             'court_category_id' => 'required|exists:court_categories,id',
-            'court_name' => 'required|string|max:255|unique:courts,court_name,' . $id,
+            'court_name' => 'required|string|max:255|unique:courts,court_name,' . $court->id,
             'location' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0|max:9999999',
+            'price_per_hour' => 'required|numeric|min:0',
             'description' => 'nullable|string|max:2000',
-            'is_available' => 'boolean',
         ]);
 
-        // Handle checkbox update
-        $validated['is_available'] = $request->has('is_available') ? 1 : 0;
+        $validated['is_available'] = $request->has('is_available');
 
         $court->update($validated);
 
@@ -108,8 +94,7 @@ class CourtsController extends Controller
     {
         $court = Courts::findOrFail($id);
 
-        // Cek apakah lapangan masih memiliki booking aktif
-        if ($court->bookings()->whereIn('status', ['pending', 'confirmed'])->count() > 0) {
+        if ($court->bookings()->whereIn('status', ['pending', 'confirmed'])->exists()) {
             return redirect()->route('courts.index')
                 ->with('error', 'Lapangan tidak dapat dihapus karena masih memiliki booking aktif.');
         }

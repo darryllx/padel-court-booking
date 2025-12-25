@@ -1,93 +1,16 @@
 <x-admin-layout>
-<<<<<<< HEAD
-    <x-slot name="header">Edit Lapangan: {{ $court->court_name }}</x-slot>
-
-    <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-sm border border-gray-100">
-        <form action="{{ route('courts.update', $court->id) }}" method="POST">
-            @csrf
-            @method('PUT')
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Kategori Lapangan</label>
-                    <select name="court_category_id" required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}" {{ (old('court_category_id', $court->court_category_id) == $category->id) ? 'selected' : '' }}>
-                                {{ $category->name }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Kode Lapangan</label>
-                    <select name="court_code" required
-                        class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                        @foreach(['A', 'B', 'C'] as $code)
-                            <option value="{{ $code }}" {{ (old('court_code', $currentCode) == $code) ? 'selected' : '' }}>
-                                Lapangan {{ $code }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Lokasi Detail</label>
-                <input type="text" name="location" value="{{ old('location', $court->location) }}" required
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Harga per Jam (Rp)</label>
-                <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">Rp</span>
-                    <input type="number" name="price_per_hour" value="{{ old('price_per_hour', $court->price_per_hour) }}" required min="0"
-                        class="w-full pl-10 border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                </div>
-            </div>
-
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Fasilitas / Deskripsi</label>
-                <textarea name="description" rows="3"
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:border-purple-500 focus:ring-purple-500">{{ old('description', $court->description) }}</textarea>
-            </div>
-
-            <div class="mb-8 bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" name="is_available" value="1" 
-                        class="rounded border-gray-300 text-purple-600 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-200 focus:ring-opacity-50"
-                        {{ $court->is_available ? 'checked' : '' }}>
-                    <span class="ml-2 text-gray-700 font-medium">Status Aktif (Bisa Dipesan)</span>
-                </label>
-                <p class="text-sm text-gray-500 mt-1 ml-6">Jika tidak dicentang, lapangan akan muncul sebagai "Maintenance".</p>
-            </div>
-
-            <div class="flex items-center justify-end gap-4 border-t pt-6">
-                <a href="{{ route('courts.index') }}" class="text-gray-600 hover:text-gray-800 font-medium">Batal</a>
-                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg shadow-md transition transform hover:scale-105">
-                    Update Lapangan
-                </button>
-            </div>
-        </form>
-    </div>
-</x-admin-layout>
-=======
     <x-slot name="title">Edit Lapangan</x-slot>
-    <x-slot name="header">Edit Lapangan</x-slot>
+    <x-slot name="header">Edit Lapangan: {{ $court->court_name }}</x-slot>
 
     <div class="max-w-3xl">
         <div class="bg-white rounded-lg shadow-md">
+
             <!-- Header -->
             <div class="px-6 py-4 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <a href="{{ route('courts.index') }}" class="text-gray-600 hover:text-gray-800 mr-4">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                            </svg>
+                            ←
                         </a>
                         <h2 class="text-xl font-semibold text-gray-800">Form Edit Lapangan</h2>
                     </div>
@@ -102,12 +25,11 @@
 
                 <!-- Category -->
                 <div class="mb-6">
-                    <label for="court_category_id" class="block text-sm font-medium text-gray-700 mb-2">
-                        Kategori Lapangan <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Kategori Lapangan
                     </label>
-                    <select name="court_category_id" id="court_category_id" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('court_category_id') border-red-500 @enderror">
-                        <option value="">-- Pilih Kategori --</option>
+                    <select name="court_category_id" required
+                        class="w-full px-4 py-2 border rounded-lg">
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"
                                 {{ old('court_category_id', $court->court_category_id) == $category->id ? 'selected' : '' }}>
@@ -115,137 +37,65 @@
                             </option>
                         @endforeach
                     </select>
-                    @error('court_category_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 <!-- Court Name -->
                 <div class="mb-6">
-                    <label for="court_name" class="block text-sm font-medium text-gray-700 mb-2">
-                        Nama Lapangan <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Nama Lapangan
                     </label>
-                    <input type="text" name="court_name" id="court_name"
-                        value="{{ old('court_name', $court->court_name) }}" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('court_name') border-red-500 @enderror"
-                        placeholder="Contoh: Court A, Lapangan 1">
-                    @error('court_name')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <input type="text" name="court_name"
+                        value="{{ old('court_name', $court->court_name) }}"
+                        class="w-full px-4 py-2 border rounded-lg" required>
                 </div>
 
                 <!-- Location -->
                 <div class="mb-6">
-                    <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
-                        Lokasi <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Lokasi
                     </label>
-                    <input type="text" name="location" id="location"
-                        value="{{ old('location', $court->location) }}" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('location') border-red-500 @enderror"
-                        placeholder="Contoh: Lantai 2, Area Utara">
-                    @error('location')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <input type="text" name="location"
+                        value="{{ old('location', $court->location) }}"
+                        class="w-full px-4 py-2 border rounded-lg" required>
                 </div>
 
                 <!-- Price -->
                 <div class="mb-6">
-                    <label for="price_per_hour" class="block text-sm font-medium text-gray-700 mb-2">
-                        Harga per Jam (Rp) <span class="text-red-500">*</span>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Harga per Jam
                     </label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-2.5 text-gray-500">Rp</span>
-                        <input type="number" name="price_per_hour" id="price_per_hour"
-                            value="{{ old('price_per_hour', $court->price_per_hour) }}" min="0" step="1000"
-                            required
-                            class="w-full pl-12 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('price_per_hour') border-red-500 @enderror"
-                            placeholder="150000">
-                    </div>
-                    @error('price_per_hour')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <input type="number" name="price_per_hour"
+                        value="{{ old('price_per_hour', $court->price_per_hour) }}"
+                        class="w-full px-4 py-2 border rounded-lg" required>
                 </div>
 
                 <!-- Description -->
                 <div class="mb-6">
-                    <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
                         Deskripsi
                     </label>
-                    <textarea name="description" id="description" rows="4"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 @error('description') border-red-500 @enderror"
-                        placeholder="Deskripsi fasilitas dan kondisi lapangan...">{{ old('description', $court->description) }}</textarea>
-                    @error('description')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                    <p class="mt-1 text-xs text-gray-500">Maksimal 2000 karakter</p>
+                    <textarea name="description" rows="3"
+                        class="w-full px-4 py-2 border rounded-lg">{{ old('description', $court->description) }}</textarea>
                 </div>
 
                 <!-- Availability -->
                 <div class="mb-6">
-                    <div class="flex items-center">
-                        <input type="checkbox" name="is_available" id="is_available" value="1"
-                            {{ old('is_available', $court->is_available) ? 'checked' : '' }}
-                            class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
-                        <label for="is_available" class="ml-2 text-sm font-medium text-gray-700">
-                            Lapangan tersedia untuk booking
-                        </label>
-                    </div>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="is_available" value="1"
+                            {{ old('is_available', $court->is_available) ? 'checked' : '' }}>
+                        <span class="ml-2">Lapangan tersedia</span>
+                    </label>
                 </div>
 
-                <!-- Info Section -->
-                <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                    <div class="flex items-start">
-                        <svg class="w-5 h-5 text-gray-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-600">
-                                Lapangan ini saat ini memiliki
-                                <span
-                                    class="font-semibold text-gray-900">{{ $court->bookings()->whereIn('status', ['pending', 'confirmed'])->count() }}</span>
-                                booking aktif.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
-                    <a href="{{ route('courts.index') }}"
-                        class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 font-medium transition">
-                        Batal
-                    </a>
+                <!-- Actions -->
+                <div class="flex justify-end gap-4">
+                    <a href="{{ route('courts.index') }}" class="text-gray-600">Batal</a>
                     <button type="submit"
-                        class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition">
+                        class="bg-purple-600 text-white px-6 py-2 rounded-lg">
                         Update Lapangan
                     </button>
                 </div>
             </form>
         </div>
-
-        <!-- Warning Card -->
-        <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-            <div class="flex">
-                <svg class="w-5 h-5 text-yellow-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd"
-                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                        clip-rule="evenodd" />
-                </svg>
-                <div class="ml-3">
-                    <h3 class="text-sm font-medium text-yellow-800">Peringatan</h3>
-                    <div class="mt-2 text-sm text-yellow-700">
-                        <ul class="list-disc list-inside space-y-1">
-                            <li>Perubahan harga tidak akan mempengaruhi booking yang sudah ada</li>
-                            <li>Jika menonaktifkan ketersediaan, lapangan tidak akan muncul di halaman booking
-                            </li>
-                            <li>Pastikan nama lapangan tidak sama dengan lapangan lain</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </x-admin-layout>
->>>>>>> 93f37c66ca1b26f0b987f28a217d2c0bb3373d3d
