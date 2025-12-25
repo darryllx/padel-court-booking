@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Bookings extends Model
 {
@@ -13,11 +14,18 @@ class Bookings extends Model
     protected $fillable = [
         'user_id',
         'court_id',
-        'status',
+
+        // Personal Info
+        'customer_name',
+        'customer_email',
+        'customer_phone',
+
+        // Booking detail
         'booking_date',
         'start_time',
         'end_time',
         'total_price',
+        'status',
     ];
 
     protected $casts = [
@@ -25,18 +33,27 @@ class Bookings extends Model
         'total_price' => 'decimal:2',
     ];
 
+    /**
+     * Relasi ke user (nullable untuk guest booking)
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Relasi ke court
+     */
     public function court(): BelongsTo
     {
         return $this->belongsTo(Courts::class);
     }
 
-    public function payment(): \Illuminate\Database\Eloquent\Relations\HasOne
-{
-    return $this->hasOne(Payments::class);
-}
+    /**
+     * Relasi ke payment
+     */
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payments::class);
+    }
 }

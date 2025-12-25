@@ -33,24 +33,30 @@
                         <div class="mb-6">
                             <label for="full_name" class="block text-gray-700 font-semibold mb-2">Full Name *</label>
                             <input type="text" id="full_name" name="full_name" required
+                                value="{{ old('full_name', auth()->check() ? auth()->user()->name : '') }}"
                                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
                                 placeholder="Enter your full name">
+
                         </div>
 
                         <!-- Email -->
                         <div class="mb-6">
                             <label for="email" class="block text-gray-700 font-semibold mb-2">Email Address *</label>
                             <input type="email" id="email" name="email" required
+                                value="{{ old('email', auth()->check() ? auth()->user()->email : '') }}"
                                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
                                 placeholder="your.email@example.com">
+
                         </div>
 
                         <!-- Phone -->
                         <div class="mb-6">
                             <label for="phone" class="block text-gray-700 font-semibold mb-2">Phone Number *</label>
                             <input type="tel" id="phone" name="phone" required
+                                value="{{ old('phone', auth()->check() ? auth()->user()->phone_number : '') }}"
                                 class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-600 focus:outline-none"
                                 placeholder="08xx xxxx xxxx">
+
                         </div>
 
                         <!-- Number of Players -->

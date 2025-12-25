@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Bookings;
 use App\Models\Courts;
-use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingsController extends Controller
 {
@@ -13,22 +13,26 @@ class BookingsController extends Controller
     {
         $query = Bookings::with(['user', 'court'])->latest();
 
-        // Fitur Search: Cari nama user yang booking
+        // 🔍 Search: user name ATAU customer name (guest)
         if ($request->filled('search')) {
-            $search = $request->input('search');
-            $query->whereHas('user', function($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%");
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('user', function ($u) use ($search) {
+                    $u->where('name', 'like', "%{$search}%");
+                })
+                ->orWhere('customer_name', 'like', "%{$search}%");
             });
         }
 
-        // Fitur Filter: Status Booking (Pending, Confirmed, etc)
+        // Filter status
         if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
+            $query->where('status', $request->status);
         }
 
-        // Fitur Filter: Tanggal Booking Tertentu
+        // Filter tanggal
         if ($request->filled('date')) {
-            $query->whereDate('booking_date', $request->input('date'));
+            $query->whereDate('booking_date', $request->date);
         }
 
         $bookings = $query->paginate(10)->withQueryString();
@@ -38,32 +42,37 @@ class BookingsController extends Controller
 
     public function create()
     {
-        $users = User::all();
         $courts = Courts::where('is_available', true)->get();
-        return view('bookings.create', compact('users', 'courts'));
+
+        return view('bookings.create', compact('courts'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'court_id' => 'required|exists:courts,id',
+
+            // Personal Info (WAJIB, editable)
+            'customer_name'  => 'required|string|max:255',
+            'customer_email' => 'required|email|max:255',
+            'customer_phone' => 'required|string|max:30',
+
             'booking_date' => 'required|date',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'total_price' => 'required|numeric|min:0',
-            'status' => 'in:Pending,Confirmed,Cancelled,Completed'
+            'start_time'   => 'required|date_format:H:i',
+            'end_time'     => 'required|date_format:H:i|after:start_time',
+            'total_price'  => 'required|numeric|min:0',
         ]);
-        
-        // Jika status tidak diisi, maka default nya akan Pending
-        if (!$request->filled('status')) {
-            $validated['status'] = 'Pending';
-        }
+
+        // 🔐 Jika user login → isi user_id
+        $validated['user_id'] = Auth::check() ? Auth::id() : null;
+
+        // Default status
+        $validated['status'] = 'Pending';
 
         Bookings::create($validated);
 
         return redirect()->route('bookings.index')
-                         ->with('success', 'Booking berhasil dibuat.');
+            ->with('success', 'Booking berhasil dibuat.');
     }
 
     public function show(string $id)
@@ -75,9 +84,9 @@ class BookingsController extends Controller
     public function edit(string $id)
     {
         $booking = Bookings::findOrFail($id);
-        $users = User::all();
-        $courts = Courts::all(); 
-        return view('bookings.edit', compact('booking', 'users', 'courts'));
+        $courts  = Courts::where('is_available', true)->get();
+
+        return view('bookings.edit', compact('booking', 'courts'));
     }
 
     public function update(Request $request, string $id)
@@ -86,17 +95,23 @@ class BookingsController extends Controller
 
         $validated = $request->validate([
             'court_id' => 'exists:courts,id',
+
+            // Personal Info tetap editable
+            'customer_name'  => 'required|string|max:255',
+            'customer_email' => 'required|email|max:255',
+            'customer_phone' => 'required|string|max:30',
+
             'booking_date' => 'date',
-            'start_time' => 'date_format:H:i',
-            'end_time' => 'date_format:H:i|after:start_time',
-            'total_price' => 'numeric|min:0',
-            'status' => 'in:Pending,Confirmed,Cancelled,Completed'
+            'start_time'   => 'date_format:H:i',
+            'end_time'     => 'date_format:H:i|after:start_time',
+            'total_price'  => 'numeric|min:0',
+            'status'       => 'in:Pending,Confirmed,Cancelled,Completed',
         ]);
 
         $booking->update($validated);
 
         return redirect()->route('bookings.index')
-                         ->with('success', 'Booking berhasil diperbarui.');
+            ->with('success', 'Booking berhasil diperbarui.');
     }
 
     public function destroy(string $id)
@@ -105,6 +120,6 @@ class BookingsController extends Controller
         $booking->delete();
 
         return redirect()->route('bookings.index')
-                         ->with('success', 'Booking berhasil dihapus.');
+            ->with('success', 'Booking berhasil dihapus.');
     }
 }
