@@ -11,37 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-    Schema::create('bookings', function (Blueprint $table) {
-        $table->id();
+        Schema::create('bookings', function (Blueprint $table) {
+            $table->id();
 
-        // User boleh null (guest / booking untuk orang lain)
-        $table->foreignId('user_id')
-              ->nullable()
-              ->constrained('users')
-              ->nullOnDelete();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('court_id')->constrained('courts')->onDelete('cascade');
 
-        $table->foreignId('court_id')
-              ->constrained('courts')
-              ->onDelete('cascade');
+            // Personal Information (booking bisa untuk orang lain)
+            $table->string('customer_name');
+            $table->string('customer_email');
+            $table->string('customer_phone');
+            $table->unsignedTinyInteger('players');
+            $table->text('notes')->nullable();
 
-        // Personal Info (diisi otomatis jika login, tapi editable)
-        $table->string('customer_name');
-        $table->string('customer_email');
-        $table->string('customer_phone');
+            $table->enum('status', ['Pending', 'Confirmed', 'Cancelled', 'Completed'])->default('Pending');
+            $table->date('booking_date');
+            $table->time('start_time');
+            $table->time('end_time');
+            $table->decimal('total_price', 12, 2);
 
-        // Booking detail
-        $table->date('booking_date');
-        $table->time('start_time');
-        $table->time('end_time');
-
-        $table->decimal('total_price', 12, 2);
-
-        $table->enum('status', ['Pending', 'Confirmed', 'Cancelled', 'Completed'])
-              ->default('Pending');
-
-        $table->timestamps();
-    });
-    }   
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.
