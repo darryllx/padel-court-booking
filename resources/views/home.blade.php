@@ -219,6 +219,60 @@
         </div>
     </section>
 
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="text-blue-600 font-semibold tracking-widest uppercase text-sm">— TESTIMONIALS & REVIEWS —</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-2 text-gray-900" style="font-style: italic;">HEAR IT FROM OUR</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900" style="font-style: italic;">PADEL ENTHUSIASTS</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
+                    <div class="flex gap-1 mb-6 justify-center">
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                    </div>
+                    <p class="text-gray-700 text-center mb-8 leading-relaxed">
+                        "Lapangan padel terbaik di Bandung! Fasilitas sangat lengkap dan terawat dengan baik. Sistem booking online sangat memudahkan."
+                    </p>
+                    <h4 class="text-xl font-bold text-center text-gray-900">Ahmad Rizki</h4>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
+                    <div class="flex gap-1 mb-6 justify-center">
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                    </div>
+                    <p class="text-gray-700 text-center mb-8 leading-relaxed">
+                        "Courtletics memberikan pengalaman bermain yang luar biasa. Pelayanan ramah dan profesional. Sangat direkomendasikan!"
+                    </p>
+                    <h4 class="text-xl font-bold text-center text-gray-900">Siti Nurhaliza</h4>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
+                    <div class="flex gap-1 mb-6 justify-center">
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                        <span class="text-yellow-400 text-2xl">★</span>
+                    </div>
+                    <p class="text-gray-700 text-center mb-8 leading-relaxed">
+                        "Tempat yang sempurna untuk bermain padel bersama teman dan keluarga. Harga terjangkau dengan kualitas terbaik di kelasnya."
+                    </p>
+                    <h4 class="text-xl font-bold text-center text-gray-900">Budi Santoso</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="py-20 hero-gradient text-black">
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Play?</h2>
