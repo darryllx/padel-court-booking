@@ -1,5 +1,5 @@
 
-<nav class="bg-white shadow-md sticky top-0 z-50">
+<nav class="bg-white shadow-sm sticky top-0 z-50">
     <div class="container mx-auto px-6 py-6">
         <div class="flex justify-between items-center">
 
