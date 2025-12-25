@@ -1,14 +1,17 @@
+
 <nav class="bg-white shadow-md sticky top-0 z-50">
-    <div class="container mx-auto px-4 py-4">
+    <div class="container mx-auto px-6 py-6">
         <div class="flex justify-between items-center">
+
             <!-- Logo -->
-            <a href="/" class="flex items-center space-x-2">
+            <a href="/" class="flex items-center gap-2 w-[248px]">
                 <div
-                    class="w-10 h-10 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                    <span class="text-white font-bold text-xl">C</span>
+                    class="w-8 h-8 bg-neutral-800
+                           rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-l">C</span>
                 </div>
                 <span
-                    class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                    class="text-xl font-bold text-neutral-900">
                     Courtletics
                 </span>
             </a>
@@ -16,15 +19,15 @@
             <!-- Navigation Links -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/"
-                    class="text-gray-700 hover:text-purple-600 font-medium transition {{ request()->is('/') ? 'text-purple-600 border-b-2 border-purple-600' : '' }}">
+                    class="text-neutral-400 hover:text-neutral-600 font-medium transition {{ request()->is('/') ? 'font-semibold text-neutral-800 border-b-2 border-neutral-800' : '' }}">
                     Home
                 </a>
                 <a href="/about"
-                    class="text-gray-700 hover:text-purple-600 font-medium transition {{ request()->is('about') ? 'text-purple-600 border-b-2 border-purple-600' : '' }}">
+                    class="text-neutral-400 hover:text-neutral-600 font-medium transition {{ request()->is('about') ? 'font-semibold text-neutral-800 border-b-2 border-neutral-800' : '' }}">
                     About
                 </a>
                 <a href="/book-court"
-                    class="text-gray-700 hover:text-purple-600 font-medium transition {{ request()->is('book-court*') ? 'text-purple-600 border-b-2 border-purple-600' : '' }}">
+                    class="text-neutral-400 hover:text-neutral-600 font-medium transition {{ request()->is('book-court*') ? 'font-semibold text-neutral-800 border-b-2 border-neutral-800' : '' }}">
                     Book Court
                 </a>
             </div>
@@ -84,18 +87,20 @@
                         </div>
                     </div>
                 @else
-                    <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                <div class="flex gap-[8px]">
+                    <a href="/login" class="w-[120px] border-2 border-neutral-100 text-center bg-white text-blue-600 px-4 py-2 rounded-md font-medium hover:bg-neutral-100">
                         Login
                     </a>
                     <a href="/register"
-                        class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition">
+                        class="w-[120px] text-center bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 shadow-lg transition">
                         Sign Up
                     </a>
                 @endauth
+                </div>
             </div>
 
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-btn" class="md:hidden text-gray-700 focus:outline-none">
+            <button id="mobile-menu-btn" class="md:hidden text-neutral-800 focus:outline-none">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
@@ -103,7 +108,7 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
+        <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-neutral-200 pt-4">
             <div class="flex flex-col space-y-4">
                 <a href="/" class="text-gray-700 hover:text-purple-600 font-medium transition">Home</a>
                 <a href="/about" class="text-gray-700 hover:text-purple-600 font-medium transition">About</a>

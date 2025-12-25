@@ -2,23 +2,24 @@
     <x-navbar></x-navbar>
     <x-slot:title>Home - Courtletics Padel Court Booking</x-slot:title>
 
+    <!-- Hero section -->
     <section class="py-15 bg-gradient-to-r from-blue-300 to-purple-600 text-white">
         <div class="container mx-auto px-4 py-20 lg:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="text-center lg:text-left">
                     <div
                         class="inline-block bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold mb-6">
-                        🎾 Best Padel Court in Bandung
+                        <p>100+ pro players play here.</p>
                     </div>
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                        Let's play at the #1 padel court in Bandung
+                        Play Padel with pro players
                     </h1>
                     <p class="text-xl text-black-100 mb-8">
-                        Booking lapangan padel indoor & outdoor dengan mudah, cepat, dan transparan.
+                        Book your court in seconds—no hassle, no waiting.
                     </p>
                     <a href="/book-court"
                         class="inline-block bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
-                        Book Now
+                        Play Now
                     </a>
                 </div>
                 <div class="relative">
@@ -29,12 +30,13 @@
         </div>
     </section>
 
+    <!-- Court Categories Section -->
     <section class="py-24 bg-gray-50">
         <div class="container mx-auto px-4">
 
             <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Our Categories</span>
-                <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-4">Choose Your Court Type</h2>
+                <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Our Court Categories</span>
+                <h2 class="text-4xl font-bold text-gray-900 mt-2 mb-4">Choose where you want to play</h2>
                 <div class="h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
             </div>
 
@@ -221,11 +223,11 @@
         <div class="container mx-auto px-4 text-center">
             <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Play?</h2>
             <p class="text-xl text-black-100 mb-8 max-w-2xl mx-auto">
-                Book your court now and experience the best padel facilities in Bandung!
+                Book your court now and experience playing padel with pro players!
             </p>
             <a href="/book-court"
                 class="inline-block bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
-                Book Your Court Now
+                Play Now
             </a>
         </div>
     </section>
