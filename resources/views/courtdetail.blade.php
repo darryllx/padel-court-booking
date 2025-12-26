@@ -2,7 +2,7 @@
     <x-navbar></x-navbar>
     <x-slot:title>Book Court - Padel Court Booking</x-slot:title>
 
-    <section class="py-12 px-4 bg-gray-50 min-h-screen">
+    <section class="pt-24 pb-12 px-4 bg-gray-50 min-h-screen">
         <div class="container mx-auto max-w-6xl">
             <!-- Header -->
             <div class="mb-8">
@@ -123,7 +123,7 @@
                     <div class="text-center py-8">
                         <p class="text-gray-500">Kategori tidak ditemukan. Silakan pilih kategori lapangan terlebih
                             dahulu.</p>
-                        <a href="/" class="text-purple-600 font-bold hover:underline">Kembali ke Home</a>
+                        <a href="/" class="text-blue-700 font-bold hover:underline">Kembali ke Home</a>
                     </div>
                 @endif
             </div>
