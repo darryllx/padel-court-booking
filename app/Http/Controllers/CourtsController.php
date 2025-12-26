@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Courts;
 use App\Models\CourtCategories;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 class CourtsController extends Controller
 {
     public function index(Request $request)
@@ -45,16 +47,14 @@ class CourtsController extends Controller
 
     public function store(Request $request)
     {
-        // ✅ SIMPAN HASIL VALIDASI
         $validated = $request->validate([
             'court_category_id' => 'required|exists:court_categories,id',
-            'court_name' => 'required|string|max:255|unique:courts,court_name',
-            'location' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0',
-            'description' => 'nullable|string|max:2000',
+            'court_name'        => 'required|string|max:255|unique:courts,court_name',
+            'location'          => 'required|string|max:255',
+            'price_per_hour'    => 'required|numeric|min:0',
+            'description'       => 'nullable|string|max:2000',
         ]);
 
-        // ✅ HANDLE CHECKBOX
         $validated['is_available'] = $request->has('is_available');
 
         Courts::create($validated);
@@ -67,6 +67,7 @@ class CourtsController extends Controller
     {
         $court = Courts::findOrFail($id);
         $categories = CourtCategories::all();
+
         return view('admin.courts.edit', compact('court', 'categories'));
     }
 
@@ -76,10 +77,10 @@ class CourtsController extends Controller
 
         $validated = $request->validate([
             'court_category_id' => 'required|exists:court_categories,id',
-            'court_name' => 'required|string|max:255|unique:courts,court_name,' . $court->id,
-            'location' => 'required|string|max:255',
-            'price_per_hour' => 'required|numeric|min:0',
-            'description' => 'nullable|string|max:2000',
+            'court_name'        => 'required|string|max:255|unique:courts,court_name,' . $court->id,
+            'location'          => 'required|string|max:255',
+            'price_per_hour'    => 'required|numeric|min:0',
+            'description'       => 'nullable|string|max:2000',
         ]);
 
         $validated['is_available'] = $request->has('is_available');
@@ -94,7 +95,7 @@ class CourtsController extends Controller
     {
         $court = Courts::findOrFail($id);
 
-        if ($court->bookings()->whereIn('status', ['pending', 'confirmed'])->exists()) {
+        if ($court->bookings()->whereIn('status', ['Pending', 'Confirmed'])->exists()) {
             return redirect()->route('courts.index')
                 ->with('error', 'Lapangan tidak dapat dihapus karena masih memiliki booking aktif.');
         }
@@ -103,5 +104,19 @@ class CourtsController extends Controller
 
         return redirect()->route('courts.index')
             ->with('success', 'Lapangan berhasil dihapus.');
+    }
+
+    /**
+     * ===============================
+     * EXPORT PDF LAPANGAN (FIX FINAL)
+     * ===============================
+     */
+    public function exportPdf()
+    {
+        $courts = Courts::with('courtCategory')->get();
+
+        $pdf = Pdf::loadView('admin.courts.pdf', compact('courts'));
+
+        return $pdf->download('laporan-data-lapangan.pdf');
     }
 }
