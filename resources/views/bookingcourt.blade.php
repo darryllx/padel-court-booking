@@ -2,7 +2,7 @@
     <x-navbar></x-navbar>
     <x-slot:title>Booking Details - Padel Court Booking</x-slot:title>
 
-    <section class="py-12 px-4 bg-gray-50 min-h-screen">
+    <section class="py-[92px] min-h-screen">
         <div class="container mx-auto max-w-6xl">
             <!-- Header -->
             <div class="mb-8">

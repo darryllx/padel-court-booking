@@ -1,4 +1,4 @@
-<nav class="bg-white h-[65px] flex items-center justify-center shadow-sm fixed top-0 left-0 right-0 z-50">
+<nav class="bg-white h-[92px] flex items-center justify-center shadow-sm fixed top-0 left-0 right-0 z-50">
     <div class="container mx-auto px-8 py-8">
         <div class="flex justify-between items-center">
 
