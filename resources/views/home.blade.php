@@ -3,31 +3,33 @@
     <x-slot:title>Home - Courtletics Padel Court Booking</x-slot:title>
 
     <!-- Hero section -->
-    <section class="bg-white text-neutral-900 flex 
+    <section
+        class="bg-white text-neutral-900 flex 
                       justify-between min-h-screen pt-[92px] items-center px-8">
-            
+
         <div class="w-3/5">
-        
+
             <p class="mb-[12px]">100+ pro players play here.</p>
             <h1 class="text-6xl font-bold text-neutral-900 tracking-tight mb-[12px]">Play padel <br>with pro players</h1>
             <p class="text-xl text-neutral-700 mb-[32px]">Book your court in seconds, no hassle, no waiting.</p>
 
+            <!-- PERUBAHAN 1: Tombol Play now di Hero - Ganti <a> dengan <div> dan tambah onclick untuk smooth scroll -->
             <div class="bg-blue-600 w-[200px] h-[56px] rounded-md flex 
-                          items-center justify-center hover:bg-blue-700">
-                <a href="/book-court" class="text-white text-xl font-semibold">Play now</a>
+                          items-center justify-center hover:bg-blue-700 cursor-pointer"
+                onclick="document.getElementById('court-categories').scrollIntoView({ behavior: 'smooth' })">
+                <span class="text-white text-xl font-semibold">Play now</span>
             </div>
 
         </div>
 
         <div class="w-2/5 bg-sky-300">
-            <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=500&fit=crop"
-                    alt="Padel Court">
+            <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800&h=500&fit=crop" alt="Padel Court">
         </div>
-            
+
     </section>
 
     <!-- Court Categories Section -->
-    <section class="py-24 bg-gray-50">
+    <section id="court-categories" class="py-24 bg-gray-50">
         <div class="container mx-auto px-4">
 
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -218,13 +220,17 @@
     <section class="py-20 bg-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <span class="text-blue-600 font-semibold tracking-widest uppercase text-sm">— TESTIMONIALS & REVIEWS —</span>
-                <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-2 text-gray-900" style="font-style: italic;">HEAR IT FROM OUR</h2>
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900" style="font-style: italic;">PADEL ENTHUSIASTS</h2>
+                <span class="text-blue-600 font-semibold tracking-widest uppercase text-sm">— TESTIMONIALS & REVIEWS
+                    —</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-2 text-gray-900" style="font-style: italic;">HEAR IT
+                    FROM OUR</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900" style="font-style: italic;">PADEL ENTHUSIASTS
+                </h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
+                <div
+                    class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
                     <div class="flex gap-1 mb-6 justify-center">
                         <span class="text-yellow-400 text-2xl">★</span>
                         <span class="text-yellow-400 text-2xl">★</span>
@@ -233,12 +239,14 @@
                         <span class="text-yellow-400 text-2xl">★</span>
                     </div>
                     <p class="text-gray-700 text-center mb-8 leading-relaxed">
-                        "Lapangan padel terbaik di Bandung! Fasilitas sangat lengkap dan terawat dengan baik. Sistem booking online sangat memudahkan."
+                        "Lapangan padel terbaik di Bandung! Fasilitas sangat lengkap dan terawat dengan baik. Sistem
+                        booking online sangat memudahkan."
                     </p>
                     <h4 class="text-xl font-bold text-center text-gray-900">Ahmad Rizki</h4>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
+                <div
+                    class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
                     <div class="flex gap-1 mb-6 justify-center">
                         <span class="text-yellow-400 text-2xl">★</span>
                         <span class="text-yellow-400 text-2xl">★</span>
@@ -247,12 +255,14 @@
                         <span class="text-yellow-400 text-2xl">★</span>
                     </div>
                     <p class="text-gray-700 text-center mb-8 leading-relaxed">
-                        "Courtletics memberikan pengalaman bermain yang luar biasa. Pelayanan ramah dan profesional. Sangat direkomendasikan!"
+                        "Courtletics memberikan pengalaman bermain yang luar biasa. Pelayanan ramah dan profesional.
+                        Sangat direkomendasikan!"
                     </p>
                     <h4 class="text-xl font-bold text-center text-gray-900">Siti Nurhaliza</h4>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
+                <div
+                    class="bg-white rounded-2xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all duration-300">
                     <div class="flex gap-1 mb-6 justify-center">
                         <span class="text-yellow-400 text-2xl">★</span>
                         <span class="text-yellow-400 text-2xl">★</span>
@@ -261,7 +271,8 @@
                         <span class="text-yellow-400 text-2xl">★</span>
                     </div>
                     <p class="text-gray-700 text-center mb-8 leading-relaxed">
-                        "Tempat yang sempurna untuk bermain padel bersama teman dan keluarga. Harga terjangkau dengan kualitas terbaik di kelasnya."
+                        "Tempat yang sempurna untuk bermain padel bersama teman dan keluarga. Harga terjangkau dengan
+                        kualitas terbaik di kelasnya."
                     </p>
                     <h4 class="text-xl font-bold text-center text-gray-900">Budi Santoso</h4>
                 </div>
@@ -275,10 +286,10 @@
             <p class="text-xl text-black-100 mb-8 max-w-2xl mx-auto">
                 Book your court now and experience playing padel with pro players!
             </p>
-            <a href="/book-court"
-                class="inline-block bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+            <button onclick="document.getElementById('court-categories').scrollIntoView({ behavior: 'smooth' })"
+                class="inline-block bg-white text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
                 Play Now
-            </a>
+            </button>
         </div>
     </section>
 
