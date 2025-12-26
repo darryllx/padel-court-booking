@@ -21,7 +21,9 @@
                     </div>
                     <h2 class="text-2xl font-bold text-gray-800 mb-3">No Bookings Yet</h2>
                     <p class="text-gray-600 mb-6">You haven't made any court reservations yet.</p>
-                    <a href="/book-court"
+                    <!-- DIUBAH: href dari "/book-court" menjadi "/#categories" -->
+                    <!-- Menggunakan hash anchor untuk scroll otomatis ke section categories di home -->
+                    <a href="/#categories"
                         class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:shadow-xl transition">
                         Book a Court Now
                     </a>
@@ -195,5 +197,8 @@
                 closeModal();
             }
         });
+
+        // Script untuk localStorage sudah tidak diperlukan
+        // Karena menggunakan hash anchor (#categories) yang otomatis scroll
     </script>
 </x-layout>
