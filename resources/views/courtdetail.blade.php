@@ -138,7 +138,10 @@
 
             <!-- Time Slots -->
             <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 mb-6">Available Time Slots</h2>
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Available Time Slots</h2>
+                    <span class="text-sm text-gray-500">Click to select multiple slots</span>
+                </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                     @php
                         $timeSlots = [
@@ -164,13 +167,19 @@
 
                     @foreach ($timeSlots as $index => $slot)
                         <label class="cursor-pointer">
-                            <input type="radio" name="time_slot" value="{{ $slot }}" class="hidden peer">
+                            <input type="checkbox" name="time_slot" value="{{ $slot }}"
+                                class="hidden peer time-slot-checkbox">
                             <div
                                 class="border-2 border-gray-200 rounded-lg p-4 text-center peer-checked:border-purple-600 peer-checked:bg-purple-600 peer-checked:text-white hover:border-purple-300 transition">
                                 <p class="font-semibold">{{ $slot }}</p>
                             </div>
                         </label>
                     @endforeach
+                </div>
+                <div class="mt-4 flex justify-end">
+                    <button id="clear_slots_btn" class="text-sm text-purple-600 hover:text-purple-800 font-medium">
+                        Clear all selections
+                    </button>
                 </div>
             </div>
 
@@ -184,7 +193,10 @@
                             <p><span class="font-semibold">Court:</span> <span id="summary_court">Not
                                     selected</span></p>
                             <p><span class="font-semibold">Date:</span> <span id="summary_date">Not selected</span></p>
-                            <p><span class="font-semibold">Time:</span> <span id="summary_time">Not selected</span></p>
+                            <p><span class="font-semibold">Time Slots:</span> <span id="summary_time">Not
+                                    selected</span></p>
+                            <p><span class="font-semibold">Duration:</span> <span id="summary_duration">0 hours</span>
+                            </p>
                             <p class="text-2xl font-bold mt-4">Total: <span id="summary_price">Rp 0</span></p>
                         </div>
                     </div>
@@ -201,9 +213,9 @@
     <script>
         let selectedCourtId = '';
         let selectedCourtName = '';
-        let selectedPrice = 0;
+        let selectedPricePerHour = 0;
         let selectedDate = '';
-        let selectedTime = '';
+        let selectedTimeSlots = []; // Array to store multiple time slots
 
         // Court selection dropdown
         const courtSelect = document.getElementById('court_select');
@@ -216,17 +228,17 @@
                     selectedCourtId = this.value;
                     const selectedOption = this.options[this.selectedIndex];
                     selectedCourtName = selectedOption.getAttribute('data-name');
-                    selectedPrice = parseInt(selectedOption.getAttribute('data-price'));
+                    selectedPricePerHour = parseInt(selectedOption.getAttribute('data-price'));
 
                     // Show price preview
                     if (pricePreviewBox && pricePreviewText) {
-                        pricePreviewText.textContent = 'Rp ' + selectedPrice.toLocaleString('id-ID');
+                        pricePreviewText.textContent = 'Rp ' + selectedPricePerHour.toLocaleString('id-ID');
                         pricePreviewBox.classList.remove('opacity-0', 'translate-y-2');
                     }
                 } else {
                     selectedCourtId = '';
                     selectedCourtName = '';
-                    selectedPrice = 0;
+                    selectedPricePerHour = 0;
 
                     // Hide price preview
                     if (pricePreviewBox) {
@@ -243,18 +255,34 @@
             updateSummary();
         });
 
-        // Time slot selection
-        document.querySelectorAll('input[name="time_slot"]').forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                selectedTime = e.target.value;
+        // Time slot selection (multiple checkboxes)
+        document.querySelectorAll('input[name="time_slot"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    // Add to selected slots
+                    selectedTimeSlots.push(e.target.value);
+                } else {
+                    // Remove from selected slots
+                    selectedTimeSlots = selectedTimeSlots.filter(slot => slot !== e.target.value);
+                }
                 updateSummary();
             });
+        });
+
+        // Clear all selections button
+        document.getElementById('clear_slots_btn').addEventListener('click', () => {
+            document.querySelectorAll('input[name="time_slot"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            selectedTimeSlots = [];
+            updateSummary();
         });
 
         function updateSummary() {
             const summaryCourtEl = document.getElementById('summary_court');
             const summaryDateEl = document.getElementById('summary_date');
             const summaryTimeEl = document.getElementById('summary_time');
+            const summaryDurationEl = document.getElementById('summary_duration');
             const summaryPriceEl = document.getElementById('summary_price');
             const continueBtn = document.getElementById('continue_btn');
 
@@ -278,18 +306,27 @@
                 summaryDateEl.textContent = 'Not selected';
             }
 
-            // Update time
-            summaryTimeEl.textContent = selectedTime || 'Not selected';
+            // Update time slots
+            if (selectedTimeSlots.length > 0) {
+                summaryTimeEl.textContent = selectedTimeSlots.join(', ');
+            } else {
+                summaryTimeEl.textContent = 'Not selected';
+            }
 
-            // Update price
-            if (selectedPrice > 0) {
-                summaryPriceEl.textContent = 'Rp ' + selectedPrice.toLocaleString('id-ID');
+            // Update duration
+            const hours = selectedTimeSlots.length;
+            summaryDurationEl.textContent = hours + ' hour' + (hours !== 1 ? 's' : '');
+
+            // Update total price
+            const totalPrice = selectedPricePerHour * hours;
+            if (totalPrice > 0) {
+                summaryPriceEl.textContent = 'Rp ' + totalPrice.toLocaleString('id-ID');
             } else {
                 summaryPriceEl.textContent = 'Rp 0';
             }
 
             // Enable/disable continue button
-            if (selectedCourtId && selectedDate && selectedTime) {
+            if (selectedCourtId && selectedDate && selectedTimeSlots.length > 0) {
                 continueBtn.disabled = false;
             } else {
                 continueBtn.disabled = true;
@@ -298,11 +335,16 @@
 
         // Continue button action
         document.getElementById('continue_btn').addEventListener('click', () => {
-            if (selectedCourtId && selectedDate && selectedTime) {
-                // Pass parameter court_id, name, price, date, time
-                // Using 'type' param as court name to maintain some compatibility or clarity
+            if (selectedCourtId && selectedDate && selectedTimeSlots.length > 0) {
+                // Calculate total price
+                const totalPrice = selectedPricePerHour * selectedTimeSlots.length;
+
+                // Encode time slots as JSON string
+                const timeSlotsParam = encodeURIComponent(JSON.stringify(selectedTimeSlots));
+
+                // Pass parameters including multiple time slots
                 window.location.href =
-                    `/booking-detail?court_id=${selectedCourtId}&type=${encodeURIComponent(selectedCourtName)}&date=${selectedDate}&time=${selectedTime}&price=${selectedPrice}`;
+                    `/booking-detail?court_id=${selectedCourtId}&type=${encodeURIComponent(selectedCourtName)}&date=${selectedDate}&time_slots=${timeSlotsParam}&price=${totalPrice}&hours=${selectedTimeSlots.length}`;
             }
         });
     </script>
