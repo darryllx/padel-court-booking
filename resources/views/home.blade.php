@@ -282,15 +282,108 @@
         </div>
     </section>
 
-    <section class="py-20 hero-gradient text-black">
-        <div class="container mx-auto px-4 text-center">
-            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Play?</h2>
-            <p class="text-xl text-black-100 mb-8 max-w-2xl mx-auto">
-                Book your court now and experience playing padel with pro players!
-            </p>
+    {{-- FAQ Section --}}
+    <section class="flex min-h-[calc(100vh-92px)] bg-white py-16 px-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1">
+                
+                <!-- Left: Heading -->
+                <div class="mb-16">
+                    <h2 class="text-5xl lg:text-5xl font-normal text-neutral-400 text-center">You ask,<span class="font-bold text-blue-600">we answered</span></h2>
+                </div>
+                
+                <!-- Right: FAQ Items -->
+                <div class="space-y-4 items-center justify-center w-full">
+                    
+                    <!-- FAQ Item -->
+                    <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                            <span class="text-lg font-semibold text-neutral-800">What are the operating hours?</span>
+                            <span class="faq-icon text-2xl text-gray-600 flex-shrink-0 transition-transform duration-300">+</span>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 text-neutral-600 leading-relaxed">
+                                We’re open every day from 06:00 to 22:00.
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                            <span class="text-lg font-semibold text-neutral-800">Is parking available at the venue?</span>
+                            <span class="faq-icon text-2xl text-gray-600 flex-shrink-0 transition-transform duration-300">+</span>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 text-neutral-600 leading-relaxed">
+                                Yes. We provide a spacious parking area, and it's free by the way.
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                            <span class="text-lg font-semibold text-neutral-800">Are rackets included in the booking?</span>
+                            <span class="faq-icon text-2xl text-gray-600 flex-shrink-0 transition-transform duration-300">+</span>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 text-neutral-600 leading-relaxed">
+                                Yes. Every booking includes 2 rackets, and additional racket rentals are also available.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                            <span class="text-lg font-semibold text-neutral-800">Why do I need to create an account?</span>
+                            <span class="faq-icon text-2xl text-gray-600 flex-shrink-0 transition-transform duration-300">+</span>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="p-6 text-neutral-600 leading-relaxed">
+                                An account helps us manage your bookings, send updates, and make future bookings faster.
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- <!-- FAQ Item 3 -->
+                    <div class="faq-item bg-gray-50 rounded-2xl overflow-hidden transition-all duration-300">
+                        <button class="faq-question w-full px-6 py-5 flex justify-between items-center text-left hover:bg-gray-100 transition-colors">
+                            <span class="text-lg font-semibold text-gray-900 pr-4">Can I cancel or reschedule my booking?</span>
+                            <span class="faq-icon text-2xl text-gray-600 flex-shrink-0 transition-transform duration-300">+</span>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="px-6 pb-5 text-gray-600 leading-relaxed">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- FAQ Item 4 -->
+                    <div class="faq-item bg-gray-50 rounded-2xl overflow-hidden transition-all duration-300">
+                        <button class="faq-question w-full px-6 py-5 flex justify-between items-center text-left hover:bg-gray-100 transition-colors">
+                            <span class="text-lg font-semibold text-gray-900 pr-4">Is there parking available at the facility?</span>
+                            <span class="faq-icon text-2xl text-gray-600 flex-shrink-0 transition-transform duration-300">+</span>
+                        </button>
+                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                            <div class="px-6 pb-5 text-gray-600 leading-relaxed">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.
+                            </div>
+                        </div>
+                    </div> --}}
+                    
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <section class="">
+        <div class="container mx-auto p-20 text-center">
+            <h2 class="text-4xl text-neutral-900 font-bold mb-2">Ready to Play?</h2>
+            <p class="text-xl text-neutral-500 mb-6 mx-auto">Book your court now and experience playing padel with pro players!</p>
             <button onclick="document.getElementById('court-categories').scrollIntoView({ behavior: 'smooth' })"
-                class="inline-block bg-neutral-800 text-blue-600 px-10 py-5 rounded-xl hover:bg-blue-50 transition font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 cursor-pointer">
-                Play Now
+                    class="inline-block bg-blue-600 text-white px-16 py-4 rounded-xl 
+                          hover:bg-blue-700 transition font-semibold text-lg shadow-lg cursor-pointer">
+                     Play Now
             </button>
         </div>
     </section>
@@ -421,5 +514,44 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // FAQ Accordion functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const icon = item.querySelector('.faq-icon');
+                
+                question.addEventListener('click', () => {
+                    const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
+                    
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            const otherAnswer = otherItem.querySelector('.faq-answer');
+                            const otherIcon = otherItem.querySelector('.faq-icon');
+                            otherAnswer.style.maxHeight = '0px';
+                            otherIcon.textContent = '+';
+                            otherIcon.style.transform = 'rotate(0deg)';
+                        }
+                    });
+                    
+                    // Toggle current item
+                    if (isOpen) {
+                        answer.style.maxHeight = '0px';
+                        icon.textContent = '+';
+                        icon.style.transform = 'rotate(0deg)';
+                    } else {
+                        answer.style.maxHeight = answer.scrollHeight + 'px';
+                        icon.textContent = '−';
+                        icon.style.transform = 'rotate(180deg)';
+                    }
+                });
+            });
+        });
+    </script>
 
 </x-layout>
