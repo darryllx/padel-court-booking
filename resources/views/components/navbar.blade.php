@@ -1,9 +1,9 @@
-<nav class="bg-white h-[92px] flex items-center justify-center shadow-sm fixed top-0 left-0 right-0 z-50">
+<nav class="bg-white h-[92px] flex items-center justify-between shadow-sm fixed top-0 left-0 right-0 z-50">
     <div class="container mx-auto px-8 py-8">
         <div class="flex justify-between items-center">
 
             <!-- Logo -->
-            <a href="/" class="flex items-center gap-2 w-[248px]">
+            <a href="/" class="flex items-center gap-2">
                 <div
                     class="w-8 h-8 bg-neutral-800
                            rounded-lg flex items-center justify-center">
@@ -67,12 +67,12 @@
                             x-transition:leave-end="transform opacity-0 scale-95"
                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50">
                             <a href="/profile"
-                                class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">
+                                class="block w-[120px] px-4 py-2 text-neutral-700 hover:bg-purple-50 hover:text-blue-600 transition">
                                 Profile
                             </a>
                             @if (!Auth::user()->isAdmin())
                                 <a href="/my-bookings"
-                                    class="block px-4 py-2 text-gray-700 hover:bg-purple-50 hover:text-purple-600 transition">
+                                    class="block w-[120px] px-4 py-2 text-neutral-700 hover:bg-purple-50 hover:text-blue-600 transition">
                                     My Bookings
                                 </a>
                             @endif

@@ -2,7 +2,7 @@
     <x-navbar></x-navbar>
     <x-slot:title>Book Court - Padel Court Booking</x-slot:title>
 
-    <section class="py-[92px] min-h-screen p-8">
+    <section class="bg-neutral-100 py-[92px] min-h-screen p-8">
     <div class=" container mx-auto">
         <!-- Main Grid: Left Content + Right Sticky Summary -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
