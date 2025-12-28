@@ -104,8 +104,7 @@
                         class="text-purple-600 hover:text-purple-700 font-medium text-sm flex items-center justify-center">
                         Lihat Semua User
                         <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5l7 7-7 7" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
                     </a>
                 </div>
@@ -124,7 +123,11 @@
                             <div class="flex-1">
                                 <p class="text-sm font-medium text-gray-900">{{ $booking->user->name ?? 'N/A' }}</p>
                                 <p class="text-xs text-gray-500">{{ $booking->court->court_name ?? 'N/A' }}</p>
-                                <p class="text-xs text-gray-400">{{ $booking->booking_date ?? 'N/A' }}</p>
+                                <p class="text-xs text-gray-400">
+                                    {{ $booking->booking_date ? $booking->booking_date->format('d M Y') : 'N/A' }}
+                                    -
+                                    {{ $booking->start_time ? \Carbon\Carbon::parse($booking->start_time)->format('H:i') : '' }}
+                                </p>
                             </div>
                             <span
                                 class="px-2 py-1 text-xs font-semibold rounded-full 
