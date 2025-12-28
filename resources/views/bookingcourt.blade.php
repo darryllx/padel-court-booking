@@ -17,7 +17,8 @@
                         <input type="hidden" name="price" value="{{ request('price') }}">
 
                         <div class="space-y-1 mb-6">
-                            <h1 class="text-2xl font-semibold text-neutral-800 tracking-tight">Fill personal information</h1>
+                            <h1 class="text-2xl font-semibold text-neutral-800 tracking-tight">Fill personal information
+                            </h1>
                             <p class="text-neutral-500">Complete your personal information to confirm the booking</p>
                         </div>
 
@@ -53,7 +54,8 @@
 
                         <!-- Special Requests -->
                         <div class="mb-6">
-                            <label for="notes" class="block text-neutral-700 font-semibold mb-2">Notes (optional)</label>
+                            <label for="notes" class="block text-neutral-700 font-semibold mb-2">Notes
+                                (optional)</label>
                             <textarea id="notes" name="notes" rows="4"
                                 class="w-full px-3 py-3 border-2 border-neutral-200 rounded-lg focus:border-blue-600 focus:outline-none"
                                 placeholder="Let us know if you have some requests"></textarea>
@@ -64,8 +66,10 @@
                             <label class="flex items-start cursor-pointer">
                                 <input type="checkbox" id="terms" name="terms" required
                                     class="w-4 h-4 text-blue-600 border-neutral-300 rounded">
-                                <span class="ml-3 text-neutral-700">I agree to the <a href="#" class="text-blue-600 cursor pointer">Terms and Conditions</a>
-                                    and <a href="#" class="text-blue-600 cursor pointer">Cancellation Policy</a></span>
+                                <span class="ml-3 text-neutral-700">I agree to the <a href="#"
+                                        class="text-blue-600 cursor pointer">Terms and Conditions</a>
+                                    and <a href="#" class="text-blue-600 cursor pointer">Cancellation
+                                        Policy</a></span>
                             </label>
                         </div>
 
@@ -135,12 +139,15 @@
                             </div>
                         </div>
 
-                        
+
                         <!-- Submit Button -->
-                        <button type="submit"
-                            class="w-full bg-blue-500 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-600 shadow-md transition">
-                            Continue payment
-                        </button>
+                        <form action="{{ route('payment') }}" method="GET">
+                            <button type="submit"
+                                class="w-full bg-blue-500 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-600 shadow-md transition">
+                                Continue payment
+                            </button>
+                        </form>
+
 
                     </div>
                 </div>

@@ -8,6 +8,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourtCategoriesController;
 use App\Http\Controllers\CourtsController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BookingsController; // Tambahkan ini untuk mengimpor BookingsController    
+
 
 Route::get('/', function () {
     $categories = CourtCategories::all();
@@ -116,4 +118,8 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 
+// my bookings user
+Route::middleware(['auth'])->group(function () {
+    Route::get('/my-bookings', [BookingsController::class, 'myBookings'])->name('my.bookings');
+});
 
