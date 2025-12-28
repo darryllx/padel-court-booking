@@ -9,11 +9,39 @@
 
                 <!-- Booking Form -->
                 <div class="lg:col-span-2">
-                    <form action="/payment" method="POST" id="booking_form" class="bg-white rounded-2xl p-8">
+                    <form action="{{ route('payment.confirmation') }}" method="POST" id="booking_form"
+                        class="bg-white rounded-2xl p-8">
                         @csrf
-                        <input type="hidden" name="court_type" value="{{ request('type') }}">
+                        <input type="hidden" name="court_id" value="{{ request('court_id') }}">
+                        @php
+                            // Parse time from time_slots if time is missing
+                            $timeSlot = request('time');
+                            if (!$timeSlot && request('time_slots')) {
+                                $slots = json_decode(urldecode(request('time_slots')), true);
+                                if (is_array($slots) && count($slots) > 0) {
+                                    // Extract "06:00" from "06:00-07:00" if needed,
+                                    // or just pass the full slot for display/processing
+                                    $timeSlot = $slots[0];
+                                }
+                            }
+
+                            // If time is "06:00-07:00", we might want to split it for cleaner display or processing
+                            // But controller expects start_time.
+                            // Let's assume controller and payment view can handle "06:00-07:00" or we split it here.
+// Controller uses Carbon::parse(). "06:00-07:00" might fail Carbon parse if no format specified.
+// Let's safe extract the start time part.
+                            if ($timeSlot && str_contains($timeSlot, '-')) {
+                                $parts = explode('-', $timeSlot);
+                                $cleanTime = trim($parts[0]);
+                            } else {
+                                $cleanTime = $timeSlot;
+                            }
+                        @endphp
+
+                        <input type="hidden" name="court_type" value="{{ request('court_id') }}">
                         <input type="hidden" name="booking_date" value="{{ request('date') }}">
-                        <input type="hidden" name="time_slot" value="{{ request('time') }}">
+                        <input type="hidden" name="time_slot" value="{{ $cleanTime }}">
+                        <input type="hidden" name="players" value="{{ request('players') }}">
                         <input type="hidden" name="price" value="{{ request('price') }}">
 
                         <div class="space-y-1 mb-6">
@@ -103,7 +131,7 @@
                             <div class="flex justify-between items-center py-1">
                                 <span class="text-neutral-500">Time</span>
                                 <span class="text-neutral-800 text-medium">
-                                    {{ request('time') }}
+                                    {{ $timeSlot }}
                                 </span>
                             </div>
 
@@ -141,12 +169,12 @@
 
 
                         <!-- Submit Button -->
-                        <form action="{{ route('payment') }}" method="GET">
-                            <button type="submit"
+                        <div class="mt-6">
+                            <button type="submit" form="booking_form"
                                 class="w-full bg-blue-500 text-white py-4 rounded-lg font-bold text-lg hover:bg-blue-600 shadow-md transition">
                                 Continue payment
                             </button>
-                        </form>
+                        </div>
 
 
                     </div>

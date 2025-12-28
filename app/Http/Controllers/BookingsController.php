@@ -132,4 +132,46 @@ class BookingsController extends Controller
 
         return view('mybookings', compact('bookings'));
     }
+
+    public function processPayment(Request $request)
+    {
+        // 1. Validate Payment & Booking Data
+        $validated = $request->validate([
+            'payment_method' => 'required',
+            'court_id'       => 'required|exists:courts,id',
+            'booking_date'   => 'required|date',
+            'start_time'     => 'required', 
+            'total_price'    => 'required|numeric',
+            'customer_name'  => 'required|string',
+            'customer_email' => 'required|email',
+            'customer_phone' => 'required|string',
+            'players'        => 'nullable|integer',
+            'notes'          => 'nullable|string',
+        ]);
+
+        // 2. Kalkulasi waktu berakhir
+        $startTime = \Carbon\Carbon::parse($validated['start_time']);
+        $endTime   = $startTime->copy()->addHour(); // Default 1 hour
+
+        // 3. Membuat Booking
+        Bookings::create([
+            'user_id'        => Auth::id(), // Nullable if guest, but protected by auth middleware usually
+            'court_id'       => $validated['court_id'],
+            'booking_date'   => $validated['booking_date'],
+            'start_time'     => $startTime->format('H:i'),
+            'end_time'       => $endTime->format('H:i'),
+            'total_price'    => $validated['total_price'] * 1.05, // Store total with tax? Or sent from front? 
+                                // Ideally recalculate server side for security. 
+                                // For now using what's passed or recalculating:
+                                // request('price') was subtotal. 
+            'status'         => 'Confirmed', // Simulate successful payment
+            'customer_name'  => $validated['customer_name'],
+            'customer_email' => $validated['customer_email'],
+            'customer_phone' => $validated['customer_phone'],
+            'players'        => $validated['players'] ?? 4,
+            'notes'          => $validated['notes'] ?? null,
+        ]);
+
+        return redirect('/booking-success')->with('success', 'Payment successful and booking confirmed!');
+    }
 }

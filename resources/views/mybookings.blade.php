@@ -6,7 +6,7 @@
             <div class="container mx-auto max-w-6xl">
                 <div class="mb-8">
                     <h1 class="text-4xl font-bold text-gray-800 mb-2">
-                        My Bookings
+                        My Bookings ({{ $bookings->count() }})
                     </h1>
                     <p class="text-gray-600">
                         View and manage your padel court reservations

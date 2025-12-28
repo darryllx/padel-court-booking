@@ -59,12 +59,10 @@ Route::get('/payment', function () {
 // Payment Page (POST dari booking form)
 Route::post('/payment', function () {
     return view('payment');
-});
+})->name('payment.confirmation');
 
 // Payment Process
-Route::post('/payment/process', function () {
-    return redirect('/booking-success')->with('success', 'Payment successful!');
-});
+Route::post('/payment/process', [BookingsController::class, 'processPayment'])->name('payment.process');
 
 // Success Page
 Route::get('/booking-success', function () {

@@ -39,8 +39,45 @@
                     <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
                         <h2 class="text-2xl font-bold text-gray-800 mb-6">Select Payment Method</h2>
 
+                        @if ($errors->any())
+                            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                                role="alert">
+                                <strong class="font-bold">Payment Failed!</strong>
+                                <span class="block sm:inline">Please check the errors below.</span>
+                                <ul class="mt-2 list-disc list-inside">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form action="/payment/process" method="POST" id="payment_form">
                             @csrf
+                            <!-- Hidden inputs to pass booking data -->
+                            <input type="hidden" name="court_id" value="{{ old('court_id', request('court_id')) }}">
+                            <!-- Use date format Y-m-d for value if possible, but keep as passed for now -->
+                            <input type="hidden" name="booking_date"
+                                value="{{ old('booking_date', request('booking_date')) }}">
+                            <input type="hidden" name="start_time"
+                                value="{{ old('start_time', request('time_slot')) }}">
+                            <input type="hidden" name="total_price" value="{{ old('total_price', request('price')) }}">
+
+                            <input type="hidden" name="customer_name"
+                                value="{{ old('customer_name', request('full_name')) }}">
+                            <input type="hidden" name="customer_email"
+                                value="{{ old('customer_email', request('email')) }}">
+                            <input type="hidden" name="customer_phone"
+                                value="{{ old('customer_phone', request('phone')) }}">
+
+                            <!-- Additional fields needed for persistence -->
+                            <input type="hidden" name="court_type"
+                                value="{{ old('court_type', request('court_type')) }}">
+                            <input type="hidden" name="players" value="{{ old('players', request('players')) }}">
+                            <input type="hidden" name="notes" value="{{ old('notes', request('notes')) }}">
+
+                            <!-- Helper inputs for Request access in view if needed (not standard but useful for the logic below) -->
+                            <!-- Or better, update Logic below to use old() -->
 
                             <!-- E-Wallet -->
                             <div class="mb-6">
@@ -260,11 +297,12 @@
                             <h3 class="font-semibold text-gray-800 mb-3">Customer Information</h3>
                             <div class="space-y-2 text-sm">
                                 <p><span class="text-gray-600">Name:</span> <span
-                                        class="font-medium">{{ request('full_name') }}</span></p>
+                                        class="font-medium">{{ old('customer_name', request('full_name')) }}</span>
+                                </p>
                                 <p><span class="text-gray-600">Email:</span> <span
-                                        class="font-medium">{{ request('email') }}</span></p>
+                                        class="font-medium">{{ old('customer_email', request('email')) }}</span></p>
                                 <p><span class="text-gray-600">Phone:</span> <span
-                                        class="font-medium">{{ request('phone') }}</span></p>
+                                        class="font-medium">{{ old('customer_phone', request('phone')) }}</span></p>
                             </div>
                         </div>
 
@@ -272,20 +310,23 @@
                         <div class="space-y-3 mb-6">
                             <div class="flex justify-between items-center pb-2 border-b border-gray-200">
                                 <span class="text-gray-600 text-sm">Court Type</span>
-                                <span class="font-semibold text-sm">{{ ucfirst(request('court_type')) }}</span>
+                                <span
+                                    class="font-semibold text-sm">{{ ucfirst(old('court_type', request('court_type'))) }}</span>
                             </div>
                             <div class="flex justify-between items-center pb-2 border-b border-gray-200">
                                 <span class="text-gray-600 text-sm">Date</span>
                                 <span
-                                    class="font-semibold text-sm">{{ \Carbon\Carbon::parse(request('booking_date'))->format('d M Y') }}</span>
+                                    class="font-semibold text-sm">{{ \Carbon\Carbon::parse(old('booking_date', request('booking_date')))->format('d M Y') }}</span>
                             </div>
                             <div class="flex justify-between items-center pb-2 border-b border-gray-200">
                                 <span class="text-gray-600 text-sm">Time</span>
-                                <span class="font-semibold text-sm">{{ request('time_slot') }}</span>
+                                <span
+                                    class="font-semibold text-sm">{{ old('start_time', request('time_slot')) }}</span>
                             </div>
                             <div class="flex justify-between items-center pb-2 border-b border-gray-200">
                                 <span class="text-gray-600 text-sm">Players</span>
-                                <span class="font-semibold text-sm">{{ request('players') }} Players</span>
+                                <span class="font-semibold text-sm">{{ old('players', request('players')) }}
+                                    Players</span>
                             </div>
                         </div>
 
@@ -294,18 +335,19 @@
                             <div class="flex justify-between items-center mb-2">
                                 <span class="text-purple-100">Subtotal</span>
                                 <span class="font-semibold">Rp
-                                    {{ number_format(request('price'), 0, ',', '.') }}</span>
+                                    {{ number_format(old('total_price', request('price')), 0, ',', '.') }}</span>
                             </div>
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-purple-100">Service Fee (5%)</span>
                                 <span class="font-semibold">Rp
-                                    {{ number_format(request('price') * 0.05, 0, ',', '.') }}</span>
+                                    {{ number_format(old('total_price', request('price')) * 0.05, 0, ',', '.') }}</span>
                             </div>
                             <div class="border-t border-purple-400 pt-4">
                                 <div class="flex justify-between items-center">
                                     <span class="text-lg font-bold">Total Payment</span>
                                     <span class="text-2xl font-bold">
-                                        Rp {{ number_format(request('price') * 1.05, 0, ',', '.') }}
+                                        Rp
+                                        {{ number_format(old('total_price', request('price')) * 1.05, 0, ',', '.') }}
                                     </span>
                                 </div>
                             </div>
