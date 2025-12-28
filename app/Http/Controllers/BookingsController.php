@@ -122,4 +122,14 @@ class BookingsController extends Controller
         return redirect()->route('bookings.index')
             ->with('success', 'Booking berhasil dihapus.');
     }
+
+    public function myBookings()
+    {
+        $bookings = Bookings::with('court')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('mybookings', compact('bookings'));
+    }
 }

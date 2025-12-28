@@ -54,7 +54,7 @@ Route::get('/booking-detail', function () {
 // Payment Page (GET)
 Route::get('/payment', function () {
     return view('payment');
-});
+})->name('payment');
 
 // Payment Page (POST dari booking form)
 Route::post('/payment', function () {
