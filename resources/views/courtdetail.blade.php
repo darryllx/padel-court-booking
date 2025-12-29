@@ -163,9 +163,10 @@
                                     class="hidden peer time-slot-checkbox"
                                 >
                         
-                                <div class="border-2 border-neutral-200 rounded-md p-2 text-center transition
-                                    hover:border-neutral-300 peer-checked:bg-blue-600 
-                                    peer-checked:border-blue-600 peer-checked:text-white">
+                                <div class="slot-box border-2 border-neutral-200 rounded-md p-2 text-center transition
+    hover:border-neutral-300 peer-checked:bg-blue-600 
+    peer-checked:border-blue-600 peer-checked:text-white">
+
                                     <p class="font-semibold text-sm">{{ $slot }}</p>
                                 </div>
                             </label>
@@ -494,9 +495,12 @@
 
         const box = cb.closest('label').querySelector('div');
 
-        box.className =
-            'border-2 border-neutral-200 rounded-md p-2 text-center transition hover:border-neutral-300';
-
+        box.classList.remove(
+    'bg-neutral-200',
+    'border-neutral-300',
+    'text-neutral-400',
+    'cursor-not-allowed'
+);
         bookings.forEach(b => {
             const bookedStart = b.start_time.substring(0,5);
             const bookedEnd   = b.end_time.substring(0,5);
@@ -507,9 +511,13 @@
 
                 selectedTimeSlots = selectedTimeSlots.filter(slot => slot !== cb.value);
 
-                box.className =
-                    'border-2 bg-neutral-200 border-neutral-300 text-neutral-400 ' +
-                    'rounded-md p-2 text-center cursor-not-allowed';
+                box.classList.add(
+    'bg-neutral-200',
+    'border-neutral-300',
+    'text-neutral-400',
+    'cursor-not-allowed'
+);
+
             }
         });
     });
