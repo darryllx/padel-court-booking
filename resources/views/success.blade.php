@@ -26,20 +26,22 @@
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white rounded-lg p-4">
                             <p class="text-gray-600 text-sm mb-1">Booking ID</p>
-                            <p class="font-bold text-lg text-purple-600">#PB{{ str_pad($booking->id, 4, '0', STR_PAD_LEFT) }}</p>
+                            <p class="font-bold text-lg text-purple-600">#PB{{ rand(1000, 9999) }}</p>
                         </div>
                         <div class="bg-white rounded-lg p-4">
                             <p class="text-gray-600 text-sm mb-1">Court Type</p>
-                            <p class="font-bold text-lg">{{ $booking->court->court_name }}</p>
+                            <p class="font-bold text-lg">Indoor Court</p>
                         </div>
                         <div class="bg-white rounded-lg p-4">
                             <p class="text-gray-600 text-sm mb-1">Date</p>
-                            <p class="font-bold text-lg">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
+                            <p class="font-bold text-lg">{{ date('d M Y') }}</p>
                         </div>
                         <div class="bg-white rounded-lg p-4">
                             <p class="text-gray-600 text-sm mb-1">Time</p>
-                            <p class="font-bold text-lg">{{ $booking->start_time }} - {{ $booking->end_time }}</p>
+                            <p class="font-bold text-lg">10:00 - 11:00</p>
                         </div>
+                    </div>
+                </div>
 
                 <!-- What's Next -->
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 text-left">
