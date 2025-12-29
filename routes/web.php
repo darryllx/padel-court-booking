@@ -65,9 +65,10 @@ Route::post('/payment', function () {
 Route::post('/payment/process', [BookingsController::class, 'processPayment'])->name('payment.process');
 
 // Success Page
-Route::get('/booking-success', function () {
-    return view('success');
-});
+Route::get('/booking-success/{id}', function ($id) {
+    $booking = \App\Models\Bookings::with('court')->findOrFail($id);
+    return view('success', compact('booking'));
+})->name('booking.success');
 
 // Authentication Routes
 

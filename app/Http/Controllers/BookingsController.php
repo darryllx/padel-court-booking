@@ -6,6 +6,7 @@ use App\Models\Bookings;
 use App\Models\Courts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class BookingsController extends Controller
 {
@@ -149,11 +150,15 @@ class BookingsController extends Controller
         ]);
 
         // 2. Kalkulasi waktu berakhir
-        $startTime = \Carbon\Carbon::parse($validated['start_time']);
-        $endTime   = $startTime->copy()->addHour(); // Default 1 hour
+        $startTime = Carbon::createFromFormat('H:i', $validated['start_time']);
+
+        // default 1 jam jika hours tidak dikirim
+        $hours = $request->input('hours', 1);
+
+        $endTime = $startTime->copy()->addHours($hours);
 
         // 3. Membuat Booking
-        Bookings::create([
+        $booking = Bookings::create([
             'user_id'        => Auth::id(), // Nullable if guest, but protected by auth middleware usually
             'court_id'       => $validated['court_id'],
             'booking_date'   => $validated['booking_date'],
@@ -170,6 +175,8 @@ class BookingsController extends Controller
             'notes'          => $validated['notes'] ?? null,
         ]);
 
-        return redirect('/booking-success')->with('success', 'Payment successful and booking confirmed!');
+        return redirect()
+        ->route('booking.success', $booking->id)
+        ->with('success', 'Payment successful and booking confirmed!');    
     }
 }
