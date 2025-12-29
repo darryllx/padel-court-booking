@@ -66,7 +66,7 @@
                         </li>
                         <li class="flex items-start">
                             <span class="text-blue-600 mr-2">4.</span>
-                            Enjoy your game!
+                            Enjoy your games!
                         </li>
                     </ul>
                 </div>
