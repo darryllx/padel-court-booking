@@ -8,7 +8,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\CourtCategoriesController;
 use App\Http\Controllers\CourtsController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BookingsController; // Tambahkan ini untuk mengimpor BookingsController    
+use App\Http\Controllers\BookingsController; // Tambahkan ini untuk mengimpor BookingsController 
+use App\Models\Bookings;   
 
 
 Route::get('/', function () {
@@ -31,24 +32,46 @@ Route::get('/about', function () {
     return view('about');
 });
 
-// Book Court - Court Selection
+// Book Court - Court Selectio
 Route::get('/book-court', function () {
     $category = null;
     $courts = [];
-    
+    $bookedSlots = collect();
+
     if (request()->has('category')) {
         $category = CourtCategories::with('courts')->find(request('category'));
+
         if ($category) {
             $courts = $category->courts;
+
+            // ⬇️ AMBIL JAM YANG SUDAH DIBOOKING
+            if (request()->filled('court_id') && request()->filled('date')) {
+                $bookedSlots = Bookings::where('court_id', request('court_id'))
+                    ->whereDate('booking_date', request('date'))
+                    ->whereIn('status', ['Pending', 'Confirmed', 'Completed'])
+                    ->get(['start_time', 'end_time']);
+            }
         }
     }
-    
-    return view('courtdetail', compact('category', 'courts'));
+
+    return view('courtdetail', compact('category', 'courts', 'bookedSlots'));
 });
 
 // Booking Detail Form
 Route::get('/booking-detail', function () {
     return view('bookingcourt');
+});
+
+Route::get('/api/booked-slots', function () {
+    request()->validate([
+        'court_id' => 'required|exists:courts,id',
+        'date' => 'required|date',
+    ]);
+
+    return \App\Models\Bookings::where('court_id', request('court_id'))
+        ->whereDate('booking_date', request('date'))
+        ->whereIn('status', ['Pending', 'Confirmed', 'Completed'])
+        ->get(['start_time', 'end_time']);
 });
 
 

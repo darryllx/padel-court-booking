@@ -76,7 +76,7 @@
                         <div>
                             <label for="court_select" class="block text-lg font-semibold text-neutral-800 mb-2">Choose court</label>
                             <div class="relative">
-                                <select id="court_select"
+                                <select id="court_select" name="court_id"
                                     class="w-full p-4 border-2 border-neutral-200 rounded-xl focus:border-blue-600 focus:outline-none appearance-none
                                           bg-white text-neutral-700 font-medium text-lg transition cursor-pointer hover:border-neutral-300">
                                     <option value="">Select court</option>
@@ -99,7 +99,7 @@
                         <!-- Date Selection -->
                         <div>
                             <label for="booking_date" class="block text-lg font-semibold text-neutral-800 mb-2">Choose Date</label>
-                            <input type="date" id="booking_date"
+                            <input type="date" id="booking_date" name="date"
                                 class="w-full p-4 border-2 border-neutral-200 rounded-xl focus:border-blue-600 focus:outline-none appearance-none
                                           bg-white text-neutral-700 font-medium text-lg transition cursor-pointer hover:border-neutral-300"
                                 min="{{ date('Y-m-d') }}">
@@ -134,16 +134,42 @@
                                     '21:00 - 22:00',
                                 ];
                             @endphp
-    
+                            {{-- @php
+                            $disabledSlots = [];
+                        
+                            foreach ($bookedSlots as $booking) {
+                                $start = substr($booking->start_time, 0, 5);
+                                $end   = substr($booking->end_time, 0, 5);
+                        
+                                foreach ($timeSlots as $slot) {
+                                    [$slotStart, $slotEnd] = explode(' - ', $slot);
+                        
+                                    if ($slotStart < $end && $slotEnd > $start) {
+                                        $disabledSlots[] = $slot;
+                                    }
+                                }
+                            }
+                        @endphp --}}
                             @foreach ($timeSlots as $index => $slot)
-                                <label class="cursor-pointer">
-                                    <input type="checkbox" name="time_slot" value="{{ $slot }}"
-                                        class="hidden peer time-slot-checkbox">
-                                    <div class="border-2 border-neutral-200 rounded-md p-2 text-center peer-checked:bg-blue-600 peer-checked:border-blue-600 peer-checked:text-white hover:border-neutral-300 transition">
-                                        <p class="font-semibold text-sm">{{ $slot }}</p>
-                                    </div>
-                                </label>
-                            @endforeach
+                            @php [$slotStart, $slotEnd] = explode(' - ', $slot); @endphp
+                        
+                            <label class="cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    name="time_slot"
+                                    value="{{ $slot }}"
+                                    data-start="{{ $slotStart }}"
+                                    data-end="{{ $slotEnd }}"
+                                    class="hidden peer time-slot-checkbox"
+                                >
+                        
+                                <div class="border-2 border-neutral-200 rounded-md p-2 text-center transition
+                                    hover:border-neutral-300 peer-checked:bg-blue-600 
+                                    peer-checked:border-blue-600 peer-checked:text-white">
+                                    <p class="font-semibold text-sm">{{ $slot }}</p>
+                                </div>
+                            </label>
+                        @endforeach
                         </div>
                         <div class="mt-4 flex justify-end">
                             <button id="clear_slots_btn" class="text-sm text-blue-600 hover:text-blue-700 font-medium">
@@ -347,6 +373,7 @@
                         pricePreviewBox.classList.add('opacity-0', 'translate-y-2');
                     }
                 }
+                loadBookedSlots()
                 updateSummary();
             });
         }
@@ -354,6 +381,7 @@
         // Date selection
         document.getElementById('booking_date').addEventListener('change', (e) => {
             selectedDate = e.target.value;
+            loadBookedSlots();
             updateSummary();
         });
 
@@ -449,6 +477,43 @@
                     `/booking-detail?court_id=${selectedCourtId}&type=${encodeURIComponent(selectedCourtName)}&date=${selectedDate}&time_slots=${timeSlotsParam}&price=${totalPrice}&hours=${selectedTimeSlots.length}`;
             }
         });
+
+        async function loadBookedSlots() {
+    if (!selectedCourtId || !selectedDate) return;
+
+    const res = await fetch(
+        `/api/booked-slots?court_id=${selectedCourtId}&date=${selectedDate}`
+    );
+    const bookings = await res.json();
+
+    document.querySelectorAll('.time-slot-checkbox').forEach(cb => {
+        cb.disabled = false;
+
+        const slotStart = cb.dataset.start;
+        const slotEnd   = cb.dataset.end;
+
+        const box = cb.closest('label').querySelector('div');
+
+        box.className =
+            'border-2 border-neutral-200 rounded-md p-2 text-center transition hover:border-neutral-300';
+
+        bookings.forEach(b => {
+            const bookedStart = b.start_time.substring(0,5);
+            const bookedEnd   = b.end_time.substring(0,5);
+
+            if (slotStart < bookedEnd && slotEnd > bookedStart) {
+                cb.disabled = true;
+                cb.checked = false;
+
+                selectedTimeSlots = selectedTimeSlots.filter(slot => slot !== cb.value);
+
+                box.className =
+                    'border-2 bg-neutral-200 border-neutral-300 text-neutral-400 ' +
+                    'rounded-md p-2 text-center cursor-not-allowed';
+            }
+        });
+    });
+}
     </script>
 
 

@@ -158,6 +158,19 @@ class BookingsController extends Controller
         $hours = $request->input('hours', 1);
         $endTime = $startTime->copy()->addHours($hours);
 
+        $exists = Bookings::where('court_id', $validated['court_id'])
+    ->whereDate('booking_date', $validated['booking_date'])
+    ->whereIn('status', ['Pending', 'Confirmed', 'Completed'])
+    ->where(function ($q) use ($startTime, $endTime) {
+        $q->where('start_time', '<', $endTime)
+          ->where('end_time', '>', $startTime);
+    })
+    ->exists();
+
+if ($exists) {
+    return back()->with('error', 'Jam ini sudah dibooking');
+}
+        
         // 3. Membuat Booking (Status Pending)
         $booking = Bookings::create([
             'user_id'        => Auth::id(),
