@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Payments;
+use Midtrans\Config;
+use Midtrans\Snap;
+use Midtrans\Transaction;
 
 class BookingsController extends Controller
 {
@@ -152,40 +155,176 @@ class BookingsController extends Controller
 
         // 2. Kalkulasi waktu berakhir
         $startTime = Carbon::createFromFormat('H:i', $validated['start_time']);
-
-        // default 1 jam jika hours tidak dikirim
         $hours = $request->input('hours', 1);
-
         $endTime = $startTime->copy()->addHours($hours);
 
-        // 3. Membuat Booking
+        // 3. Membuat Booking (Status Pending)
         $booking = Bookings::create([
-            'user_id'        => Auth::id(), // Nullable if guest, but protected by auth middleware usually
+            'user_id'        => Auth::id(),
             'court_id'       => $validated['court_id'],
             'booking_date'   => $validated['booking_date'],
             'start_time'     => $startTime->format('H:i'),
             'end_time'       => $endTime->format('H:i'),
-            'total_price'    => $validated['total_price'] * 1.05, // Store total with tax? Or sent from front? 
-                                // Ideally recalculate server side for security. 
-                                // For now using what's passed or recalculating:
-                                // request('price') was subtotal. 
-            'status'         => 'Confirmed', // Simulate successful payment
+            'total_price'    => $validated['total_price'] * 1.05, // Menambahkan pajak 5%
+            'status'         => 'Pending', // Tunggu pembayaran
             'customer_name'  => $validated['customer_name'],
             'customer_email' => $validated['customer_email'],
             'customer_phone' => $validated['customer_phone'],
             'notes'          => $validated['notes'] ?? null,
         ]);
 
-        Payments::create([
-            'booking_id'     => $booking->id,
-            'payment_method' => $validated['payment_method'],
-            'payment_status' => 'completed',
-            'payment_date'   => now(),
-            'amount'         => $booking->total_price,
-        ]);
+        // 4. Konfigurasi Midtrans
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.isProduction');
+        Config::$isSanitized = config('midtrans.isSanitized');
+        Config::$is3ds = config('midtrans.is3ds');
 
-        return redirect()
-        ->route('booking.success', $booking->id)
-        ->with('success', 'Payment successful and booking confirmed!');    
+        // 5. Generate Order ID & Save to DB
+        $orderId = 'BOOK-' . $booking->id . '-' . time();
+        $booking->update(['midtrans_order_id' => $orderId]);
+
+        // 6. Buat Transaksi Midtrans
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $orderId,
+                'gross_amount' => (int) $booking->total_price,
+            ),
+            'customer_details' => array(
+                'first_name' => $validated['customer_name'],
+                'email' => $validated['customer_email'],
+                'phone' => $validated['customer_phone'],
+            ),
+            'item_details' => array(
+                [
+                    'id' => 'COURT-' . $validated['court_id'],
+                    'price' => (int) $booking->total_price,
+                    'quantity' => 1,
+                    'name' => 'Booking Lapangan Padel'
+                ]
+            ),
+        );
+
+        try {
+            $snapToken = Snap::getSnapToken($params);
+            return view('bookings.pay', compact('snapToken', 'booking'));
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal membuat transaksi: ' . $e->getMessage());
+        }
+    }
+
+    public function paymentCallback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+
+        if ($hashed == $request->signature_key) {
+            // Find booking by midtrans_order_id OR extract ID
+            $booking = Bookings::where('midtrans_order_id', $request->order_id)->first();
+            
+            // Fallback parsing if needed
+            if (!$booking) {
+                $orderIdParts = explode('-', $request->order_id);
+                if (isset($orderIdParts[1])) {
+                     $booking = Bookings::find($orderIdParts[1]);
+                }
+            }
+
+            if ($booking) {
+                if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+                    $booking->update(['status' => 'Confirmed']);
+                    
+                    $exists = Payments::where('booking_id', $booking->id)->exists();
+                    if (!$exists) {
+                        Payments::create([
+                            'booking_id' => $booking->id,
+                            'payment_method' => $request->payment_type, // e.g bank_transfer
+                            'payment_status' => 'completed', 
+                            'payment_date' => now(),
+                            'amount' => $request->gross_amount,
+                        ]);
+                    }
+
+                } elseif ($request->transaction_status == 'expire' || $request->transaction_status == 'cancel' || $request->transaction_status == 'deny') {
+                    $booking->update(['status' => 'Cancelled']);
+                }
+            }
+        }
+
+        return response()->json(['status' => 'success']);
+    }
+
+    public function success($id)
+    {
+        $booking = Bookings::with('court')->findOrFail($id);
+
+        if ($booking->status == 'Pending' && $booking->midtrans_order_id) {
+            $this->verifyMidtransStatus($booking);
+        }
+
+        return view('success', compact('booking'));
+    }
+
+    public function checkPaymentStatus($id)
+    {
+        $booking = Bookings::findOrFail($id);
+        
+        if (!$booking->midtrans_order_id) {
+            return back()->with('error', 'System Error: No Midtrans Order ID found for this booking. Please contact admin.');
+        }
+
+        if ($booking->status == 'Pending') {
+            try {
+                $status = $this->verifyMidtransStatus($booking);
+                
+                if ($status) {
+                    if ($status->transaction_status == 'settlement' || $status->transaction_status == 'capture') {
+                        return back()->with('success', 'Payment success! Status updated to Confirmed.');
+                    } elseif ($status->transaction_status == 'pending') {
+                        return back()->with('info', 'Midtrans Verification: Payment is still PENDING. Please complete payment.');
+                    } elseif ($status->transaction_status == 'expire' || $status->transaction_status == 'cancel' || $status->transaction_status == 'deny') {
+                        return back()->with('warning', 'Payment failed or expired. Status: ' . $status->transaction_status);
+                    } else {
+                        return back()->with('info', 'Midtrans Status: ' . $status->transaction_status);
+                    }
+                }
+            } catch (\Exception $e) {
+                return back()->with('error', 'Check Failed: ' . $e->getMessage());
+            }
+        }
+        
+        return back()->with('info', 'Booking status is already ' . $booking->status);
+    }
+
+    private function verifyMidtransStatus($booking)
+    {
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.isProduction');
+        Config::$isSanitized = config('midtrans.isSanitized');
+        Config::$is3ds = config('midtrans.is3ds');
+
+        try {
+            $status = Transaction::status($booking->midtrans_order_id);
+            
+            if ($status->transaction_status == 'settlement' || $status->transaction_status == 'capture') {
+                $booking->update(['status' => 'Confirmed']);
+                
+                $exists = Payments::where('booking_id', $booking->id)->exists();
+                if (!$exists) {
+                    Payments::create([
+                        'booking_id' => $booking->id,
+                        'payment_method' => $status->payment_type ?? 'midtrans',
+                        'payment_status' => 'completed',
+                        'payment_date' => now(),
+                        'amount' => $status->gross_amount,
+                    ]);
+                }
+            } elseif ($status->transaction_status == 'expire' || $status->transaction_status == 'cancel' || $status->transaction_status == 'deny') {
+                $booking->update(['status' => 'Cancelled']);
+            }
+            
+            return $status;
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

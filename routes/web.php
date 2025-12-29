@@ -63,12 +63,11 @@ Route::post('/payment', function () {
 
 // Payment Process
 Route::post('/payment/process', [BookingsController::class, 'processPayment'])->name('payment.process');
+Route::post('/payment/notification', [BookingsController::class, 'paymentCallback']); // Callback Midtrans
 
 // Success Page
-Route::get('/booking-success/{id}', function ($id) {
-    $booking = \App\Models\Bookings::with('court')->findOrFail($id);
-    return view('success', compact('booking'));
-})->name('booking.success');
+Route::get('/booking-success/{id}', [BookingsController::class, 'success'])->name('booking.success');
+Route::post('/booking/{id}/check-status', [BookingsController::class, 'checkPaymentStatus'])->name('booking.check_status');
 
 // Authentication Routes
 

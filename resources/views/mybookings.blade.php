@@ -147,7 +147,21 @@
                                     </div>
 
                                     <!-- Action Button -->
-                                    <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <div class="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                                        @if ($booking->status === 'Pending')
+                                            <form action="{{ route('booking.check_status', $booking->id) }}"
+                                                method="POST">
+                                                @csrf
+                                                <button type="submit"
+                                                    class="w-full bg-yellow-500 text-white py-2 rounded-lg font-semibold hover:bg-yellow-600 transition">
+                                                    Check Payment Status
+                                                </button>
+                                            </form>
+
+                                            <!-- Link to pay if needed, or just rely on check status if paid -->
+                                            <!-- Optional: Link to re-pay? No, midtrans token might be expired. -->
+                                        @endif
+
                                         <button onclick="viewDetails({{ $booking->id }})"
                                             class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
                                             View Details

@@ -26,6 +26,7 @@ class Bookings extends Model
         'end_time',
         'total_price',
         'status',
+        'midtrans_order_id',
     ];
 
     protected $casts = [

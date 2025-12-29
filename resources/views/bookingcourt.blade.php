@@ -9,7 +9,7 @@
 
                 <!-- Booking Form -->
                 <div class="lg:col-span-2">
-                    <form action="{{ route('payment.confirmation') }}" method="POST" id="booking_form"
+                    <form action="{{ route('payment.process') }}" method="POST" id="booking_form"
                         class="bg-white rounded-2xl p-8">
                         @csrf
                         <input type="hidden" name="court_id" value="{{ request('court_id') }}">
@@ -40,9 +40,10 @@
 
                         <input type="hidden" name="court_type" value="{{ request('court_id') }}">
                         <input type="hidden" name="booking_date" value="{{ request('date') }}">
-                        <input type="hidden" name="time_slot" value="{{ $cleanTime }}">
+                        <input type="hidden" name="start_time" value="{{ $cleanTime }}">
                         <input type="hidden" name="players" value="{{ request('players') }}">
-                        <input type="hidden" name="price" value="{{ request('price') }}">
+                        <input type="hidden" name="total_price" value="{{ request('price') }}">
+                        <input type="hidden" name="payment_method" value="midtrans">
 
                         <div class="space-y-1 mb-6">
                             <h1 class="text-2xl font-semibold text-neutral-800 tracking-tight">Fill personal information
@@ -53,8 +54,8 @@
                         <!-- Full Name -->
                         <div class="mb-6">
                             <label for="full_name" class="block text-neutral-700 font-semibold mb-2">Full name</label>
-                            <input type="text" id="full_name" name="full_name" required
-                                value="{{ old('full_name', auth()->check() ? auth()->user()->name : '') }}"
+                            <input type="text" id="full_name" name="customer_name" required
+                                value="{{ old('customer_name', auth()->check() ? auth()->user()->name : '') }}"
                                 class="w-full px-3 py-3 border-2 border-neutral-200 rounded-lg focus:border-blue-600 focus:outline-none"
                                 placeholder="Enter your full name">
 
@@ -63,8 +64,8 @@
                         <!-- Email -->
                         <div class="mb-6">
                             <label for="email" class="block text-neutral-700 font-semibold mb-2">Email</label>
-                            <input type="email" id="email" name="email" required
-                                value="{{ old('email', auth()->check() ? auth()->user()->email : '') }}"
+                            <input type="email" id="email" name="customer_email" required
+                                value="{{ old('customer_email', auth()->check() ? auth()->user()->email : '') }}"
                                 class="w-full px-3 py-3 border-2 border-neutral-200 rounded-lg focus:border-blue-600 focus:outline-none"
                                 placeholder="Enter your email">
 
@@ -73,8 +74,8 @@
                         <!-- Phone -->
                         <div class="mb-6">
                             <label for="phone" class="block text-neutral-700 font-semibold mb-2">Phone number</label>
-                            <input type="tel" id="phone" name="phone" required
-                                value="{{ old('phone', auth()->check() ? auth()->user()->phone_number : '') }}"
+                            <input type="tel" id="phone" name="customer_phone" required
+                                value="{{ old('customer_phone', auth()->check() ? auth()->user()->phone_number : '') }}"
                                 class="w-full px-3 py-3 border-2 border-neutral-200 rounded-lg focus:border-blue-600 focus:outline-none"
                                 placeholder="08xx xxxx xxxx">
 
