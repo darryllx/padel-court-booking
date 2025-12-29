@@ -7,6 +7,7 @@ use App\Models\Courts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Payments;
 
 class BookingsController extends Controller
 {
@@ -173,6 +174,14 @@ class BookingsController extends Controller
             'customer_email' => $validated['customer_email'],
             'customer_phone' => $validated['customer_phone'],
             'notes'          => $validated['notes'] ?? null,
+        ]);
+
+        Payments::create([
+            'booking_id'     => $booking->id,
+            'payment_method' => $validated['payment_method'],
+            'payment_status' => 'completed',
+            'payment_date'   => now(),
+            'amount'         => $booking->total_price,
         ]);
 
         return redirect()
