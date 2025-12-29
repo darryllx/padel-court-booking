@@ -51,15 +51,7 @@ Route::get('/booking-detail', function () {
     return view('bookingcourt');
 });
 
-// Payment Page (GET)
-Route::get('/payment', function () {
-    return view('payment');
-})->name('payment');
 
-// Payment Page (POST dari booking form)
-Route::post('/payment', function () {
-    return view('payment');
-})->name('payment.confirmation');
 
 // Payment Process
 Route::post('/payment/process', [BookingsController::class, 'processPayment'])->name('payment.process');
