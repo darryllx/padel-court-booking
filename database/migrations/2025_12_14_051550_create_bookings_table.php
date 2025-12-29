@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('customer_name');
             $table->string('customer_email');
             $table->string('customer_phone');
-            $table->unsignedTinyInteger('players');
             $table->text('notes')->nullable();
 
             $table->enum('status', ['Pending', 'Confirmed', 'Cancelled', 'Completed'])->default('Pending');

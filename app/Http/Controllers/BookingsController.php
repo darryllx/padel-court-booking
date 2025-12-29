@@ -145,7 +145,6 @@ class BookingsController extends Controller
             'customer_name'  => 'required|string',
             'customer_email' => 'required|email',
             'customer_phone' => 'required|string',
-            'players'        => 'nullable|integer',
             'notes'          => 'nullable|string',
         ]);
 
@@ -168,7 +167,6 @@ class BookingsController extends Controller
             'customer_name'  => $validated['customer_name'],
             'customer_email' => $validated['customer_email'],
             'customer_phone' => $validated['customer_phone'],
-            'players'        => $validated['players'] ?? 4,
             'notes'          => $validated['notes'] ?? null,
         ]);
 
