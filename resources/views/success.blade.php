@@ -51,7 +51,8 @@
         <div class="bg-white rounded-lg p-4">
             <p class="text-gray-600 text-sm mb-1">Time</p>
             <p class="font-bold text-lg">
-                {{ $booking->start_time }} - {{ $booking->end_time }}
+                {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - 
+                {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
             </p>
         </div>
     </div>

@@ -151,11 +151,12 @@ class BookingsController extends Controller
             'customer_email' => 'required|email',
             'customer_phone' => 'required|string',
             'notes'          => 'nullable|string',
+            'hours'          => 'required|integer|min:1',
         ]);
 
         // 2. Kalkulasi waktu berakhir
-        $startTime = Carbon::createFromFormat('H:i', $validated['start_time']);
-        $hours = $request->input('hours', 1);
+        $startTime = Carbon::createFromFormat('H:i', substr($validated['start_time'], 0, 5));
+        $hours = (int) $request->input('hours');
         $endTime = $startTime->copy()->addHours($hours);
 
         $exists = Bookings::where('court_id', $validated['court_id'])
