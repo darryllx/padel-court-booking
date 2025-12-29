@@ -32,7 +32,7 @@ class DashboardController extends Controller
         $recentUsers = User::with('role')->latest()->take(5)->get();
 
         // Recent bookings (last 5)
-        $recentBookings = Bookings::with(['user', 'court'])->latest()->take(5)->get();
+        $recentBookings = Bookings::with(['user', 'court'])->latest()->take(10)->get();
 
         return view('admin.dashboard', compact(
             'totalUsers',

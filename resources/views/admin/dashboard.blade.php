@@ -119,26 +119,58 @@
             <div class="p-6">
                 <div class="space-y-4">
                     @forelse ($recentBookings as $booking)
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded-lg transition">
                             <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">{{ $booking->user->name ?? 'N/A' }}</p>
-                                <p class="text-xs text-gray-500">{{ $booking->court->court_name ?? 'N/A' }}</p>
-                                <p class="text-xs text-gray-400">
-                                    {{ $booking->booking_date ? $booking->booking_date->format('d M Y') : 'N/A' }}
-                                    -
-                                    {{ $booking->start_time ? \Carbon\Carbon::parse($booking->start_time)->format('H:i') : '' }}
+                                <p class="text-sm font-bold text-gray-900">
+                                    {{ $booking->customer_name ?? $booking->user->name ?? 'Guest' }}
+                                </p>
+                                
+                                <p class="text-xs text-gray-500 mb-1">
+                                    {{ $booking->court->court_name ?? 'Lapangan Dihapus' }}
+                                </p>
+                                
+                                <p class="text-xs text-gray-400 flex items-center gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}
+                                    
+                                    <span class="mx-1">•</span>
+                                    
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - 
+                                    {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
                                 </p>
                             </div>
-                            <span
-                                class="px-2 py-1 text-xs font-semibold rounded-full 
-                                @if ($booking->booking_status === 'confirmed') bg-green-100 text-green-800
-                                @elseif($booking->booking_status === 'pending') bg-yellow-100 text-yellow-800
-                                @else bg-red-100 text-red-800 @endif">
-                                {{ ucfirst($booking->booking_status ?? 'N/A') }}
+
+                            @php
+                                // Cek nama kolom (status atau booking_status)
+                                $rawStatus = $booking->status ?? $booking->booking_status ?? 'Pending';
+                                
+                                $statusStyles = [
+                                    'Pending'   => 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+                                    'Confirmed' => 'bg-green-100 text-green-800 border border-green-200',
+                                    'Completed' => 'bg-blue-100 text-blue-800 border border-blue-200',
+                                    'Cancelled' => 'bg-red-100 text-red-800 border border-red-200',
+                                ];
+                                
+                                $statusLabels = [
+                                    'Pending'   => 'Menunggu',
+                                    'Confirmed' => 'Lunas',
+                                    'Completed' => 'Selesai',
+                                    'Cancelled' => 'Batal',
+                                ];
+
+                                $style = $statusStyles[$rawStatus] ?? 'bg-gray-100 text-gray-600';
+                                $label = $statusLabels[$rawStatus] ?? $rawStatus;
+                            @endphp
+
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full {{ $style }}">
+                                {{ $label }}
                             </span>
                         </div>
                     @empty
-                        <p class="text-center text-gray-500 py-4">Belum ada booking</p>
+                        <div class="text-center py-8">
+                            <p class="text-gray-500 text-sm">Belum ada booking terbaru</p>
+                        </div>
                     @endforelse
                 </div>
             </div>
