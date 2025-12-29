@@ -38,7 +38,7 @@
                         </div>
                         <div class="bg-white rounded-lg p-4">
                             <p class="text-gray-600 text-sm mb-1">Time</p>
-                            <p class="font-bold text-lg">{{ $booking->start_time }} - {{ $booking->end_time }}</p>
+                            <p class="font-bold text-lg">10:00 - 11:00</p>
                         </div>
                     </div>
                 </div>
