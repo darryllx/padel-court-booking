@@ -23,7 +23,7 @@
                 <div class="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-8 mb-8 text-left">
                     <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Booking Details</h2>
 
-                   <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white rounded-lg p-4">
                             <p class="text-gray-600 text-sm mb-1">Booking ID</p>
                             <p class="font-bold text-lg text-purple-600">#PB{{ str_pad($booking->id, 4, '0', STR_PAD_LEFT) }}</p>
@@ -40,7 +40,6 @@
                             <p class="text-gray-600 text-sm mb-1">Time</p>
                             <p class="font-bold text-lg">{{ $booking->start_time }} - {{ $booking->end_time }}</p>
                         </div>
-                </div>
 
                 <!-- What's Next -->
                 <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 text-left">
