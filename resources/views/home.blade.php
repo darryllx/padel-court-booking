@@ -4,41 +4,44 @@
 
     <!-- Hero section -->
     <section class="relative min-h-screen pt-[92px] flex items-center justify-center">
-
         <!-- Background Image with Overlay -->
         <div class="absolute inset-0 z-0">
             <img src="{{ asset('images/padel.jpeg') }}" alt="Padel Court" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/50"></div>
         </div>
 
-
         <!-- Content -->
-        <div class="relative z-10 text-center text-white max-w-4xl mx-auto pt-12">
-            <h1 class="text-5xl md:text-6xl font-bold tracking-tight mb-3">Play Padel with Pro Players</h1>
-            <p class="text-xl mb-8 text-white">Book your court in seconds—no hassle, no waiting.</p>
+        <div class="relative z-10 text-center text-white max-w-4xl mx-auto pt-12 px-4">
+            <h1 class="text-3xl md:text-6xl font-bold tracking-tight mb-3">
+                Play Padel with Pro Players
+            </h1>
+            <p class="text-lg md:text-xl mb-8 text-white">
+                Book your court in seconds—no hassle, no waiting.
+            </p>
 
             <button onclick="document.getElementById('court-categories').scrollIntoView({ behavior: 'smooth' })"
-                class="bg-blue-600 text-white px-12 py-4 rounded-lg text-lg font-semibold transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg transform hover:scale-105 hover:bg-blue-700">
+                class="bg-blue-600 text-white px-10 md:px-12 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg transform hover:scale-105 hover:bg-blue-700">
                 Play now
             </button>
         </div>
-
     </section>
 
     <!-- Court Categories Section -->
-    <section id="court-categories" class="py-24 bg-neutral-50">
+    <section id="court-categories" class="py-16 md:py-24 bg-neutral-50">
         <div class="container mx-auto px-4">
-
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <span class="text-blue-600 font-semibold tracking-wide uppercase text-sm">Our Court Categories</span>
-                <h1 class="text-4xl font-bold text-neutral-900 mt-2 mb-4">Choose where you want to play</h1>
+            <div class="text-center max-w-3xl mx-auto mb-12 md:mb-16">
+                <span class="text-blue-600 font-semibold tracking-wide uppercase text-xs md:text-sm">
+                    Our Court Categories
+                </span>
+                <h1 class="text-3xl md:text-4xl font-bold text-neutral-900 mt-2 mb-4">
+                    Choose where you want to play
+                </h1>
                 <div class="h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                 @forelse($categories as $category)
                     @php
-                        // 1. Logika Pengambilan Gambar
                         if ($category->image) {
                             $imageUrl = Storage::url($category->image);
                         } else {
@@ -51,7 +54,6 @@
 
                         $courtCount = $category->courts->count();
 
-                        // 2. Logika Penentuan Warna Berdasarkan Nama Kategori
                         $catName = strtolower($category->category_name);
 
                         // Default (Indoor/Lainnya) - Biru
@@ -83,8 +85,7 @@
 
                     <div
                         class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-neutral-100 flex flex-col h-full">
-
-                        <div class="relative h-64 overflow-hidden">
+                        <div class="relative h-56 md:h-64 overflow-hidden">
                             <div
                                 class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-all duration-300 z-10">
                             </div>
@@ -92,18 +93,17 @@
                             <img src="{{ $imageUrl }}" alt="{{ $category->category_name }}"
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
 
-                            <div class="absolute top-4 right-4 z-20">
+                            <div class="absolute top-3 md:top-4 right-3 md:right-4 z-20">
                                 <span
-                                    class="bg-white/90 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold {{ $theme['badge_text'] }} shadow-sm flex items-center gap-1">
+                                    class="bg-white/90 backdrop-blur-md px-3 md:px-4 py-1.5 rounded-full text-[11px] md:text-xs font-bold {{ $theme['badge_text'] }} shadow-sm flex items-center gap-1">
                                     🎾 {{ $courtCount }} Courts
                                 </span>
                             </div>
                         </div>
 
-                        <div class="p-8 flex flex-col flex-grow relative">
-
+                        <div class="p-6 md:p-8 flex flex-col flex-grow relative">
                             <h1
-                                class="text-2xl font-bold text-neutral-900 mb-3 {{ $theme['title_hover'] }} transition-colors">
+                                class="text-xl md:text-2xl font-bold text-neutral-900 mb-3 {{ $theme['title_hover'] }} transition-colors">
                                 {{ $category->category_name }}
                             </h1>
 
@@ -111,15 +111,16 @@
                                 {{ $category->description ?? 'Nikmati pengalaman bermain padel terbaik dengan fasilitas standar internasional.' }}
                             </p>
 
-                            <div class="mt-auto pt-6 border-t border-neutral-100 flex items-center justify-between">
+                            <div
+                                class="mt-auto pt-4 md:pt-6 border-t border-neutral-100 flex items-center justify-between">
                                 <span
                                     class="text-sm font-medium text-neutral-400 {{ $theme['link_hover'] }} transition-colors">
                                     View Details
                                 </span>
 
                                 <a href="/book-court?category={{ $category->id }}"
-                                    class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-neutral-50 text-neutral-600 {{ $theme['btn_hover_bg'] }} group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
-                                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform"
+                                    class="inline-flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full bg-neutral-50 text-neutral-600 {{ $theme['btn_hover_bg'] }} group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-md">
+                                    <svg class="w-4 h-4 md:w-5 md:h-5 transform group-hover:translate-x-1 transition-transform"
                                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -129,9 +130,10 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-3 text-center py-12">
+                    <div class="col-span-1 md:col-span-3 text-center py-12">
                         <div class="inline-block p-4 rounded-full bg-neutral-100 mb-4">
-                            <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-neutral-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                             </svg>
@@ -144,68 +146,91 @@
     </section>
 
     {{-- Court Facilities --}}
-    <section class="px-8 py-16 bg-neutral-100 flex min-h-[calc(100vh-92px)]">
+    <section class="px-4 md:px-8 py-12 md:py-16 bg-neutral-100">
         <div class="container mx-auto">
-            <div class="text-center mb-16">
-                <h1 class="text-5xl font-bold text-blue-600 mb-2 tracking-tight">Our facilities</h1>
-                <p class="text-xl text-neutral-500">Built for players who care about comfort, on and off the court</p>
+            <div class="text-center mb-10 md:mb-16">
+                <h1 class="text-3xl md:text-5xl font-bold text-blue-600 mb-2 tracking-tight">
+                    Our facilities
+                </h1>
+                <p class="text-base md:text-xl text-neutral-500">
+                    Built for players who care about comfort, on and off the court
+                </p>
             </div>
 
-            <div class="flex gap-6">
-
-                <div class="bg-white flex-1 rounded-2xl p-6 hover:shadow-md transition border-neutral-200 space-y-12">
-                    <div class="w-16 h-16 bg-blue-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div
+                    class="bg-white flex-1 rounded-2xl p-6 hover:shadow-md transition border border-neutral-200 space-y-6">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-blue-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-7 h-7 md:w-8 md:h-8 text-blue-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                     </div>
                     <div class="space-y-2">
-                        <h1 class="text-xl font-bold text-neutral-800 tracking-tight">Professional Courts</h1>
-                        <p class="text-neutral-500 leading-relaxed">International standard padel courts with high-quality equipment</p>
+                        <h1 class="text-lg md:text-xl font-bold text-neutral-800 tracking-tight">
+                            Professional Courts
+                        </h1>
+                        <p class="text-neutral-500 leading-relaxed text-sm md:text-base">
+                            International standard padel courts with high-quality equipment
+                        </p>
                     </div>
                 </div>
 
-                <div class="bg-white flex-1 rounded-2xl p-6 hover:shadow-md transition border-neutral-200 space-y-12">
-                    <div class="w-16 h-16 bg-cyan-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-8 h-8 text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div
+                    class="bg-white flex-1 rounded-2xl p-6 hover:shadow-md transition border border-neutral-200 space-y-6">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-cyan-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-7 h-7 md:w-8 md:h-8 text-cyan-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
                     <div class="space-y-2">
-                        <h1 class="text-xl font-bold text-neutral-800 tracking-tight">Hot & Cold Plunge</h1>
-                        <p class="text-neutral-500 leading-relaxed">Premium recovery facilities with hot and cold plunge pools for optimal recovery</p>
+                        <h1 class="text-lg md:text-xl font-bold text-neutral-800 tracking-tight">
+                            Hot & Cold Plunge
+                        </h1>
+                        <p class="text-neutral-500 leading-relaxed text-sm md:text-base">
+                            Premium recovery facilities with hot and cold plunge pools for optimal recovery
+                        </p>
                     </div>
                 </div>
 
-                <div class="bg-white flex-1 rounded-2xl p-6 hover:shadow-md transition border-neutral-200 space-y-12">
-                    <div class="w-16 h-16 bg-pink-50 rounded-xl flex items-center justify-center">
-                        <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div
+                    class="bg-white flex-1 rounded-2xl p-6 hover:shadow-md transition border border-neutral-200 space-y-6">
+                    <div class="w-14 h-14 md:w-16 md:h-16 bg-pink-50 rounded-xl flex items-center justify-center">
+                        <svg class="w-7 h-7 md:w-8 md:h-8 text-pink-600" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0
                                    012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                         </svg>
                     </div>
                     <div class="space-y-2">
-                        <h1 class="text-xl font-bold text-neutral-800 tracking-tight">Locker & Amenities</h1>
-                        <p class="text-neutral-500 leading-relaxed">Spacious lockers, clean showers, fluffy towels, and even hair dryers</p>
+                        <h1 class="text-lg md:text-xl font-bold text-neutral-800 tracking-tight">
+                            Locker & Amenities
+                        </h1>
+                        <p class="text-neutral-500 leading-relaxed text-sm md:text-base">
+                            Spacious lockers, clean showers, fluffy towels, and even hair dryers
+                        </p>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
 
     {{-- Testimonials --}}
-    <section class="py-20 bg-white">
+    <section class="py-16 md:py-20 bg-white">
         <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <span class="text-blue-600 font-semibold tracking-widest uppercase text-sm">— TESTIMONIALS & REVIEWS
-                    —</span>
-                <h1 class="text-4xl md:text-5xl font-bold mt-4 mb-2 text-neutral-900" style="font-style: italic;">HEAR IT
-                    FROM OUR</h1>
-                <h1 class="text-4xl md:text-5xl font-bold text-neutral-900" style="font-style: italic;">PADEL ENTHUSIASTS
+            <div class="text-center mb-12 md:mb-16">
+                <span class="text-blue-600 font-semibold tracking-widest uppercase text-xs md:text-sm">
+                    — TESTIMONIALS & REVIEWS —
+                </span>
+                <h1 class="text-3xl md:text-5xl font-bold mt-4 mb-2 text-neutral-900 italic">
+                    HEAR IT FROM OUR
+                </h1>
+                <h1 class="text-3xl md:text-5xl font-bold text-neutral-900 italic">
+                    PADEL ENTHUSIASTS
                 </h1>
             </div>
 
@@ -239,7 +264,7 @@
                         "Courtletics memberikan pengalaman bermain yang luar biasa. Pelayanan ramah dan profesional.
                         Sangat direkomendasikan!"
                     </p>
-                    <h4 class="text-xl font-bold text-center text-neutral-900">Siti Nurhaliza</h4>
+                    <h4 class="text-xl font-bold text-center text-neutral-900">Amalia Nurhaliza</h4>
                 </div>
 
                 <div
@@ -262,116 +287,111 @@
     </section>
 
     {{-- FAQ Section --}}
-    <section class="flex min-h-[calc(100vh-92px)] bg-white py-16 px-8">
-        <div class="max-w-6xl mx-auto">
-            <div class="grid grid-cols-1">
-                
-                <!-- Left: Heading -->
-                <div class="mb-16">
-                    <h1 class="text-5xl font-bold text-blue-600 tracking-tight text-center">Frequently asked questions</h1>
+    <section class="bg-white py-12 md:py-16 px-4 md:px-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-10 md:mb-16">
+                <h1 class="text-3xl md:text-5xl font-bold text-blue-600 tracking-tight text-center">
+                    Frequently asked questions
+                </h1>
+            </div>
+
+            <div class="space-y-4">
+                <!-- FAQ Item -->
+                <div
+                    class="faq-item bg-neutral-50 w-full rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                    <button
+                        class="faq-question w-full px-4 md:px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                        <span class="text-base md:text-lg font-semibold text-neutral-800">
+                            What are the operating hours?
+                        </span>
+                        <span
+                            class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+
+                        </span>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-4 md:px-6 pb-4 md:pb-6 text-neutral-600 leading-relaxed text-sm md:text-base">
+                            We’re open every day from 06:00 to 22:00.
+                        </div>
+                    </div>
                 </div>
-                
-                <!-- Right: FAQ Items -->
-                <div class="space-y-4 items-center justify-center w-full">
-                    
-                    <!-- FAQ Item -->
-                    <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
-                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
-                            <span class="text-lg font-semibold text-neutral-800">What are the operating hours?</span>
-                            <span class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+</span>
-                        </button>
-                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-                            <div class="p-6 text-neutral-600 leading-relaxed">
-                                We’re open every day from 06:00 to 22:00.
-                            </div>
-                        </div>
-                    </div>
 
-                     <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
-                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
-                            <span class="text-lg font-semibold text-neutral-800">Is parking available at the venue?</span>
-                            <span class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+</span>
-                        </button>
-                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-                            <div class="p-6 text-neutral-600 leading-relaxed">
-                                Yes. We provide a spacious parking area, and it's free by the way.
-                            </div>
+                <div
+                    class="faq-item bg-neutral-50 w-full rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                    <button
+                        class="faq-question w-full px-4 md:px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                        <span class="text-base md:text-lg font-semibold text-neutral-800">
+                            Is parking available at the venue?
+                        </span>
+                        <span
+                            class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+
+                        </span>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-4 md:px-6 pb-4 md:pb-6 text-neutral-600 leading-relaxed text-sm md:text-base">
+                            Yes. We provide a spacious parking area, and it's free by the way.
                         </div>
                     </div>
-
-                     <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
-                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
-                            <span class="text-lg font-semibold text-neutral-800">Are rackets included in the booking?</span>
-                            <span class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+</span>
-                        </button>
-                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-                            <div class="p-6 text-neutral-600 leading-relaxed">
-                                Yes. Every booking includes 2 rackets, and additional racket rentals are also available.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="faq-item bg-neutral-50 w-[640px] items-center rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
-                        <button class="faq-question w-full px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
-                            <span class="text-lg font-semibold text-neutral-800">Why do I need to create an account?</span>
-                            <span class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+</span>
-                        </button>
-                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-                            <div class="p-6 text-neutral-600 leading-relaxed">
-                                An account helps us manage your bookings, send updates, and make future bookings faster.
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- <!-- FAQ Item 3 -->
-                    <div class="faq-item bg-neutral-50 rounded-2xl overflow-hidden transition-all duration-300">
-                        <button class="faq-question w-full px-6 py-5 flex justify-between items-center text-left hover:bg-neutral-100 transition-colors">
-                            <span class="text-lg font-semibold text-neutral-900 pr-4">Can I cancel or reschedule my booking?</span>
-                            <span class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+</span>
-                        </button>
-                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-                            <div class="px-6 pb-5 text-neutral-600 leading-relaxed">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- FAQ Item 4 -->
-                    <div class="faq-item bg-neutral-50 rounded-2xl overflow-hidden transition-all duration-300">
-                        <button class="faq-question w-full px-6 py-5 flex justify-between items-center text-left hover:bg-neutral-100 transition-colors">
-                            <span class="text-lg font-semibold text-neutral-900 pr-4">Is there parking available at the facility?</span>
-                            <span class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+</span>
-                        </button>
-                        <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
-                            <div class="px-6 pb-5 text-neutral-600 leading-relaxed">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore.
-                            </div>
-                        </div>
-                    </div> --}}
-                    
                 </div>
-                
+
+                <div
+                    class="faq-item bg-neutral-50 w-full rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                    <button
+                        class="faq-question w-full px-4 md:px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                        <span class="text-base md:text-lg font-semibold text-neutral-800">
+                            Are rackets included in the booking?
+                        </span>
+                        <span
+                            class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+
+                        </span>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-4 md:px-6 pb-4 md:pb-6 text-neutral-600 leading-relaxed text-sm md:text-base">
+                            Yes. Every booking includes 2 rackets, and additional racket rentals are also available.
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="faq-item bg-neutral-50 w-full rounded-xl overflow-hidden transition-all duration-300 border-2 border-neutral-100">
+                    <button
+                        class="faq-question w-full px-4 md:px-6 py-4 flex justify-between items-center text-left transition-colors hover:bg-neutral-100">
+                        <span class="text-base md:text-lg font-semibold text-neutral-800">
+                            Why do I need to create an account?
+                        </span>
+                        <span
+                            class="faq-icon text-2xl text-neutral-600 flex-shrink-0 transition-transform duration-300">+
+                        </span>
+                    </button>
+                    <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300">
+                        <div class="px-4 md:px-6 pb-4 md:pb-6 text-neutral-600 leading-relaxed text-sm md:text-base">
+                            An account helps us manage your bookings, send updates, and make future bookings faster.
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="">
-        <div class="container mx-auto p-20 text-center">
-            <h1 class="text-4xl text-neutral-900 font-bold mb-2">Ready to Play?</h1>
-            <p class="text-xl text-neutral-500 mb-6 mx-auto">Book your court now and experience playing padel with pro players!</p>
+    <section>
+        <div class="container mx-auto px-4 md:px-20 py-12 md:py-20 text-center">
+            <h1 class="text-3xl md:text-4xl text-neutral-900 font-bold mb-2">
+                Ready to Play?
+            </h1>
+            <p class="text-base md:text-xl text-neutral-500 mb-6 mx-auto max-w-2xl">
+                Book your court now and experience playing padel with pro players!
+            </p>
             <button onclick="document.getElementById('court-categories').scrollIntoView({ behavior: 'smooth' })"
-                    class="inline-block bg-blue-600 text-white px-16 py-4 rounded-xl 
-                          hover:bg-blue-700 transition font-semibold text-lg shadow-lg cursor-pointer">
-                     Play Now
+                class="inline-block bg-blue-600 text-white px-12 md:px-16 py-3 md:py-4 rounded-xl 
+                       hover:bg-blue-700 transition font-semibold text-base md:text-lg shadow-lg cursor-pointer">
+                Play Now
             </button>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-neutral-900 text-neutral-300">
-        <div class="container mx-auto px-4 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-
+        <div class="container mx-auto px-4 py-12 md:py-16">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12">
                 <!-- Company Info -->
                 <div>
                     <h1 class="text-white text-2xl font-bold mb-6">Courtletics</h1>
@@ -432,7 +452,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
-                            <span class="text-neutral-400">Jl. Setiabudhi No. 123, Bandung, Jawa Barat 40164</span>
+                            <span class="text-neutral-400">
+                                Jl. Setiabudhi No. 123, Bandung, Jawa Barat 40164
+                            </span>
                         </li>
                         <li class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor"
@@ -440,8 +462,9 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                             </svg>
-                            <a href="tel:+6222123456" class="text-neutral-400 hover:text-blue-400 transition-colors">+62
-                                22 123 456</a>
+                            <a href="tel:+6222123456" class="text-neutral-400 hover:text-blue-400 transition-colors">
+                                +62 22 123 456
+                            </a>
                         </li>
                         <li class="flex items-center gap-3">
                             <svg class="w-5 h-5 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor"
@@ -450,7 +473,9 @@
                                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
                             <a href="mailto:info@courtletics.com"
-                                class="text-neutral-400 hover:text-blue-400 transition-colors">info@courtletics.com</a>
+                                class="text-neutral-400 hover:text-blue-400 transition-colors">
+                                info@courtletics.com
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -473,21 +498,24 @@
                         </li>
                     </ul>
                 </div>
-
             </div>
 
             <!-- Bottom Footer -->
-            <div class="border-t border-neutral-800 mt-12 pt-8">
+            <div class="border-t border-neutral-800 mt-10 md:mt-12 pt-6 md:pt-8">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                     <p class="text-neutral-500 text-sm">
                         © 2025 Courtletics. All rights reserved.
                     </p>
-                    <div class="flex gap-6 text-sm">
-                        <a href="/privacy-policy" class="text-neutral-500 hover:text-blue-400 transition-colors">Privacy
-                            Policy</a>
-                        <a href="/terms-of-service" class="text-neutral-500 hover:text-blue-400 transition-colors">Terms
-                            of Service</a>
-                        <a href="/faq" class="text-neutral-500 hover:text-blue-400 transition-colors">FAQ</a>
+                    <div class="flex flex-wrap gap-4 md:gap-6 text-sm">
+                        <a href="/privacy-policy" class="text-neutral-500 hover:text-blue-400 transition-colors">
+                            Privacy Policy
+                        </a>
+                        <a href="/terms-of-service" class="text-neutral-500 hover:text-blue-400 transition-colors">
+                            Terms of Service
+                        </a>
+                        <a href="/faq" class="text-neutral-500 hover:text-blue-400 transition-colors">
+                            FAQ
+                        </a>
                     </div>
                 </div>
             </div>
@@ -498,15 +526,15 @@
         // FAQ Accordion functionality
         document.addEventListener('DOMContentLoaded', function() {
             const faqItems = document.querySelectorAll('.faq-item');
-            
+
             faqItems.forEach(item => {
                 const question = item.querySelector('.faq-question');
                 const answer = item.querySelector('.faq-answer');
                 const icon = item.querySelector('.faq-icon');
-                
+
                 question.addEventListener('click', () => {
                     const isOpen = answer.style.maxHeight && answer.style.maxHeight !== '0px';
-                    
+
                     // Close all other items
                     faqItems.forEach(otherItem => {
                         if (otherItem !== item) {
@@ -517,7 +545,7 @@
                             otherIcon.style.transform = 'rotate(0deg)';
                         }
                     });
-                    
+
                     // Toggle current item
                     if (isOpen) {
                         answer.style.maxHeight = '0px';
@@ -532,5 +560,4 @@
             });
         });
     </script>
-
 </x-layout>
