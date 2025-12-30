@@ -226,10 +226,10 @@
                 <span class="text-blue-600 font-semibold tracking-widest uppercase text-xs md:text-sm">
                     — TESTIMONIALS & REVIEWS —
                 </span>
-                <h1 class="text-3xl md:text-5xl font-bold mt-4 mb-2 text-neutral-900 italic">
+                <h2 class="text-4xl md:text-5xl font-bold mt-4 mb-2 text-gray-900">
                     HEAR IT FROM OUR
-                </h1>
-                <h1 class="text-3xl md:text-5xl font-bold text-neutral-900 italic">
+                </h2>
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900">
                     PADEL ENTHUSIASTS
                 </h1>
             </div>
@@ -245,8 +245,8 @@
                         <span class="text-yellow-400 text-2xl">★</span>
                     </div>
                     <p class="text-neutral-700 text-center mb-8 leading-relaxed">
-                        "Lapangan padel terbaik di Bandung! Fasilitas sangat lengkap dan terawat dengan baik. Sistem
-                        booking online sangat memudahkan."
+                        "The best padel court in Bandung! The facilities are very complete and
+                        well-mantained. The online booking system is very easy."
                     </p>
                     <h4 class="text-xl font-bold text-center text-neutral-900">Ahmad Rizki</h4>
                 </div>
@@ -261,8 +261,8 @@
                         <span class="text-yellow-400 text-2xl">★</span>
                     </div>
                     <p class="text-neutral-700 text-center mb-8 leading-relaxed">
-                        "Courtletics memberikan pengalaman bermain yang luar biasa. Pelayanan ramah dan profesional.
-                        Sangat direkomendasikan!"
+                        "Courtletics provides an exceptional playing experience. 
+                        The service is friendly and professional. Highly recommended!"
                     </p>
                     <h4 class="text-xl font-bold text-center text-neutral-900">Amalia Nurhaliza</h4>
                 </div>
@@ -277,8 +277,8 @@
                         <span class="text-yellow-400 text-2xl">★</span>
                     </div>
                     <p class="text-neutral-700 text-center mb-8 leading-relaxed">
-                        "Tempat yang sempurna untuk bermain padel bersama teman dan keluarga. Harga terjangkau dengan
-                        kualitas terbaik di kelasnya."
+                        "The perfect place to play padel with friends and family.
+                        Affordable prices and best-in-class quality."
                     </p>
                     <h4 class="text-xl font-bold text-center text-neutral-900">Budi Santoso</h4>
                 </div>
@@ -507,13 +507,13 @@
                         © 2025 Courtletics. All rights reserved.
                     </p>
                     <div class="flex flex-wrap gap-4 md:gap-6 text-sm">
-                        <a href="/privacy-policy" class="text-neutral-500 hover:text-blue-400 transition-colors">
+                        <a href="/" class="text-neutral-500 hover:text-blue-400 transition-colors">
                             Privacy Policy
                         </a>
-                        <a href="/terms-of-service" class="text-neutral-500 hover:text-blue-400 transition-colors">
+                        <a href="/" class="text-neutral-500 hover:text-blue-400 transition-colors">
                             Terms of Service
                         </a>
-                        <a href="/faq" class="text-neutral-500 hover:text-blue-400 transition-colors">
+                        <a href="/" class="text-neutral-500 hover:text-blue-400 transition-colors">
                             FAQ
                         </a>
                     </div>
