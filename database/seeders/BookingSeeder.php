@@ -20,10 +20,10 @@ class BookingSeeder extends Seeder
             'notes' => 'Booking untuk latihan',
 
             'status' => 'Confirmed',
-            'booking_date' => now()->addDays(1)->toDateString(),
+            'booking_date' => '2025-12-30',
             'start_time' => '14:00:00',
             'end_time' => '16:00:00',
-            'total_price' => 300000,
+            'total_price' => 300000, 
 
             'created_at' => now(),
             'updated_at' => now(),
