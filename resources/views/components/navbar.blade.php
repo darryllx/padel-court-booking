@@ -1,12 +1,10 @@
-<nav class="bg-white h-[92px] flex items-center justify-between shadow-sm fixed top-0 left-0 right-0 z-50">
-    <div class="container mx-auto px-8 py-8">
+<nav class="bg-white h-[72px] flex items-center shadow-sm fixed top-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
         <div class="flex justify-between items-center">
 
             <!-- Logo -->
             <a href="/" class="flex items-center gap-2">
-                <div
-                    class="w-8 h-8 bg-neutral-800
-                           rounded-lg flex items-center justify-center">
+                <div class="w-8 h-8 bg-neutral-800 rounded-lg flex items-center justify-center">
                     <span class="text-white font-bold text-l">C</span>
                 </div>
                 <span class="text-xl font-bold text-neutral-900">
@@ -14,7 +12,7 @@
                 </span>
             </a>
 
-            <!-- Navigation Links -->
+            <!-- Navigation Links (Desktop) -->
             <div class="hidden md:flex items-center space-x-8">
                 <a href="/"
                     class="text-neutral-400 hover:text-neutral-600 font-medium transition {{ request()->is('/') ? 'font-semibold text-neutral-800 border-b-2 border-neutral-800' : '' }}">
@@ -30,10 +28,9 @@
                 </a>
             </div>
 
-            <!-- Auth Buttons -->
+            <!-- Auth (Desktop) -->
             <div class="hidden md:flex items-center space-x-4">
                 @auth
-                    <!-- Show Admin link for admin users -->
                     @if (Auth::user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}"
                             class="text-gray-700 hover:text-purple-600 font-medium transition">
@@ -41,7 +38,7 @@
                         </a>
                     @endif
 
-                    <!-- Profile dropdown or link -->
+                    <!-- Profile dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open"
                             class="flex items-center space-x-2 text-gray-700 hover:text-purple-600 font-medium transition">
@@ -96,8 +93,8 @@
                             class="w-[120px] flex items-center justify-center bg-blue-600 text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700 shadow-lg transition">
                             Sign Up
                         </a>
-                    @endauth
-                </div>
+                    </div>
+                @endauth
             </div>
 
             <!-- Mobile Menu Button -->
@@ -109,21 +106,34 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-neutral-200 pt-4">
+        <div id="mobile-menu"
+            class="hidden md:hidden mt-3 pb-4 border-t border-neutral-200 pt-4
+                    bg-white shadow-lg rounded-b-lg relative z-40">
             <div class="flex flex-col space-y-4">
-                <a href="/" class="text-gray-700 hover:text-purple-600 font-medium transition">Home</a>
-                <a href="/about" class="text-gray-700 hover:text-purple-600 font-medium transition">About</a>
-                <a href="/book-court" class="text-gray-700 hover:text-purple-600 font-medium transition">Book Court</a>
+                <a href="/" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                    Home
+                </a>
+                <a href="/about" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                    About
+                </a>
+                <a href="/book-court" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                    Book Court
+                </a>
 
                 @auth
                     @if (Auth::user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}"
-                            class="text-gray-700 hover:text-purple-600 font-medium transition">Admin Panel</a>
+                            class="text-gray-700 hover:text-purple-600 font-medium transition">
+                            Admin Panel
+                        </a>
                     @endif
-                    <a href="/profile" class="text-gray-700 hover:text-purple-600 font-medium transition">Profile</a>
+                    <a href="/profile" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                        Profile
+                    </a>
                     @if (!Auth::user()->isAdmin())
-                        <a href="/my-bookings" class="text-gray-700 hover:text-purple-600 font-medium transition">My
-                            Bookings</a>
+                        <a href="/my-bookings" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                            My Bookings
+                        </a>
                     @endif
                     <form action="/logout" method="POST">
                         @csrf
@@ -133,18 +143,23 @@
                         </button>
                     </form>
                 @else
-                    <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">Login</a>
+                    <a href="/login" class="text-gray-700 hover:text-purple-600 font-medium transition">
+                        Login
+                    </a>
                     <a href="/register"
-                        class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium text-center">Sign
-                        Up</a>
+                        class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-2 rounded-lg font-medium text-center">
+                        Sign Up
+                    </a>
                 @endauth
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
             menu.classList.toggle('hidden');
         });
     </script>
