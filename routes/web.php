@@ -136,3 +136,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-bookings', [BookingsController::class, 'myBookings'])->name('my.bookings');
 });
 
+// show detail untuk di my bookings
+Route::get('/my-bookings/{booking}', [BookingsController::class, 'show'])
+    ->name('bookings.show');
+
+    

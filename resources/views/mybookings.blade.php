@@ -46,8 +46,8 @@
                                             alt="{{ $booking->court->name }}"
                                             class="w-full h-full object-cover opacity-60">
                                     @else
-                                        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?w=800"
-                                            alt="Padel Court" class="w-full h-full object-cover opacity-60">
+                                        <img src="{{ asset('images/Padell.jpeg') }}" alt="Padel Court"
+                                            class="w-full h-full object-cover">
                                     @endif
                                     <div class="absolute top-4 right-4">
                                         @if ($booking->status === 'Confirmed')
@@ -162,10 +162,10 @@
                                             <!-- Optional: Link to re-pay? No, midtrans token might be expired. -->
                                         @endif
 
-                                        <button onclick="viewDetails({{ $booking->id }})"
-                                            class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
+                                        <a href="{{ route('bookings.show', $booking->id) }}"
+                                            class="w-full inline-block text-center bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition">
                                             View Details
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
