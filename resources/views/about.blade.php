@@ -167,12 +167,10 @@
                     <p class="text-gray-500 text-sm">
                         © 2025 Courtletics. All rights reserved.
                     </p>
-                    <div class="flex gap-6 text-sm">
-                        <a href="/privacy-policy" class="text-gray-500 hover:text-blue-400 transition-colors">Privacy
-                            Policy</a>
-                        <a href="/terms-of-service" class="text-gray-500 hover:text-blue-400 transition-colors">Terms
-                            of Service</a>
-                        <a href="/faq" class="text-gray-500 hover:text-blue-400 transition-colors">FAQ</a>
+                    <div class="flex flex-wrap gap-4 md:gap-6 text-sm">
+                        <p class="text-neutral-500 text-sm">
+                        Privacy Policy  Terms of Service  FAQ
+                        </p>
                     </div>
                 </div>
             </div>
