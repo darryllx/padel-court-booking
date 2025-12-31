@@ -37,8 +37,8 @@ class AuthController extends Controller
             $user = Auth::user();
             $message = 'Login berhasil! Selamat datang, ' . $user->name;
 
-            return redirect()->intended('/')
-                ->with('success', $message);
+            return redirect('/')
+                -> with('success', $message);
         }
 
         return back()

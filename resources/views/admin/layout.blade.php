@@ -21,7 +21,6 @@
 
 <body class="bg-gray-100">
     <div class="flex min-h-screen">
-        <!-- Sidebar -->
         <aside class="w-64 bg-gradient-to-b from-purple-600 to-indigo-600 text-white flex-shrink-0">
             <div class="p-6">
                 <a href="/" class="flex items-center space-x-2">
@@ -91,9 +90,7 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <div class="flex-1 flex flex-col">
-            <!-- Top Bar -->
             <header class="bg-white shadow-sm">
                 <div class="px-8 py-4">
                     <div class="flex items-center justify-between">
@@ -105,9 +102,7 @@
                 </div>
             </header>
 
-            <!-- Content -->
             <main class="flex-1 p-8">
-                <!-- Success/Error Messages -->
                 @if (session('success'))
                     <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg" role="alert">
                         <div class="flex items-center">
@@ -212,6 +207,7 @@
             });
         @endif
     </script>
+    @stack('scripts')
 </body>
 
 </html>

@@ -13,6 +13,7 @@ class CourtCategories extends Model
     protected $fillable = [
         'category_name',
         'description',
+        'image',
     ];
 
     /**

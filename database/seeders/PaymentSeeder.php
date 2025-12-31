@@ -13,7 +13,7 @@ class PaymentSeeder extends Seeder
         DB::table('payments')->insert([
             'booking_id' => 1,
             'payment_method' => 'Transfer Bank',
-            'payment_status' => 'Paid',
+            'payment_status' => 'completed',
             'amount' => 300000,
             'payment_date' => now(),
             'created_at' => now(),
